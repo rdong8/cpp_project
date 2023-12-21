@@ -1,6 +1,0 @@
-/home/rd8/.local/share/JetBrains/Toolbox/apps/clion-nova/bin/cmake/linux/x64/bin/cmake -DCMAKE_MAKE_PROGRAM=ninja -DCMAKE_CXX_COMPILER=clang++ -G "Ninja Multi-Config" -S /home/rd8/Projects/cpp_project -B /home/rd8/Projects/cpp_project/cmake-build-debug
--- Build spdlog: 1.12.0
--- Build type: 
--- Configuring done (0.1s)
--- Generating done (0.0s)
--- Build files have been written to: /home/rd8/Projects/cpp_project/cmake-build-debug
