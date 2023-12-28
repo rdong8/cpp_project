@@ -1,4 +1,14 @@
-function(my_set_project_compile_options project_name)
+# Enhance error reporting and compiler messages
+if(CMAKE_CXX_COMPILER_ID MATCHES ".*Clang")
+    add_compile_options(-fcolor-diagnostics)
+elseif(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+    add_compile_options(-fdiagnostics-color=always)
+else()
+    message(STATUS "No colored compiler diagnostic set for '${CMAKE_CXX_COMPILER_ID}' compiler.")
+endif()
+
+
+  function(my_set_project_compile_options project_name)
 
     set(COMMON_OPTIONS
     )
