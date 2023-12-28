@@ -9,51 +9,61 @@ cd cpp_project/
 
 ## Dependencies
 
-### LLVM
-
-Ensure you have the LLVM toolchain installed, including `compiler-rt` for the sanitizers to work.
+Ensure you have the LLVM toolchain installed, including `compiler-rt` for the sanitizers to work. Also creates a `pyenv`
+environment and installs the necessary packages.
 
 ```bash
-sudo dnf install llvm compiler-rt
+make system-deps py-deps
 ```
 
 ### Conan
 
-Install conan, preferably through pip with pyenv.
-
-```bash
-pyenv virtualenv 3.12.2 cpp_project
-pyenv local cpp_project
-pip install conan
-```
-
 If you haven't already, create a conan profile.
 
 ```bash
-conan profile detect --force
+make conan-profile
 ```
 
-### Install Dependencies
+Then install the project's C++ dependencies with Conan.
 
 ```bash
-conan install . --build=missing --settings=build_type=Debug
+make conan-deps
 ```
 
 ## Configure
 
+Either run:
+
 ```bash
-cmake -S . -B build/ -G "Ninja Multi-Config" \
-  -DCMAKE_BUILD_TYPE=Debug \
-  -DCMAKE_MAKE_PROGRAM=Ninja \
-  -DCMAKE_C_COMPILER=clang \
-  -DCMAKE_CXX_COMPILER=clang++ \
-  -DCMAKE_TOOLCHAIN_FILE=build/Debug/generators/conan_toolchain.cmake
+make cmake-config
 ```
+
+or create a CMake profile in CLion with the following settings:
+
+- Name: Debug
+- Build type: Debug
+- Toolchain: Use Default
+- Generator: Ninja Multi-Config
+- CMake options:
+    ```
+    -G "Ninja Multi-Config" -DCMAKE_TOOLCHAIN_FILE=build/Debug/generators/conan_toolchain.cmake
+    ```
+- Build directory: `build/`
+- Build options: empty
+- Environment: empty
 
 ## Build
 
 ```bash
-cmake --build build/
+make build
 ```
 
 The `cpp_project` executable will be in `build/src/Debug/`.
+
+## Pre-Commit
+
+While developing, you may want to have some tasks automatically run with pre-commit.
+
+```bash
+make pre-commit
+```
