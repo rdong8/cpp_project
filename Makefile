@@ -12,7 +12,7 @@ system-deps:
 
 .PHONY: py-deps
 py-deps:
-	pyenv virtualenv 3.11.2 ${PROJECT}
+	pyenv virtualenv 3.12.1 ${PROJECT}
 	pyenv local ${PROJECT}
 	pip install -r requirements.txt
 
