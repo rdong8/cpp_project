@@ -28,7 +28,7 @@ conan-deps: conan-profile
 cmake-config: system-deps conan-deps
 	cmake -S . -B ${BUILD_DIR} -G "Ninja Multi-Config" \
 	  -DCMAKE_BUILD_TYPE=${BUILD_TYPE} \
-	  -DCMAKE_MAKE_PROGRAM=Ninja \
+	  -DCMAKE_MAKE_PROGRAM=ninja \
 	  -DCMAKE_C_COMPILER=${CC} \
 	  -DCMAKE_CXX_COMPILER=${CXX} \
 	  -DCMAKE_TOOLCHAIN_FILE=${BUILD_DIR}${BUILD_TYPE}/generators/conan_toolchain.cmake
