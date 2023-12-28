@@ -1,5 +1,4 @@
-#include <format>
-#include <iostream>
+#include <boost/asio.hpp>
 
 #include "spdlog/spdlog.h"
 #include "spdlog/sinks/basic_file_sink.h"
@@ -11,8 +10,14 @@ auto main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) -> int {
     logger->flush_on(spdlog::level::info);
     spdlog::set_default_logger(logger);
 
-    spdlog::info("Logging!");
-    std::cout << std::format("Hello {}!\n", "Richard");
+    spdlog::info("Starting wait!");
+
+    boost::asio::io_context io{};
+    boost::asio::steady_timer t{io, boost::asio::chrono::seconds{5}};
+
+    t.wait();
+
+    spdlog::info("Finished waiting!");
 
     return 0;
 }

@@ -62,12 +62,8 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
   endif()
 endif()
 
-# spdlog
-add_subdirectory(external/spdlog)
-if(NOT TARGET spdlog)
-  # Stand-alone build
-  find_package(spdlog REQUIRED)
-endif()
+# Logging
+find_package(spdlog REQUIRED)
 
 # Define compile warnings interface target
 add_library(my_warnings INTERFACE)

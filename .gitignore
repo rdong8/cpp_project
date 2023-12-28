@@ -38,3 +38,9 @@
 .idea/
 .vscode/
 .cache/
+
+# Pyenv
+.python-version
+
+# CMake
+CMakeUserPresets.json
