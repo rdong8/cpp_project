@@ -8,7 +8,7 @@ BUILD_TYPE = Debug
 
 .PHONY: system-deps
 system-deps:
-	sudo dnf install llvm compiler-rt cmake
+	sudo dnf install llvm compiler-rt cmake doxygen
 
 .PHONY:
 py-deps:
