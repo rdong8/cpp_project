@@ -51,19 +51,19 @@ namespace {
     }
 
     // Demonstrate differentiation operator
-    auto d_demo() -> void {
-        using math::d;
+    auto d_dx_demo() -> void {
+        using math::d_dx;
 
-        spdlog::info("DERIVATIVES DEMO:");
+        spdlog::info("DIFFERENTIATION DEMO:");
 
         static constexpr auto f{[](double x) { return 3 * x * x - x + 16; }};
 
         spdlog::info("f(x) = 3x^2 - x + 16");
-        spdlog::info("f'(4) = {}", d<f>(4.0));
+        spdlog::info("f'(4) = {}", d_dx<f>(4.0));
 
-        constexpr auto dfdx{[](double x) { return d<f>(x); }};
+        constexpr auto dfdx{[](double x) { return d_dx<f>(x); }};
 
-        spdlog::info("f''(4) = {}", d<dfdx>(4.0));
+        spdlog::info("f''(4) = {}", d_dx<dfdx>(4.0));
     }
 }
 
@@ -74,7 +74,7 @@ auto main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) -> int {
 
     ::vec2_demo();
 
-    ::d_demo();
+    ::d_dx_demo();
 
     return 0;
 }

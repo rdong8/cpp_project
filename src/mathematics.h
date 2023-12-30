@@ -1,6 +1,8 @@
 /// @file
 /// A sample library containing math functions.
 /// A documentation comment for the file like this one must be in any file you wish to be tracked by Doxygen.
+/// Note that `constexpr` functions are implicitly inlined and thus will be implemented in this header file. Non-inline
+/// functions will be implemented in the `.cc` file.
 
 #pragma once
 
@@ -18,7 +20,7 @@ namespace math {
         double y_; ///< The y component of the vector (postfix doc comment)
 
     public:
-        /// Construct a new @ref Vec3 with the given components.
+        /// Construct a new @ref Vec2 with the given components.
         /// @param[in] _x The x component
         /// @param[in] _y The y component
         constexpr Vec2(double _x, double _y)
@@ -79,14 +81,21 @@ namespace math {
     };
 
     /// Evaluate the approximate derivative of @p f at @p x
-    /// @tparam f A real scalar function with signature `double(double)`
+    /// @tparam f A function @f$ f : \mathbb R \to \mathbb R @f$
     /// @param[in] x The x-value to evaluate the derivative at
+    ///
+    /// Example: @f$ f(x) = x^2 @f$
+    /// @code{.cpp}
+    /// auto f{[](double x) { return x * x; }};
+    /// std::cout << d_dx<f>(3.0) << '\n'; // Prints 6
+    /// @endcode
     template<auto f>
         requires requires(double x)
         {
             { f(x) } -> std::same_as<double>;
         }
-    constexpr auto d(double x) -> double {
+    [[nodiscard]]
+    constexpr auto d_dx(double x) -> double {
         constexpr static double dx{0.00001};
         return (f(x + dx) - f(x)) / dx;
     }
@@ -100,6 +109,7 @@ struct fmt::formatter<math::Vec2> {
         return ctx.end();
     }
 
+    /// This function will be implemented in the implementation file.
     [[nodiscard]]
     auto format(const math::Vec2& vec, fmt::format_context& ctx) -> decltype(ctx.out());
 };
