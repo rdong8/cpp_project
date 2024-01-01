@@ -60,6 +60,26 @@ make build
 
 The `cpp_project` executable will be in `build/src/Debug/`.
 
+## Run
+
+```bash
+make run
+```
+
+## Test
+
+```bash
+make test
+```
+
+## Documentation
+
+```bash
+make docs
+```
+
+The documentation will be under `build/docs/html/`.
+
 ## Pre-Commit
 
 While developing, you may want to have some tasks automatically run with pre-commit.

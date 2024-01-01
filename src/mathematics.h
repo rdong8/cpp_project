@@ -78,7 +78,18 @@ namespace math {
         constexpr auto operator<=>(const Vec2& other) const noexcept -> std::weak_ordering {
             return std::weak_order(this->norm(), other.norm());
         }
+
+        /// Compute the scalar product of this vector and @p c
+        /// @param[in] c The scalar
+        [[nodiscard]]
+        constexpr auto operator*(double c) const noexcept -> Vec2 {
+            return Vec2{c * this->x(), c * this->y()};
+        }
     };
+
+    constexpr auto operator*(double c, const Vec2& vec) noexcept -> Vec2 {
+        return vec * c;
+    }
 
     /// Evaluate the approximate derivative of @p f at @p x
     /// @tparam f A function @f$ f : \mathbb R \to \mathbb R @f$
