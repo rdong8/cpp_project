@@ -1,6 +1,7 @@
 find_package(Boost REQUIRED)
 
-add_library(mathematics mathematics.cc mathematics.h)
+add_library(mathematics)
+target_sources(mathematics PUBLIC FILE_SET CXX_MODULES FILES mathematics.ccm)
 target_link_libraries(mathematics PRIVATE my_config)
 
 add_executable(cpp_project main.cc)

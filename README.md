@@ -9,22 +9,30 @@ cd cpp_project/
 
 ## Dependencies
 
-Ensure you have the LLVM toolchain installed, including `compiler-rt` for the sanitizers to work. Also creates a `pyenv`
-environment and installs the necessary packages.
+### System
 
 ```bash
-make system-deps py-deps
+make system-deps
+```
+
+### Python
+
+First ensure you have [pyenv](https://github.com/pyenv/pyenv) and
+[pyenv-virtualenv](https://github.com/pyenv/pyenv-virtualenv) installed. Then:
+
+```bash
+make py-deps
 ```
 
 ### Conan
 
-If you haven't already, create a conan profile.
+If you haven't already, create a conan profile, which can be done with:
 
 ```bash
 make conan-profile
 ```
 
-Then install the project's C++ dependencies with Conan.
+Then install the project's C++ dependencies with Conan:
 
 ```bash
 make conan-deps

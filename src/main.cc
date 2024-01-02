@@ -2,7 +2,7 @@
 #include <spdlog/spdlog.h>
 #include <spdlog/sinks/basic_file_sink.h>
 
-#include "mathematics.h"
+import mathematics;
 
 namespace {
     /// Configure the default logger to log to the file "log.txt", flushing on the info level or higher

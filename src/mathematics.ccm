@@ -1,10 +1,8 @@
 /// @file
 /// A sample library containing math functions.
 /// A documentation comment for the file like this one must be in any file you wish to be tracked by Doxygen.
-/// Note that `constexpr` functions are implicitly inlined and thus will be implemented in this header file. Non-inline
-/// functions will be implemented in the `.cc` file.
 
-#pragma once
+module;
 
 #include <cmath>
 #include <compare>
@@ -12,7 +10,9 @@
 
 #include <spdlog/fmt/fmt.h>
 
-namespace math {
+export module mathematics;
+
+export namespace math {
     /// A 2-dimensional mathematical vector
     class Vec2 {
         /// The x component of the vector (regular doc comment)
@@ -113,6 +113,7 @@ namespace math {
 }
 
 /// Formatter specialization for @ref math::Vec2
+export
 template<>
 struct fmt::formatter<math::Vec2> {
     [[nodiscard]]
@@ -122,5 +123,7 @@ struct fmt::formatter<math::Vec2> {
 
     /// This function will be implemented in the implementation file.
     [[nodiscard]]
-    auto format(const math::Vec2& vec, fmt::format_context& ctx) -> decltype(ctx.out());
+    auto format(const math::Vec2& vec, fmt::format_context& ctx) -> decltype(ctx.out()) {
+        return fmt::format_to(ctx.out(), "<{}, {}>", vec.x(), vec.y());
+    }
 };

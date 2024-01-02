@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.27.0)
+cmake_minimum_required(VERSION 3.28)
 
 project(
   cpp_project

@@ -1,6 +1,6 @@
 #include <catch2/catch_test_macros.hpp>
 
-#include <src/mathematics.h>
+import mathematics;
 
 // TEST_CASE("test name", "[tags]...")
 TEST_CASE("Vector algebra", "[Vec2][math]") {
