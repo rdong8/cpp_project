@@ -35,7 +35,7 @@ cmake-config:
 
 .PHONY: build
 build:
-	cmake --build ${BUILD_DIR}/
+	cmake --build ${BUILD_DIR}
 
 .PHONY: run
 run:
