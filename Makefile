@@ -10,7 +10,7 @@ BUILD_TYPE = Debug
 system-deps:
 	sudo dnf install llvm compiler-rt cmake doxygen
 
-.PHONY:
+.PHONY: py-deps
 py-deps: requirements.txt
 	pyenv virtualenv 3.12.1 ${PROJECT}
 	pyenv local ${PROJECT}
