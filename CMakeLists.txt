@@ -57,19 +57,19 @@ find_package(spdlog REQUIRED)
 # Define compile warnings interface target
 add_library(my_warnings INTERFACE)
 include(cmake/CompileWarnings.cmake)
-my_set_project_warnings(my_warnings)
+set_project_warnings(my_warnings)
 
 # Define compile options interface target
 add_library(my_compile_options INTERFACE)
 target_compile_features(my_compile_options
                         INTERFACE cxx_std_${CMAKE_CXX_STANDARD})
 include(cmake/CompileOptions.cmake)
-my_set_project_compile_options(my_compile_options)
+set_project_compile_options(my_compile_options)
 
 # Define link options interface target
 add_library(my_link_options INTERFACE)
 include(cmake/LinkOptions.cmake)
-my_set_project_link_options(my_compile_options)
+set_project_link_options(my_compile_options)
 
 # Define config interface target
 add_library(my_config INTERFACE)
