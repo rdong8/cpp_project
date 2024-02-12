@@ -124,6 +124,6 @@ struct fmt::formatter<math::Vec2> {
     /// This function will be implemented in the implementation file.
     [[nodiscard]]
     auto format(const math::Vec2& vec, fmt::format_context& ctx) -> decltype(ctx.out()) {
-        return fmt::format_to(ctx.out(), "<{}, {}>", vec.x(), vec.y());
+        return fmt::format_to(ctx.out(), "({}, {})", vec.x(), vec.y());
     }
 };

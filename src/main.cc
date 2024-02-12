@@ -5,18 +5,21 @@
 import mathematics;
 
 namespace {
-    /// Configure the default logger to log to the file "log.txt", flushing on the info level or higher
-    auto configure_logger() -> void {
+    // Configure the default logger to log to the file "log.txt", flushing on the info level or higher
+    [[maybe_unused]]
+    auto configure_file_logger() -> void {
         // Create new logger called "logger" to log.txt, clearing previous contents
         const auto logger{spdlog::basic_logger_st("logger", "log.txt", true)};
 
-        // Display the message as "[abbreviated log level] message"
-        logger->set_pattern("[%L] %v");
+        // Change the message format to "[abbreviated log level] message"
+        // https://github.com/gabime/spdlog/wiki/3.-Custom-formatting
+        // logger->set_pattern("[%L] %v");
 
         // Automatically flush for info level or higher
         logger->flush_on(spdlog::level::info);
 
-        // Set default logger to "logger"
+        // Set the logger used by the `spdlog::<level>(msg)` logging functions to this logger
+        // ie. `spdlog::warn("Warning!!")`
         spdlog::set_default_logger(logger);
     }
 
@@ -68,7 +71,8 @@ namespace {
 }
 
 auto main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) -> int {
-    ::configure_logger();
+    // By default spdlog will log to stdout
+    // ::configure_file_logger();
 
     ::asio_demo();
 
