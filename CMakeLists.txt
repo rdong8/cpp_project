@@ -7,6 +7,12 @@ project(
   HOMEPAGE_URL "https://github.com/rdong8/cpp_project"
   LANGUAGES CXX)
 
+# Only these 2 compilers are supported for now
+# https://cmake.org/cmake/help/latest/variable/CMAKE_LANG_COMPILER_ID.html#variable:CMAKE_%3CLANG%3E_COMPILER_ID
+if("$<NOT:$<CXX_COMPILER_ID:Clang,GCC>>")
+  message(FATAL_ERROR "Invalid compiler. Must be either Clang or GCC.")
+endif()
+
 # Only do these if this is the main project, and not if it is included through
 # add_subdirectory
 if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
@@ -16,19 +22,8 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
   set(CMAKE_CXX_STANDARD 23)
   set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-  # Let's ensure -std=c++xx instead of -std=g++xx
+  # Ensure -std=c++xx instead of -std=g++xx
   set(CMAKE_CXX_EXTENSIONS OFF)
-
-  # Set a default build type if none was specified
-  if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
-    message(STATUS "Setting build type to 'Debug' as none was specified.")
-    set(CMAKE_BUILD_TYPE
-        Debug
-        CACHE STRING "Choose the type of build." FORCE)
-    # Set the possible values of build type for cmake-gui, ccmake
-    set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release"
-                                                 "MinSizeRel" "RelWithDebInfo")
-  endif()
 
   # Generate compile_commands.json to make it easier to work with clang based
   # tools

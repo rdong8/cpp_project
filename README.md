@@ -1,5 +1,11 @@
 # cpp_project
+
 Template for a modern C++ project using CMake.
+
+Ideally you should read through both the README and the Makefile to better understand how everything works.
+
+Note: All Makefile commands should be run under a shell in which your `.bashrc`, `.zshrc` or equivalent has been
+sourced. Do not use the run button in your IDE's markdown preview or Makefile editor, `pyenv` will likely not work.
 
 ## Clone
 
@@ -28,14 +34,15 @@ make py-deps
 ### Conan
 
 #### Profile
-If you haven't already, create a Conan profile, which can be done with:
+
+Check if you already have a Conan profile with `conan profile list`. If you haven't already made one, create one:
 
 ```bash
 make conan-profile
 ```
 
-Then, modify the `~/.conan2/profiles/default` profile generated to add a `[buildenv]` section, and put in your compiler
-and language configuration:
+Then, modify the `$(conan config home)/profiles/default` profile generated to add a `[buildenv]` section, and put in
+your compiler and language details:
 
 ```toml
 [buildenv]
@@ -53,7 +60,7 @@ os=Linux
 ```
 
 Note that the build type here is for your dependencies, which you can compile in release mode even if you are building
-your own code in debug.
+your own code in debug. A variable `CONAN_BUILD_TYPE` is provided in the Makefile to override the build type.
 
 #### Build Dependencies
 
@@ -106,7 +113,7 @@ make build TARGET=docs
 Either set the `TARGET` variable in the Makefile or do it on the command line:
 
 ```bash
-make run TARGET="main"
+make run TARGET=main
 ```
 
 If `TARGET` is not set, it will try to run the target with the same name as the project.
@@ -116,6 +123,8 @@ You can also provide arguments to the executable:
 ```bash
 make run ARGS="arg1 arg2 arg3"
 ```
+
+Make sure to quote them so that they're interpreted as a single string assigned to `ARGS`.
 
 ## Test
 

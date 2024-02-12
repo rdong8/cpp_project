@@ -1,12 +1,19 @@
 PROJECT = cpp_project
 
 # Set a path to the compiler executables
-# It's set to use the compiler's linker automatically (LLD for Clang, LD for GCC)
-CC = clang
+# Will use the compiler's linker automatically (LLD for Clang, LD for GCC)
+# Will add debug info on certain build types for the compiler's debugger automatically (LLDB for Clang, GDB for GCC)
 CXX = clang++
 
 BUILD_DIR = build
+
+# CMake supports Debug, Release, RelWithDebInfo, MinSizeRel to build *your code*
+# 	Source: https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html
 BUILD_TYPE = Debug
+
+# Conan supports Debug, Release to build *your dependencies*
+# 	Source: https://docs.conan.io/2/tutorial/consuming_packages/different_configurations.html
+CONAN_BUILD_TYPE = ${BUILD_TYPE}
 
 # The target to build and/or run
 # 	Default build target is the default CMake target `all`
@@ -26,25 +33,32 @@ py-deps: requirements.txt
 	pyenv local ${PROJECT}
 	pip install -r requirements.txt
 
+# This only creates the profile, you still need to edit it to contain the details for your compiler and language
 .PHONY: conan-profile
 conan-profile:
 	conan profile detect --force
 
 .PHONY: conan-deps
 conan-deps:
-	conan install . --build=missing --settings=build_type=${BUILD_TYPE}
+	conan install . --build=missing --settings=build_type=${CONAN_BUILD_TYPE}
 
 .PHONY: cmake-config
 cmake-config:
-	cmake -S . -B ${BUILD_DIR} -G "Ninja Multi-Config" \
-	  -DCMAKE_MAKE_PROGRAM=ninja \
-	  -DCMAKE_C_COMPILER=${CC} \
-	  -DCMAKE_CXX_COMPILER=${CXX} \
-	  -DCMAKE_TOOLCHAIN_FILE=${BUILD_DIR}/${BUILD_TYPE}/generators/conan_toolchain.cmake
+	cmake \
+		-S . \
+		-B ${BUILD_DIR} \
+		-G "Ninja Multi-Config" \
+		-DCMAKE_CXX_COMPILER=${CXX} \
+		-DCMAKE_MAKE_PROGRAM=ninja \
+		-DCMAKE_TOOLCHAIN_FILE=${BUILD_DIR}/${CONAN_BUILD_TYPE}/generators/conan_toolchain.cmake
 
 .PHONY: build
 build:
-	cmake --build ${BUILD_DIR} --target $(if $(TARGET),$(TARGET),all) -j
+	cmake \
+		--build ${BUILD_DIR} \
+		--config ${BUILD_TYPE} \
+		-t $(if $(TARGET),$(TARGET),all) \
+		-j
 
 .PHONY: run
 run:
@@ -52,7 +66,11 @@ run:
 
 .PHONY: test
 test:
-	ctest --test-dir ${BUILD_DIR} --extra-verbose -C ${BUILD_TYPE}
+	ctest \
+		--test-dir ${BUILD_DIR} \
+		--extra-verbose \
+		-C ${BUILD_TYPE} \
+		-j
 
 .PHONY: pre-commit
 pre-commit:

@@ -37,20 +37,9 @@ function(set_project_warnings project_name)
       "-Wuseless-cast" # warn if you perform a cast to the same type
   )
 
-  if(CMAKE_CXX_COMPILER_ID MATCHES ".*Clang")
-    set(PROJECT_WARNINGS_CXX ${CLANG_WARNINGS} "-fcolor-diagnostics")
-  elseif(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-    set(PROJECT_WARNINGS_CXX ${GCC_WARNINGS} "-fdiagnostics-color=always")
-  else()
-    message(
-      AUTHOR_WARNING
-        "No compiler warnings set for CXX compiler: '${CMAKE_CXX_COMPILER_ID}'")
-  endif()
-
-  # Use the same warning flags for C
-  set(PROJECT_WARNINGS_C "${PROJECT_WARNINGS_CXX}")
-
   target_compile_options(
-    ${project_name} INTERFACE $<$<COMPILE_LANGUAGE:CXX>:${PROJECT_WARNINGS_CXX}>
-                              $<$<COMPILE_LANGUAGE:C>:${PROJECT_WARNINGS_C}>)
+    ${project_name}
+    INTERFACE
+      "$<$<CXX_COMPILER_ID:Clang>:${CLANG_WARNINGS};-fcolor-diagnostics>"
+      "$<$<CXX_COMPILER_ID:GCC>:${GCC_WARNINGS};-fdiagonostics-color=always>")
 endfunction()
