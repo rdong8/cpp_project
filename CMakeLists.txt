@@ -29,7 +29,7 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
   # tools
   set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-  # Let's nicely support folders in IDEs
+  # Nicely support folders in IDEs
   set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
   # Testing only available if this is the main app Note this needs to be done in

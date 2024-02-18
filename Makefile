@@ -13,7 +13,7 @@ BUILD_TYPE = Debug
 
 # Conan supports Debug, Release to build *your dependencies*
 # 	Source: https://docs.conan.io/2/tutorial/consuming_packages/different_configurations.html
-CONAN_BUILD_TYPE = ${BUILD_TYPE}
+CONAN_BUILD_TYPE = Release
 
 # The target to build and/or run
 # 	Default build target is the default CMake target `all`
@@ -40,7 +40,11 @@ conan-profile:
 
 .PHONY: conan-deps
 conan-deps:
-	conan install . --build=missing --settings=build_type=${CONAN_BUILD_TYPE}
+	conan \
+		install . \
+		-b missing \
+		-s build_type=${CONAN_BUILD_TYPE} \
+		-s "&:build_type=${BUILD_TYPE}"
 
 .PHONY: cmake-config
 cmake-config:
@@ -50,7 +54,7 @@ cmake-config:
 		-G "Ninja Multi-Config" \
 		-DCMAKE_CXX_COMPILER=${CXX} \
 		-DCMAKE_MAKE_PROGRAM=ninja \
-		-DCMAKE_TOOLCHAIN_FILE=${BUILD_DIR}/${CONAN_BUILD_TYPE}/generators/conan_toolchain.cmake
+		-DCMAKE_TOOLCHAIN_FILE=${BUILD_DIR}/${BUILD_TYPE}/generators/conan_toolchain.cmake
 
 .PHONY: build
 build:
