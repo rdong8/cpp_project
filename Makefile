@@ -25,7 +25,7 @@ ARGS =
 
 .PHONY: system-deps
 system-deps:
-	sudo dnf install llvm compiler-rt cmake doxygen
+	sudo dnf install llvm compiler-rt cmake doxygen ninja
 
 .PHONY: py-deps
 py-deps: requirements.txt
@@ -40,11 +40,12 @@ conan-profile:
 
 .PHONY: conan-deps
 conan-deps:
-	conan \
-		install . \
-		-b missing \
-		-s build_type=${CONAN_BUILD_TYPE} \
-		-s "&:build_type=${BUILD_TYPE}"
+	BUILD_DIR=${BUILD_DIR} \
+		conan \
+			install . \
+			-b missing \
+			-s build_type=${CONAN_BUILD_TYPE} \
+			-s "&:build_type=${BUILD_TYPE}"
 
 .PHONY: cmake-config
 cmake-config:

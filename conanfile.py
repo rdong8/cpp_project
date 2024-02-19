@@ -1,3 +1,5 @@
+import os
+
 from conan import ConanFile
 from conan.tools.cmake import cmake_layout, CMakeToolchain
 
@@ -8,7 +10,9 @@ class ConanApplication(ConanFile):
     generators = "CMakeDeps"
 
     def layout(self):
-        cmake_layout(self)
+        if (build_dir := os.getenv("BUILD_DIR")) is None or len(build_dir) == 0:
+            raise KeyError("Environment variable BUILD_DIR not set in {0}".format(__file__))
+        cmake_layout(self, build_folder=build_dir)
 
     def generate(self):
         tc = CMakeToolchain(self)
