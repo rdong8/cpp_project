@@ -20,5 +20,9 @@ set(DOXYGEN_SOURCE_BROWSER YES)
 set(DOXYGEN_USE_MDFILE_AS_MAINPAGE "${CMAKE_SOURCE_DIR}/docs/mainpage.md")
 set(DOXYGEN_USE_MATHJAX YES)
 
-doxygen_add_docs(docs "${PROJECT_SOURCE_DIR}/docs/mainpage.md"
-                 "${PROJECT_SOURCE_DIR}/src" "${PROJECT_SOURCE_DIR}/tests" ALL)
+doxygen_add_docs(docs
+        "${PROJECT_SOURCE_DIR}/docs/mainpage.md"
+        "${PROJECT_SOURCE_DIR}/src"
+        "${PROJECT_SOURCE_DIR}/tests"
+        ALL
+)
