@@ -38,6 +38,7 @@
 .idea/
 .vscode/
 .cache/
+.fleet
 
 # Pyenv
 .python-version
