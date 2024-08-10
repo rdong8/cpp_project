@@ -4,10 +4,12 @@
 
 import mathematics;
 
-namespace {
+namespace
+{
     // Configure the default logger to log to the file "log.txt", flushing on the info level or higher
     [[maybe_unused]]
-    auto configure_file_logger() -> void {
+    auto configure_file_logger() -> void
+    {
         // Create new logger called "logger" to log.txt, clearing previous contents
         const auto logger{spdlog::basic_logger_st("logger", "log.txt", true)};
 
@@ -24,7 +26,8 @@ namespace {
     }
 
     // Demonstrate Boost ASIO
-    auto asio_demo() -> void {
+    auto asio_demo() -> void
+    {
         spdlog::info("ASIO DEMO:");
 
         spdlog::info("Starting wait for 2 seconds!");
@@ -38,7 +41,8 @@ namespace {
     }
 
     // Demonstrate 2D vector class
-    auto vec2_demo() -> void {
+    auto vec2_demo() -> void
+    {
         spdlog::info("VECTOR DEMO:");
 
         constexpr math::Vec2 north{0, 1};
@@ -54,7 +58,8 @@ namespace {
     }
 
     // Demonstrate differentiation operator
-    auto d_dx_demo() -> void {
+    auto d_dx_demo() -> void
+    {
         using math::d_dx;
 
         spdlog::info("DIFFERENTIATION DEMO:");
@@ -70,7 +75,8 @@ namespace {
     }
 }
 
-auto main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) -> int {
+auto main([[maybe_unused]] int argc, [[maybe_unused]] char *argv[]) -> int
+{
     // By default spdlog will log to stdout
     // ::configure_file_logger();
 
