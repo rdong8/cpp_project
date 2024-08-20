@@ -11,7 +11,7 @@ namespace
     auto configure_file_logger() -> void
     {
         // Create new logger called "logger" to log.txt, clearing previous contents
-        const auto logger{spdlog::basic_logger_st("logger", "log.txt", true)};
+        auto const logger{spdlog::basic_logger_st("logger", "log.txt", true)};
 
         // Change the message format to "[abbreviated log level] message"
         // https://github.com/gabime/spdlog/wiki/3.-Custom-formatting
@@ -45,9 +45,9 @@ namespace
     {
         spdlog::info("VECTOR DEMO:");
 
-        constexpr math::Vec2 north{0, 1};
-        constexpr math::Vec2 east{1, 0};
-        constexpr math::Vec2 northeast{1, 1};
+        math::Vec2 constexpr north{0, 1};
+        math::Vec2 constexpr east{1, 0};
+        math::Vec2 constexpr northeast{1, 1};
 
         spdlog::info("Dot product of {} and {} is: {}", north, east, north.dot(east));
         spdlog::info("Dot product of {} and {} is: {}", north, northeast, north.dot(northeast));
@@ -64,12 +64,12 @@ namespace
 
         spdlog::info("DIFFERENTIATION DEMO:");
 
-        static constexpr auto f{[](double x) { return 3 * x * x - x + 16; }};
+        static auto constexpr f{[](double x) { return 3 * x * x - x + 16; }};
 
         spdlog::info("f(x) = 3x^2 - x + 16");
         spdlog::info("f'(4) = {}", d_dx<f>(4.0));
 
-        constexpr auto dfdx{[](double x) { return d_dx<f>(x); }};
+        auto constexpr dfdx{[](double x) { return d_dx<f>(x); }};
 
         spdlog::info("f''(4) = {}", d_dx<dfdx>(4.0));
     }

@@ -6,8 +6,8 @@ import mathematics;
 TEST_CASE("Vector algebra", "[Vec2][math]")
 {
     // Setup (reran for each section)
-    constexpr math::Vec2 v{2, 3};
-    constexpr math::Vec2 w{4, 5};
+    math::Vec2 constexpr v{2, 3};
+    math::Vec2 constexpr w{4, 5};
 
     // SECTION("section name", "[section description]...")
     SECTION("Dot product is commutative")
@@ -17,7 +17,7 @@ TEST_CASE("Vector algebra", "[Vec2][math]")
 
     SECTION("Scalar dot product is associative")
     {
-        constexpr double c{3.0};
+        double constexpr c{3.0};
         REQUIRE(c * (v.dot(w)) == (c * v).dot(w));
     }
 }
