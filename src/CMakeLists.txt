@@ -8,7 +8,10 @@ target_sources(mathematics
 target_link_libraries(mathematics PRIVATE my_config)
 
 add_executable(cpp_project)
-target_sources(cpp_project PRIVATE main.cc)
+target_sources(cpp_project
+        PRIVATE FILE_SET CXX_MODULES FILES
+        main.ccm
+)
 target_link_libraries(cpp_project
         PRIVATE
         my_config
