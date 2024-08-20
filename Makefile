@@ -25,7 +25,8 @@ ARGS =
 
 .PHONY: system-deps
 system-deps:
-	sudo dnf install llvm compiler-rt cmake doxygen ninja
+	sudo dnf install llvm compiler-rt doxygen ninja
+	sudo snap install cmake --classic
 
 .PHONY: py-deps
 py-deps: requirements.txt
