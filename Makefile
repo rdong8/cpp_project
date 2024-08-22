@@ -1,5 +1,8 @@
 PROJECT = cpp_project
 
+# Set to any non-empty string for extra output
+VERBOSE =
+
 # Set a path to the compiler executables
 # Will use the compiler's linker automatically (LLD for Clang, LD for GCC)
 # Will add debug info on certain build types for the compiler's debugger automatically (LLDB for Clang, GDB for GCC)
@@ -64,7 +67,8 @@ build:
 		--build ${BUILD_DIR} \
 		--config ${BUILD_TYPE} \
 		-t $(if $(TARGET),$(TARGET),all) \
-		-j
+		-j \
+		$(if $(VERBOSE),-v,)
 
 .PHONY: run
 run:

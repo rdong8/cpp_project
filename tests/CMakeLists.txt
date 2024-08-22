@@ -4,7 +4,7 @@ add_executable(test_math)
 target_sources(test_math PRIVATE mathematics.cc)
 target_link_libraries(test_math
         PRIVATE
-        my_config
+        config
         Catch2::Catch2WithMain
         mathematics
 )

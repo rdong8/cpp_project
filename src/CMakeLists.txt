@@ -5,7 +5,7 @@ target_sources(mathematics
         PUBLIC FILE_SET CXX_MODULES FILES
         mathematics.ccm
 )
-target_link_libraries(mathematics PRIVATE my_config)
+target_link_libraries(mathematics PRIVATE config)
 
 add_executable(cpp_project)
 target_sources(cpp_project
@@ -14,7 +14,7 @@ target_sources(cpp_project
 )
 target_link_libraries(cpp_project
         PRIVATE
-        my_config
+        config
         Boost::system
         Boost::coroutine
         Boost::regex
