@@ -28,12 +28,12 @@ ARGS =
 
 .PHONY: system-deps
 system-deps:
-	sudo dnf install llvm compiler-rt doxygen ninja
+	sudo dnf install llvm compiler-rt doxygen ninja mold
 	sudo snap install cmake --classic
 
 .PHONY: py-deps
 py-deps: requirements.txt
-	pyenv virtualenv 3.12.1 ${PROJECT}
+	pyenv virtualenv 3.12.5 ${PROJECT}
 	pyenv local ${PROJECT}
 	pip install -r requirements.txt
 

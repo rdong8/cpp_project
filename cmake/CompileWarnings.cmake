@@ -1,4 +1,5 @@
 # Credit: https://github.com/cpp-best-practices/cmake_template/blob/main/cmake/CompilerWarnings.cmake
+# https://best.openssf.org/Compiler-Hardening-Guides/Compiler-Options-Hardening-Guide-for-C-and-C++.html
 
 function(set_project_warnings project_name)
     set(CLANG_WARNINGS
