@@ -1,4 +1,7 @@
-cmake_minimum_required(VERSION 3.30)
+cmake_minimum_required(VERSION 3.30.3 FATAL_ERROR)
+
+set(CMAKE_EXPERIMENTAL_IMPORT_STD "0e5b6991-d74f-4b3d-a41c-cf096e0b2508")
+set(CMAKE_CXX_MODULE_STD 1)
 
 project(cpp_project
         VERSION 0.0.1

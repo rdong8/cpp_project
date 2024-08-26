@@ -2,7 +2,6 @@
 
 import mathematics;
 
-// TEST_CASE("test name", "[tags]...")
 TEST_CASE("Vector algebra", "[Vec2][math]")
 {
     // Setup (reran for each section)
@@ -13,7 +12,7 @@ TEST_CASE("Vector algebra", "[Vec2][math]")
     SECTION("Dot product is commutative")
     {
         REQUIRE(v.dot(w) == w.dot(v));
-    }
+     }
 
     SECTION("Scalar dot product is associative")
     {
