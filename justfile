@@ -1,91 +1,83 @@
-PROJECT = cpp_project
+set dotenv-load
+
+project := "cpp_project"
 
 # Set to any non-empty string for extra output
-VERBOSE =
+verbose := ""
 
 # Set a path to the compiler executables
 # Will use the compiler's linker automatically (LLD for Clang, LD for GCC)
 # Will add debug info on certain build types for the compiler's debugger automatically (LLDB for Clang, GDB for GCC)
-CXX = clang++
+export CXX := "clang++"
 
-BUILD_DIR = build
+build_dir := "build"
 
 # CMake supports Debug, Release, RelWithDebInfo, MinSizeRel to build *your code*
 # 	Source: https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html
-BUILD_TYPE = Debug
+build_type := "Debug"
 
 # Conan supports Debug, Release to build *your dependencies*
 # 	Source: https://docs.conan.io/2/tutorial/consuming_packages/different_configurations.html
-CONAN_BUILD_TYPE = Release
+conan_build_type := "Release"
 
 # The target to build and/or run
 # 	Default build target is the default CMake target `all`
 # 	Default run target is the target with the same name as the project, if present
-TARGET =
+target := "all"
 
-# Arguments to provide to the executable in `make run`
-ARGS =
+# Default to provide to the executable
+default_args := ""
 
-.PHONY: system-deps
 system-deps:
 	sudo dnf install llvm compiler-rt doxygen ninja mold
 	sudo snap install cmake --classic
 
-.PHONY: py-deps
-py-deps: requirements.txt
-	pyenv virtualenv 3.12.5 ${PROJECT}
-	pyenv local ${PROJECT}
+py-deps:
+	pyenv virtualenv 3.12.5 {{ project }}
+	pyenv activate {{ project }}
 	pip install -r requirements.txt
 
 # This only creates the profile, you still need to edit it to contain the details for your compiler and language
-.PHONY: conan-profile
 conan-profile:
 	conan profile detect --force
 
-.PHONY: conan-deps
 conan-deps:
-	BUILD_DIR=${BUILD_DIR} \
+	BUILD_DIR={{ build_dir }} \
 		conan \
 			install . \
 			-b missing \
-			-s build_type=${CONAN_BUILD_TYPE} \
-			-s "&:build_type=${BUILD_TYPE}"
+			-s build_type={{ conan_build_type }} \
+			-s "&:build_type={{ build_type }}"
 
-.PHONY: cmake-config
 cmake-config:
 	cmake \
 		-S . \
-		-B ${BUILD_DIR} \
+		-B {{ build_dir }} \
 		-G "Ninja Multi-Config" \
-		-DCMAKE_CXX_COMPILER=${CXX} \
+		-DCMAKE_CXX_COMPILER={{ CXX }} \
 		-DCMAKE_MAKE_PROGRAM=ninja \
-		-DCMAKE_TOOLCHAIN_FILE=${BUILD_DIR}/${BUILD_TYPE}/generators/conan_toolchain.cmake
+		-DCMAKE_TOOLCHAIN_FILE={{ build_dir }}/{{ build_type }}/generators/conan_toolchain.cmake
 
-.PHONY: build
 build:
 	cmake \
-		--build ${BUILD_DIR} \
-		--config ${BUILD_TYPE} \
-		-t $(if $(TARGET),$(TARGET),all) \
+		--build {{ build_dir }} \
+		--config {{ build_type }} \
+		-t {{ target }} \
 		-j \
-		$(if $(VERBOSE),-v,)
+		{{ if verbose != "" { "-v" } else { "" } }}
 
-.PHONY: run
-run:
-	./${BUILD_DIR}/src/${BUILD_TYPE}/$(if $(TARGET),$(TARGET),$(PROJECT)) ${ARGS}
+run *args=default_args:
+	./{{ build_dir }}/src/{{ build_type }}/{{ if target == "all" { project } else { target } }} {{ args }}
 
-.PHONY: test
 test:
 	ctest \
-		--test-dir ${BUILD_DIR} \
+		--test-dir {{ build_dir }} \
 		--extra-verbose \
-		-C ${BUILD_TYPE} \
+		-C {{ build_type }} \
 		-j
 
-.PHONY: pre-commit
 pre-commit:
 	pre-commit install
 
-.PHONY: clean
 clean:
-	rm -rf ${BUILD_DIR}
+	rm -rf {{ build_dir }}
