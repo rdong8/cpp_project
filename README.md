@@ -2,10 +2,13 @@
 
 Template for a modern C++ project using CMake.
 
-Ideally you should read through both the README and the `justfile` to better understand how everything works.
+Read through both the README and the `justfile` to better understand how everything works.
 
-Note: All `justfile` commands should be run under a shell in which your `.bashrc`, `.zshrc` or equivalent has been
-sourced. Do not use the run button in your IDE, `pyenv` will likely not work.
+### Notes
+
+- Only Linux is supported
+- All `justfile` commands should be run under a shell in which your `.bashrc`, `.zshrc` or equivalent has been sourced.
+  Do not use the run button in your IDE, `pyenv` will likely not work.
 
 ## Clone
 
@@ -17,6 +20,9 @@ cd cpp_project/
 ## Dependencies
 
 ### System
+
+This recipe uses `dnf` and `snap` to install dependencies of this project. You may need to modify the command for your
+distro.
 
 ```bash
 just system-deps
@@ -46,21 +52,21 @@ your compiler and language details:
 
 ```toml
 [buildenv]
-CC=clang
-CXX=clang++
+CC = clang
+CXX = clang++
 
 [settings]
-arch=x86_64
-build_type=Release
-compiler=clang
-compiler.cppstd=23
-compiler.libcxx=libc++
-compiler.version=18
-os=Linux
+arch = x86_64
+build_type = Release
+compiler = clang
+compiler.cppstd = 23
+compiler.libcxx = libc++
+compiler.version = 18
+os = Linux
 ```
 
 Note that the build type here is for your dependencies, which you can compile in release mode even if you are building
-your own code in debug. A variable `CONAN_BUILD_TYPE` is provided in the Makefile to override the build type.
+your own code in debug. A variable `conan_build_type` is provided in the `justfile` to override the build type.
 
 #### Build Dependencies
 
@@ -96,7 +102,7 @@ or create a CMake profile in CLion with the following settings:
 
 ## Build
 
-To build the default target:
+To build the default target with the default arguments specified in the `justfile`:
 
 ```bash
 just build
@@ -105,23 +111,43 @@ just build
 To build a specific target:
 
 ```bash
-just target=docs build
+just build docs
 ```
 
 ## Run
 
-Either set the `target` variable in the Makefile or do it on the command line:
+To run the default target with the default arguments specified in the `justfile`:
 
 ```bash
-just target=main run
+just run
 ```
 
-If `target` is not set, it will try to run the target with the same name as the project.
-
-You can also provide arguments to the executable by adding them after the `run` command:
+To run a specific target:
 
 ```bash
-just run arg1 arg2 arg3
+just run cpp_project
+```
+
+To run a target with arguments:
+
+```bash
+just run cpp_project arg1 arg2 arg3
+```
+
+## Docs
+
+To open the documentation (must be built first via `just build docs`):
+
+```bash
+just docs
+```
+
+To open with a particular browser, pass the path to the command that will be passed the `index.html` file of the
+browser:
+
+```bash
+just docs firefox
+just docs "flatpak run com.brave.Browser" # You need to use Flatseal to give the flatpak permission in this case
 ```
 
 ## Test

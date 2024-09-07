@@ -1,7 +1,7 @@
 import os
 
 from conan import ConanFile
-from conan.tools.cmake import cmake_layout, CMakeToolchain
+from conan.tools.cmake import CMakeToolchain, cmake_layout
 
 
 class ConanApplication(ConanFile):
@@ -9,9 +9,12 @@ class ConanApplication(ConanFile):
     settings = "os", "compiler", "build_type", "arch"
     generators = "CMakeDeps"
 
+    def configure(self):
+        self.options["spdlog"].use_std_format = True
+
     def layout(self):
         if (build_dir := os.getenv("BUILD_DIR")) is None or len(build_dir) == 0:
-            raise KeyError("Environment variable BUILD_DIR not set in {0}".format(__file__))
+            raise KeyError(f"Environment variable BUILD_DIR not set in {__file__}")
         cmake_layout(self, build_folder=build_dir)
 
     def generate(self):

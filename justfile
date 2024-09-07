@@ -3,10 +3,9 @@ set dotenv-load
 project := "cpp_project"
 
 # Set to any non-empty string for extra output
-verbose := ""
+verbose := "True"
 
 # Set a path to the compiler executables
-# Will use the compiler's linker automatically (LLD for Clang, LD for GCC)
 # Will add debug info on certain build types for the compiler's debugger automatically (LLDB for Clang, GDB for GCC)
 export CXX := "clang++"
 
@@ -20,13 +19,18 @@ build_type := "Debug"
 # 	Source: https://docs.conan.io/2/tutorial/consuming_packages/different_configurations.html
 conan_build_type := "Release"
 
-# The target to build and/or run
-# 	Default build target is the default CMake target `all`
-# 	Default run target is the target with the same name as the project, if present
-target := "all"
+# The default target to build if none is provided to the `build` recipe
+default_build_target := "all"
 
-# Default to provide to the executable
+# Default target to run if none is provided to the `run` recipe
+default_run_target := project
+
+# Default arguments to provide when running the executable if none are provided to the `run` recipe
 default_args := ""
+
+# Command that will be invoked to open the `index.html` from the documentation.
+# ie. Set to `firefox` so that docs are opened with `firefox index.html`
+default_browser := "xdg-open"
 
 system-deps:
 	sudo dnf install llvm compiler-rt doxygen ninja mold
@@ -58,7 +62,7 @@ cmake-config:
 		-DCMAKE_MAKE_PROGRAM=ninja \
 		-DCMAKE_TOOLCHAIN_FILE={{ build_dir }}/{{ build_type }}/generators/conan_toolchain.cmake
 
-build:
+build target=default_build_target:
 	cmake \
 		--build {{ build_dir }} \
 		--config {{ build_type }} \
@@ -66,8 +70,11 @@ build:
 		-j \
 		{{ if verbose != "" { "-v" } else { "" } }}
 
-run *args=default_args:
-	./{{ build_dir }}/src/{{ build_type }}/{{ if target == "all" { project } else { target } }} {{ args }}
+run target=default_run_target *args=default_args:
+    ./{{ build_dir }}/src/{{ build_type }}/{{ if target == "all" { project } else { target } }} {{ args }}
+
+docs browser=default_browser:
+    {{ browser }} $(realpath {{ build_dir }})/docs/html/index.html
 
 test:
 	ctest \
