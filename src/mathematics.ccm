@@ -2,9 +2,16 @@
 /// A sample library containing math functions.
 /// A documentation comment for the file like this one must be in any file you wish to be tracked by Doxygen.
 
+module;
+
+#include <concepts>
+#include <format>
+#include <string_view>
+#include <utility>
+
 export module mathematics;
 
-import std;
+// import std;
 
 export namespace math
 {
@@ -124,7 +131,7 @@ export namespace math
 /// Formatter specialization for @ref math::Vec2
 export
 template<>
-struct std::formatter<math::Vec2> : std::formatter<std::string>
+struct std::formatter<math::Vec2> : std::formatter<std::string_view>
 {
     [[nodiscard]]
     auto format([[maybe_unused]] this auto const &self, math::Vec2 const &vec,

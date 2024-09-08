@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.30.3 FATAL_ERROR)
 
-set(CMAKE_EXPERIMENTAL_IMPORT_STD "0e5b6991-d74f-4b3d-a41c-cf096e0b2508")
-set(CMAKE_CXX_MODULE_STD 1)
+# set(CMAKE_EXPERIMENTAL_IMPORT_STD "0e5b6991-d74f-4b3d-a41c-cf096e0b2508")
+# set(CMAKE_CXX_MODULE_STD ON)
 
 project(cpp_project
         VERSION 0.0.1
@@ -23,7 +23,7 @@ if (CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
     set(CMAKE_CXX_STANDARD_REQUIRED True)
 
     # Ensure -std=c++xx instead of -std=g++xx
-    set(CMAKE_CXX_EXTENSIONS OFF)
+    set(CMAKE_CXX_EXTENSIONS ON)
 
     # Generate compile_commands.json to make it easier to work with clang based tools
     set(CMAKE_EXPORT_COMPILE_COMMANDS ON)

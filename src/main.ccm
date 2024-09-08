@@ -52,6 +52,7 @@ auto vec2_demo() -> void
     math::Vec2 constexpr northeast{1, 1};
 
     spdlog::info("Dot product of {} and {} is: {}", north, east, north.dot(east));
+    spdlog::info("{}");
     spdlog::info("Dot product of {} and {} is: {}", north, northeast, north.dot(northeast));
 
     spdlog::info("Norm of {} is: {}", northeast, northeast.norm());
@@ -66,12 +67,12 @@ auto d_dx_demo() -> void
 
     spdlog::info("DIFFERENTIATION DEMO:");
 
-    auto constexpr f{[](double x) { return 3 * x * x - x + 16; }};
+    static auto constexpr f{[](double x) { return 3 * x * x - x + 16; }};
 
     spdlog::info("f(x) = 3x^2 - x + 16");
     spdlog::info("f'(4) = {}", d_dx<f>(4.0));
 
-    auto constexpr dfdx{[&](double x) { return d_dx<f>(x); }};
+    auto constexpr dfdx{[](double x) { return d_dx<f>(x); }};
 
     spdlog::info("f''(4) = {}", d_dx<dfdx>(4.0));
 }

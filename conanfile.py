@@ -10,7 +10,7 @@ class ConanApplication(ConanFile):
     generators = "CMakeDeps"
 
     def configure(self):
-        self.options["spdlog"].use_std_format = True
+        self.options["spdlog"].use_std_fmt = True
 
     def layout(self):
         if (build_dir := os.getenv("BUILD_DIR")) is None or len(build_dir) == 0:
