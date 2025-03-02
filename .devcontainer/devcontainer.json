@@ -1,0 +1,32 @@
+{
+  "name": "Dev Container",
+  "containerEnv": {
+    // For Podman
+    "HOME": "/home/dev"
+  },
+  //  For Podman
+  "remoteUser": "dev",
+  "capAdd": [
+    // For C++
+    "SYS_PTRACE"
+  ],
+  "securityOpt": [
+    // For C++
+    "seccomp=unconfined",
+    // For Podman
+    "label=disable"
+  ],
+  "features": {
+    "git": "latest",
+    "git-lfs": "latest",
+  },
+  "build": {
+    "dockerfile": "Containerfile"
+  },
+  "runArgs": [
+    // For Podman:
+    // - https://code.visualstudio.com/remote/advancedcontainers/docker-options#_podman
+    // - https://universal-blue.discourse.group/t/should-we-really-recommend-vscode-podman-as-supported/220/3
+    "--userns=keep-id"
+  ],
+}

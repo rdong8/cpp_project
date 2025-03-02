@@ -1,0 +1,17 @@
+FROM mcr.microsoft.com/devcontainers/cpp:debian-12
+
+# For Just
+RUN \
+  wget -qO - 'https://proget.makedeb.org/debian-feeds/prebuilt-mpr.pub' | gpg --dearmor | tee /usr/share/keyrings/prebuilt-mpr-archive-keyring.gpg 1> /dev/null \
+  && echo "deb [arch=all,$(dpkg --print-architecture) signed-by=/usr/share/keyrings/prebuilt-mpr-archive-keyring.gpg] https://proget.makedeb.org prebuilt-mpr bookworm" | tee /etc/apt/sources.list.d/prebuilt-mpr.list
+
+# For uv
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
+
+RUN \
+  export DEBIAN_FRONTEND=noninteractive \
+  && apt-get update \
+  && apt-get install -y \
+    apt-transport-https ca-certificates gnupg curl \
+    just \
+  && apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/*

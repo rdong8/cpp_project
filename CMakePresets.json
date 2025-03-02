@@ -1,0 +1,85 @@
+{
+    "version": 10,
+    "cmakeMinimumRequired": {
+        "major": 3,
+        "minor": 31
+    },
+    "configurePresets": [
+        {
+            "name": "Base",
+            "hidden": true,
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Linux"
+            },
+            "generator": "Ninja Multi-Config",
+            "toolchainFile": "$env{BUILD_DIR}/${presetName}/generators/conan_toolchain.cmake",
+            "environment": {
+                "BUILD_DIR": "build"
+            }
+        },
+        {
+            "name": "Debug",
+            "inherits": "Base"
+        },
+        {
+            "name": "RelWithDebInfo",
+            "inherits": "Base"
+        },
+        {
+            "name": "Release",
+            "inherits": "Base"
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "Debug",
+            "configurePreset": "Debug",
+            "configuration": "Debug"
+        },
+        {
+            "name": "RelWithDebInfo",
+            "configurePreset": "RelWithDebInfo",
+            "configuration": "RelWithDebInfo"
+        },
+        {
+            "name": "Release",
+            "configurePreset": "Release",
+            "configuration": "Release"
+        }
+    ],
+    "testPresets": [
+        {
+            "name": "Debug",
+            "configurePreset": "Debug",
+            "configuration": "Debug",
+            "output": {
+                "verbosity": "extra",
+                "outputOnFailure": true
+            }
+        },
+        {
+            "name": "RelWithDebInfo",
+            "configurePreset": "RelWithDebInfo",
+            "configuration": "RelWithDebInfo",
+            "output": {
+                "outputOnFailure": true
+            }
+        },
+        {
+            "name": "Release",
+            "configurePreset": "Release",
+            "configuration": "Release",
+            "output": {
+                "outputOnFailure": true
+            }
+        }
+    ],
+    "vendor": {
+        "conan": {}
+    },
+    "include": [
+        "build/generators/CMakePresets.json"
+    ]
+}
