@@ -2,16 +2,9 @@
 /// A sample library containing math functions.
 /// A documentation comment for the file like this one must be in any file you wish to be tracked by Doxygen.
 
-module;
-
-#include <concepts>
-#include <format>
-#include <string_view>
-#include <utility>
-
 export module mathematics;
 
-// import std;
+import std;
 
 export namespace math
 {

@@ -8,7 +8,6 @@ Read through both the README and the `justfile` to better understand how everyth
 
 - Only Linux is supported
 - All `justfile` commands should be run under a shell in which your `.bashrc`, `.zshrc` or equivalent has been sourced.
-  Do not use the run button in your IDE, `pyenv` will likely not work.
 
 ## Clone
 
@@ -30,11 +29,11 @@ just system-deps
 
 ### Python
 
-First ensure you have [pyenv](https://github.com/pyenv/pyenv) and
-[pyenv-virtualenv](https://github.com/pyenv/pyenv-virtualenv) installed. Then:
+First ensure you have [uv](https://github.com/astral-sh/uv) installed. Then:
 
 ```bash
-just py-deps
+just venv # Creates a virtual environment
+just py-deps # Installs the Python dependencies. Use `just py-deps 1` to force a reinstall.
 ```
 
 ### Conan
@@ -52,17 +51,23 @@ your compiler and language details:
 
 ```toml
 [buildenv]
-CC = clang
-CXX = clang++
+CC=clang
+CXX=clang++
+
+[conf]
+tools.cmake.cmaketoolchain:generator=Ninja Multi-Config
+
+[platform_tool_requires]
+cmake/3.31.0
 
 [settings]
-arch = x86_64
-build_type = Release
-compiler = clang
-compiler.cppstd = 23
-compiler.libcxx = libc++
-compiler.version = 18
-os = Linux
+arch=x86_64
+build_type=Release
+compiler=clang
+compiler.cppstd=26
+compiler.libcxx=libc++
+compiler.version=19
+os=Linux
 ```
 
 Note that the build type here is for your dependencies, which you can compile in release mode even if you are building

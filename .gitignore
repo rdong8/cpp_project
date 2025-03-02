@@ -46,3 +46,9 @@
 # CMake
 CMakeUserPresets.json
 Testing/
+
+# uv
+uv.lock
+
+# Python distribution / packaging
+*.egg-info/
