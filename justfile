@@ -29,11 +29,6 @@ default_args := ""
 # ie. Set to `firefox` so that docs are opened with `firefox index.html`
 default_browser := "xdg-open"
 
-# Fedora-specific
-system-deps:
-	sudo dnf install llvm compiler-rt doxygen ninja mold
-	sudo snap install cmake --classic
-
 venv:
 	uv venv --python 3.13
 

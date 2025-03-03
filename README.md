@@ -18,16 +18,6 @@ cd cpp_project/
 
 ## Dependencies
 
-### System
-
-This recipe uses `dnf` and `snap` to install dependencies of this project. You may need to modify the command for your distro.
-
-```bash
-just system-deps
-```
-
-Alternatively, using the `devcontainer` will install these dependencies for you.
-
 ### Python
 
 First ensure you have [uv](https://github.com/astral-sh/uv) installed. Then:
@@ -50,6 +40,10 @@ just conan-profile
 Then, modify the `$(conan config home)/profiles/default` profile that was generated:
 
 ```toml
+[buildenv]
+CC=clang
+CXX=clang++
+
 [conf]
 # tools.build:exelinkflags=["-fuse-ld=mold"]
 # tools.build:sharedlinkflags=["-fuse-ld=mold"]

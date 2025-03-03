@@ -10,6 +10,7 @@ RUN \
     doxygen \
     helix \
     just \
+    libcxx \
     lldb \
     llvm \
     mold \
