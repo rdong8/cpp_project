@@ -1,59 +1,45 @@
 {
-    "version": 10,
+    "version": 9,
     "cmakeMinimumRequired": {
         "major": 3,
-        "minor": 31
+        "minor": 30
     },
     "configurePresets": [
         {
-            "name": "Base",
-            "hidden": true,
+            "name": "Default",
+            "inherits": "conan-default",
             "condition": {
                 "type": "equals",
                 "lhs": "${hostSystemName}",
                 "rhs": "Linux"
             },
-            "generator": "Ninja Multi-Config",
-            "toolchainFile": "$env{BUILD_DIR}/${presetName}/generators/conan_toolchain.cmake",
             "environment": {
                 "BUILD_DIR": "build"
             }
-        },
-        {
-            "name": "Debug",
-            "inherits": "Base"
-        },
-        {
-            "name": "RelWithDebInfo",
-            "inherits": "Base"
-        },
-        {
-            "name": "Release",
-            "inherits": "Base"
         }
     ],
     "buildPresets": [
         {
             "name": "Debug",
-            "configurePreset": "Debug",
-            "configuration": "Debug"
+            "inherits": "conan-debug",
+            "configurePreset": "Default"
         },
         {
             "name": "RelWithDebInfo",
-            "configurePreset": "RelWithDebInfo",
-            "configuration": "RelWithDebInfo"
+            "inherits": "conan-relwithdebinfo",
+            "configurePreset": "Default"
         },
         {
             "name": "Release",
-            "configurePreset": "Release",
-            "configuration": "Release"
+            "inherits": "conan-release",
+            "configurePreset": "Default"
         }
     ],
     "testPresets": [
         {
             "name": "Debug",
-            "configurePreset": "Debug",
-            "configuration": "Debug",
+            "inherits": "conan-debug",
+            "configurePreset": "Default",
             "output": {
                 "verbosity": "extra",
                 "outputOnFailure": true
@@ -61,24 +47,21 @@
         },
         {
             "name": "RelWithDebInfo",
-            "configurePreset": "RelWithDebInfo",
-            "configuration": "RelWithDebInfo",
+            "inherits": "conan-relwithdebinfo",
+            "configurePreset": "Default",
             "output": {
                 "outputOnFailure": true
             }
         },
         {
             "name": "Release",
-            "configurePreset": "Release",
-            "configuration": "Release",
+            "inherits": "conan-release",
+            "configurePreset": "Default",
             "output": {
                 "outputOnFailure": true
             }
         }
     ],
-    "vendor": {
-        "conan": {}
-    },
     "include": [
         "build/generators/CMakePresets.json"
     ]

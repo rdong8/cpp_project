@@ -1,3 +1,6 @@
+// Podman notes:
+// - https://code.visualstudio.com/remote/advancedcontainers/docker-options#_podman
+// - https://universal-blue.discourse.group/t/should-we-really-recommend-vscode-podman-as-supported/220/3
 {
   "name": "Dev Container",
   "containerEnv": {
@@ -16,17 +19,30 @@
     // For Podman
     "label=disable"
   ],
-  "features": {
-    "git": "latest",
-    "git-lfs": "latest",
-  },
+	"customizations": {
+		"vscode": {
+			"extensions": [
+        "DavidAnson.vscode-markdownlint",
+        "charliermarsh.ruff",
+        "cschlosser.doxdocgen",
+        "eamodio.gitlens",
+        "jeff-hykin.better-cpp-syntax",
+        "ms-azuretools.vscode-docker",
+        "ms-python.isort",
+        "ms-python.mypy-type-checker",
+        "ms-python.python",
+        "ms-vscode.cpptools-extension-pack",
+        "nefrob.vscode-just-syntax",
+        "usernamehw.errorlens",
+        "vadimcn.vscode-lldb"
+			]
+		}
+	},
   "build": {
     "dockerfile": "Containerfile"
   },
   "runArgs": [
     // For Podman:
-    // - https://code.visualstudio.com/remote/advancedcontainers/docker-options#_podman
-    // - https://universal-blue.discourse.group/t/should-we-really-recommend-vscode-podman-as-supported/220/3
     "--userns=keep-id"
-  ],
+  ]
 }
