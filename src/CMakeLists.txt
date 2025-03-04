@@ -15,11 +15,6 @@ target_sources(cpp_project
 target_link_libraries(cpp_project
         PRIVATE
         config
-        Boost::system
-        Boost::coroutine
-        Boost::regex
-        Boost::thread
-        Boost::date_time
-        Boost::serialization
+        Boost::headers
         mathematics
 )
