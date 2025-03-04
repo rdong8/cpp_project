@@ -4,11 +4,10 @@ Template for a modern C++ project using CMake.
 
 Read through both the README and the `justfile` to better understand how everything works.
 
-### Notes
+## Notes
 
 - Only Linux is supported
 - All `justfile` commands should be run under a shell in which your `.bashrc`, `.zshrc` or equivalent has been sourced.
-  Do not use the run button in your IDE, `pyenv` will likely not work.
 
 ## Clone
 
@@ -19,22 +18,13 @@ cd cpp_project/
 
 ## Dependencies
 
-### System
-
-This recipe uses `dnf` and `snap` to install dependencies of this project. You may need to modify the command for your
-distro.
-
-```bash
-just system-deps
-```
-
 ### Python
 
-First ensure you have [pyenv](https://github.com/pyenv/pyenv) and
-[pyenv-virtualenv](https://github.com/pyenv/pyenv-virtualenv) installed. Then:
+First ensure you have [uv](https://github.com/astral-sh/uv) installed. Then:
 
 ```bash
-just py-deps
+just venv # Creates a virtual environment
+just py-deps # Installs the Python dependencies. Use `just py-deps 1` to force a reinstall.
 ```
 
 ### Conan
@@ -47,26 +37,39 @@ Check if you already have a Conan profile with `conan profile list`. If you have
 just conan-profile
 ```
 
-Then, modify the `$(conan config home)/profiles/default` profile generated to add a `[buildenv]` section, and put in
-your compiler and language details:
+Then, modify the `$(conan config home)/profiles/default` profile that was generated:
 
 ```toml
 [buildenv]
-CC = clang
-CXX = clang++
+CC=clang
+CXX=clang++
+
+[conf]
+# tools.build:exelinkflags=["-fuse-ld=mold"]
+# tools.build:sharedlinkflags=["-fuse-ld=mold"]
+tools.cmake.cmaketoolchain:generator=Ninja Multi-Config
+# Paths to your compilers if they're not `clang` and `clang++`
+# tools.build:compiler_executables={"c": "clang-19", "cpp": "clang++-19"}
+
+[platform_tool_requires]
+cmake/3.31.0
 
 [settings]
-arch = x86_64
-build_type = Release
-compiler = clang
-compiler.cppstd = 23
-compiler.libcxx = libc++
-compiler.version = 18
-os = Linux
+arch=x86_64
+build_type=Release
+compiler=clang
+compiler.cppstd=23 # TODO: 26 causing problems
+compiler.libcxx=libc++
+compiler.version=19
+os=Linux
+
+# TODO: Causes dependency loop
+# [tool_requires]
+# !mold/*: mold/[*]
 ```
 
 Note that the build type here is for your dependencies, which you can compile in release mode even if you are building
-your own code in debug. A variable `conan_build_type` is provided in the `justfile` to override the build type.
+your own code in debug.
 
 #### Build Dependencies
 
@@ -80,25 +83,11 @@ just conan-deps
 
 First, go in the `justfile` and set the paths to the C and C++ compilers.
 
-Then either run:
+Then run:
 
 ```bash
-just cmake-config
+just config
 ```
-
-or create a CMake profile in CLion with the following settings:
-
-- Name: Debug
-- Build type: Debug
-- Toolchain: Use Default
-- Generator: Ninja Multi-Config
-- CMake options:
-    ```
-    -G "Ninja Multi-Config" -DCMAKE_TOOLCHAIN_FILE=build/Debug/generators/conan_toolchain.cmake
-    ```
-- Build directory: `build/`
-- Build options: empty
-- Environment: empty
 
 ## Build
 
@@ -172,4 +161,4 @@ Cleans the build directory.
 just clean
 ```
 
-You'll need to make the project's Conan dependencies and run the CMake config again with `just conan-deps cmake-config`.
+You'll need to make the project's Conan dependencies and run the CMake config again with `just conan-deps config`.

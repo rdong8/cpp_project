@@ -8,6 +8,7 @@ export module main;
 
 import mathematics;
 
+
 // Configure the default logger to log to the file "log.txt", flushing on the info level or higher
 [[maybe_unused]]
 auto configure_file_logger() -> void
@@ -52,7 +53,6 @@ auto vec2_demo() -> void
     math::Vec2 constexpr northeast{1, 1};
 
     spdlog::info("Dot product of {} and {} is: {}", north, east, north.dot(east));
-    spdlog::info("{}");
     spdlog::info("Dot product of {} and {} is: {}", north, northeast, north.dot(northeast));
 
     spdlog::info("Norm of {} is: {}", northeast, northeast.norm());

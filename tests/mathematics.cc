@@ -12,11 +12,11 @@ TEST_CASE("Vector algebra", "[Vec2][math]")
     SECTION("Dot product is commutative")
     {
         REQUIRE(v.dot(w) == w.dot(v));
-     }
+    }
 
     SECTION("Scalar dot product is associative")
     {
-        double constexpr c{3.0};
+        auto constexpr c{3.0};
         REQUIRE(c * (v.dot(w)) == (c * v).dot(w));
     }
 }

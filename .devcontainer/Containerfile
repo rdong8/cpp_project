@@ -1,0 +1,24 @@
+FROM docker.io/fedora:latest
+
+RUN \
+  dnf update -y \
+  && dnf install -y \
+    @development-tools \
+    cmake \
+    clang \
+    clang-tools-extra-devel \
+    compiler-rt \
+    doxygen \
+    helix \
+    just \
+    libcxx-devel \
+    lldb \
+    llvm \
+    mold \
+    ninja \
+    uv \
+    wget \
+  && dnf clean all && rm -rf /var/cache/dnf
+
+RUN useradd -ms /bin/bash dev
+USER dev

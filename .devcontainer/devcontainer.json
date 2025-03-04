@@ -1,0 +1,48 @@
+// Podman notes:
+// - https://code.visualstudio.com/remote/advancedcontainers/docker-options#_podman
+// - https://universal-blue.discourse.group/t/should-we-really-recommend-vscode-podman-as-supported/220/3
+{
+  "name": "Dev Container",
+  "containerEnv": {
+    // For Podman
+    "HOME": "/home/dev"
+  },
+  //  For Podman
+  "remoteUser": "dev",
+  "capAdd": [
+    // For C++
+    "SYS_PTRACE"
+  ],
+  "securityOpt": [
+    // For C++
+    "seccomp=unconfined",
+    // For Podman
+    "label=disable"
+  ],
+	"customizations": {
+		"vscode": {
+			"extensions": [
+        "DavidAnson.vscode-markdownlint",
+        "charliermarsh.ruff",
+        "cschlosser.doxdocgen",
+        "eamodio.gitlens",
+        "jeff-hykin.better-cpp-syntax",
+        "ms-azuretools.vscode-docker",
+        "ms-python.isort",
+        "ms-python.mypy-type-checker",
+        "ms-python.python",
+        "ms-vscode.cpptools-extension-pack",
+        "nefrob.vscode-just-syntax",
+        "usernamehw.errorlens",
+        "vadimcn.vscode-lldb"
+			]
+		}
+	},
+  "build": {
+    "dockerfile": "Containerfile"
+  },
+  "runArgs": [
+    // For Podman:
+    "--userns=keep-id"
+  ]
+}

@@ -2,32 +2,24 @@
 /// A sample library containing math functions.
 /// A documentation comment for the file like this one must be in any file you wish to be tracked by Doxygen.
 
-module;
-
-#include <concepts>
-#include <format>
-#include <string_view>
-#include <utility>
-
 export module mathematics;
 
-// import std;
+import std;
 
 export namespace math
 {
     /// A 2-dimensional mathematical vector
-    class Vec2
+    struct Vec2
     {
         /// The x component of the vector (regular doc comment)
-        double x_{};
-        double y_{}; ///< The y component of the vector (postfix doc comment)
+        double x{};
+        double y{}; ///< The y component of the vector (postfix doc comment)
 
-    public:
         /// Construct a new @ref Vec2 with the given components.
         /// @param[in] _x The x component
         /// @param[in] _y The y component
         constexpr Vec2(double _x, double _y)
-            : x_{_x}, y_{_y}
+            : x{_x}, y{_y}
         {
         }
 
@@ -41,49 +33,30 @@ export namespace math
 
         constexpr Vec2(Vec2 &&other) noexcept = default;
 
-        [[maybe_unused]]
         auto constexpr operator=(Vec2 const &other) noexcept -> Vec2 & = default;
 
-        [[maybe_unused]]
         auto constexpr operator=(Vec2 &&other) noexcept -> Vec2 & = default;
-
-        ///@}
-
-        /// @name Getters
-        ///@{
-        /// Getters for each component of the vector
-        [[nodiscard]]
-        auto constexpr x(this auto const &self) noexcept -> double
-        {
-            return self.x_;
-        }
-
-        [[nodiscard]]
-        auto constexpr y(this auto const &self) noexcept -> double
-        {
-            return self.y_;
-        }
 
         ///@}
 
         /// Compute the dot product of this vector and @p other
         /// @param[in] other The second operand of the dot product operator
         [[nodiscard]]
-        auto constexpr dot(this auto const &self, Vec2 const &other) noexcept -> double
+        auto constexpr dot(this Vec2 const &self, Vec2 const &other) noexcept -> double
         {
-            return self.x_ * other.x_ + self.y_ * other.y_;
+            return self.x * other.x + self.y * other.y;
         }
 
         /// Compute the norm of this vector
         [[nodiscard]]
-        auto constexpr norm(this auto const &self) noexcept -> double
+        auto constexpr norm(this Vec2 const &self) noexcept -> double
         {
             return std::sqrt(self.dot(self));
         }
 
         /// Compare this vector and @p other by norm
         [[nodiscard]]
-        auto constexpr operator<=>(this auto const &self, Vec2 const &other) noexcept -> std::weak_ordering
+        auto constexpr operator<=>(this Vec2 const &self, Vec2 const &other) noexcept -> std::weak_ordering
         {
             return std::weak_order(self.norm(), other.norm());
         }
@@ -91,9 +64,9 @@ export namespace math
         /// Compute the scalar product of this vector and @p c
         /// @param[in] c The scalar
         [[nodiscard]]
-        auto constexpr operator*(this auto const &self, double c) noexcept -> Vec2
+        auto constexpr operator*(this Vec2 const &self, double c) noexcept -> Vec2
         {
-            return Vec2{c * self.x(), c * self.y()};
+            return Vec2{c * self.x, c * self.y};
         }
 
         /// Compute the scalar product of @p c and @p vec
@@ -137,6 +110,6 @@ struct std::formatter<math::Vec2> : std::formatter<std::string_view>
     auto format([[maybe_unused]] this auto const &self, math::Vec2 const &vec,
                 std::format_context &ctx) -> std::format_context::iterator
     {
-        return std::format_to(ctx.out(), "({}, {})", vec.x(), vec.y());
+        return std::format_to(ctx.out(), "({}, {})", vec.x, vec.y);
     }
 };
