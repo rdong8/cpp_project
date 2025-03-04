@@ -7,9 +7,8 @@ verbose := "True"
 
 build_dir := "build"
 
-# How to build your code
-# 	Source: https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html
 build_type := "Debug"
+preset := "conan-" + shell('echo ' + build_type + ' | tr "[:upper:]" "[:lower:]"')
 
 conan := "uv run conan"
 
@@ -53,12 +52,12 @@ config:
 	cmake \
 		-S . \
 		-B {{ build_dir }} \
-		--preset Default
+		--preset conan-default
 
 build target=default_build_target:
 	cmake \
 		--build {{ build_dir }} \
-		--preset {{ build_type }} \
+		--preset {{ preset }} \
 		{{ if target != "" { "-t " + target } else { "" } }} \
 		{{ if verbose != "" { "-v" } else { "" } }}
 
@@ -70,7 +69,7 @@ docs browser=default_browser:
 
 test:
 	ctest \
-		--preset {{ build_type }} \
+		--preset {{ preset }} \
 		{{ if verbose != "" { "--extra-verbose" } else { "" } }}
 
 pre-commit:
