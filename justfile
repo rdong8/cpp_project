@@ -49,7 +49,7 @@ conan-deps:
 			-pr:h {{ conan_host_profile }} \
 			-s build_type={{ build_type }}
 
-cmake-config:
+config:
 	cmake \
 		-S . \
 		-B {{ build_dir }} \

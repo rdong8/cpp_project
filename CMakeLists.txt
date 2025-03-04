@@ -3,7 +3,9 @@ cmake_minimum_required(VERSION 3.30.0 FATAL_ERROR)
 set(CMAKE_EXPERIMENTAL_CXX_IMPORT_STD "0e5b6991-d74f-4b3d-a41c-cf096e0b2508")
 set(CMAKE_CXX_MODULE_STD ON)
 set(CMAKE_CXX_SCAN_FOR_MODULES ON)
-
+set(CMAKE_CXX_EXTENSIONS OFF)
+set(CMAKE_CXX_STANDARD 23) # TODO: Boost Conan package doesn't support C++26/CMAKE_CXX_STANDARD_LATEST
+set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 project(cpp_project
         VERSION 0.0.1
@@ -12,21 +14,12 @@ project(cpp_project
         LANGUAGES CXX
 )
 
-# Only these 2 compilers are supported for now
-# https://cmake.org/cmake/help/latest/variable/CMAKE_LANG_COMPILER_ID.html#variable:CMAKE_%3CLANG%3E_COMPILER_ID
 if ("$<NOT:$<CXX_COMPILER_ID:Clang,GCC>>")
     message(FATAL_ERROR "Invalid compiler. Must be either Clang or GCC.")
 endif ()
 
 # Only do these if this is the main project, and not if it is included through add_subdirectory
 if (CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
-    # Optionally set things like CMAKE_CXX_STANDARD, CMAKE_POSITION_INDEPENDENT_CODE here
-    set(CMAKE_CXX_STANDARD "${CMAKE_CXX_STANDARD_LATEST}")
-    set(CMAKE_CXX_STANDARD_REQUIRED True)
-
-    # Ensure -std=c++xx instead of -std=g++xx
-    set(CMAKE_CXX_EXTENSIONS ON)
-
     set(CMAKE_CXX_CLANG_TIDY
         clang-tidy
         "-checks=-*,cppcoreguidelines-*"

@@ -6,11 +6,12 @@ RUN \
     @development-tools \
     cmake \
     clang \
+    clang-tools-extra-devel \
     compiler-rt \
     doxygen \
     helix \
     just \
-    libcxx \
+    libcxx-devel \
     lldb \
     llvm \
     mold \

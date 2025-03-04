@@ -86,7 +86,7 @@ First, go in the `justfile` and set the paths to the C and C++ compilers.
 Then run:
 
 ```bash
-just cmake-config
+just config
 ```
 
 ## Build
@@ -161,4 +161,4 @@ Cleans the build directory.
 just clean
 ```
 
-You'll need to make the project's Conan dependencies and run the CMake config again with `just conan-deps cmake-config`.
+You'll need to make the project's Conan dependencies and run the CMake config again with `just conan-deps config`.
