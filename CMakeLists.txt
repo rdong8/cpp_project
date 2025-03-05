@@ -22,10 +22,13 @@ endif ()
 
 # Only do these if this is the main project, and not if it is included through add_subdirectory
 if (CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
-    set(CMAKE_CXX_CLANG_TIDY
-        clang-tidy
-        "-checks=-*,cppcoreguidelines-*"
-    )
+    # TODO: Currently broken
+    # find_program(CLANG_TIDY NAMES clang-tidy REQUIRED)
+
+    # set(CMAKE_CXX_CLANG_TIDY
+    #     ${CLANG_TIDY}
+    #     "-checks=-*,cppcoreguidelines-*"
+    # )
 
     # Generate compile_commands.json to make it easier to work with clang based tools
     set(CMAKE_EXPORT_COMPILE_COMMANDS ON)

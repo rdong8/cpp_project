@@ -3,7 +3,7 @@ set dotenv-load
 project := "cpp_project"
 
 # Set to any non-empty string for extra output
-verbose := "True"
+verbose := ""
 
 build_dir := "build"
 
