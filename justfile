@@ -28,6 +28,9 @@ default_args := ""
 # ie. Set to `firefox` so that docs are opened with `firefox index.html`
 default_browser := "xdg-open"
 
+# The default editor to edit configuration files with
+default_editor := "hx"
+
 venv:
 	uv venv --python 3.13
 
@@ -38,6 +41,9 @@ py-deps reinstall="0":
 # This only creates the profile, you still need to edit it to contain the details for your compiler and language
 conan-profile:
 	{{ conan }} profile detect --force
+
+edit-conan-profile editor=default_editor profile="default":
+	{{ editor }} $({{ conan }} config home)/profiles/{{ profile }}
 
 conan-deps:
 	BUILD_DIR={{ build_dir }} \
