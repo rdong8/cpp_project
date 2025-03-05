@@ -3,11 +3,9 @@
 
 function(set_project_warnings project_name)
     set(CLANG_WARNINGS
-            "-fcolor-diagnostics"
     )
 
     set(GCC_WARNINGS
-            "-fdiagonostics-color=always"
             "-Wduplicated-branches" # Warn if if / else branches have duplicated code
             "-Wduplicated-cond" # Warn if if / else chain has duplicated conditions
             "-Wlogical-op" # Warn about logical operations being used where bitwise were probably wanted
