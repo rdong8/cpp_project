@@ -9,6 +9,9 @@ class ConanApplication(ConanFile):
     settings = "os", "compiler", "build_type", "arch"
     generators = "CMakeDeps"
 
+    def build_requirements(self):
+        self.tool_requires("cmake/[>=3.30]")
+
     def configure(self):
         self.options["spdlog"].use_std_fmt = True
 

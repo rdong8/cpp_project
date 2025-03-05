@@ -52,7 +52,8 @@ tools.cmake.cmaketoolchain:generator=Ninja Multi-Config
 # tools.build:compiler_executables={"c": "clang-19", "cpp": "clang++-19"}
 
 [platform_tool_requires]
-cmake/3.31.0
+# Tell Conan to look for CMake on the machine instead of installing it itself
+cmake/3.30
 
 [settings]
 arch=x86_64
