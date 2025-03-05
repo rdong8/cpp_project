@@ -23,5 +23,5 @@ class ConanApplication(ConanFile):
         tc.generate()
 
     def requirements(self):
-        requirements = self.conan_data.get('requirements', [])
+        requirements = self.conan_data.get("requirements", [])
         tuple(map(self.requires, requirements))

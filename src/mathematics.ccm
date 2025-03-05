@@ -43,14 +43,15 @@ export namespace math
 
         /// Compute the dot product of this vector and @p other
         /// @param[in] other The second operand of the dot product operator
+        /// @param[in] initial The initial value of the dot product, defaults to 0
         [[nodiscard]]
-        auto constexpr dot(this Self const &self, Self const &other) noexcept -> Float
+        auto constexpr dot(this Self const &self, Self const &other, Float initial = {}) noexcept -> Float
         {
             return std::inner_product(
                 std::ranges::begin(self.components),
                 std::ranges::end(self.components),
                 std::ranges::begin(other.components),
-                Float{});
+                initial);
         }
 
         /// Compute the norm of this vector

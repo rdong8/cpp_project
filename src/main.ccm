@@ -61,7 +61,7 @@ auto vec_demo() -> void
 }
 
 // Demonstrate differentiation operator
-auto d_dx_demo() -> void
+auto differentiation_demo() -> void
 {
     using math::d_dx;
 
@@ -86,7 +86,7 @@ auto main([[maybe_unused]] int argc, [[maybe_unused]] char *argv[]) -> int
 
     vec_demo();
 
-    d_dx_demo();
+    differentiation_demo();
 
     return 0;
 }
