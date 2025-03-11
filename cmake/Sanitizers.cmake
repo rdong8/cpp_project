@@ -1,6 +1,7 @@
 option(ENABLE_ASAN "Enable address sanitizer" OFF)
 option(ENABLE_LSAN "Enable leak sanitizer" OFF)
 option(ENABLE_MSAN "Enable memory sanitizer" OFF)
+option(ENABLE_RSAN "Enable realtime sanitizer" OFF)
 option(ENABLE_TSAN "Enable thread sanitizer" OFF)
 option(ENABLE_UBSAN "Enable undefined behaviour sanitizer" OFF)
 
@@ -12,6 +13,13 @@ macro(set_project_sanitizers project_name)
 
     if ("${ENABLE_LSAN}")
         list(APPEND SANITIZERS "leak")
+    endif ()
+
+    if ("${ENABLE_RSAN}")
+        if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+            message(SEND_ERROR "Memory sanitizer doesn't work with GCC")
+        endif ()
+        list(APPEND SANITIZERS "realtime")
     endif ()
 
     if ("${ENABLE_TSAN}")
