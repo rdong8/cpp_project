@@ -1,8 +1,5 @@
 cmake_minimum_required(VERSION 3.30.0 FATAL_ERROR)
 
-set(CMAKE_EXPERIMENTAL_CXX_IMPORT_STD "0e5b6991-d74f-4b3d-a41c-cf096e0b2508")
-set(CMAKE_CXX_MODULE_STD ON)
-set(CMAKE_CXX_SCAN_FOR_MODULES ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_CXX_STANDARD 23) # TODO: Boost Conan package doesn't support C++26/CMAKE_CXX_STANDARD_LATEST
 set(CMAKE_CXX_STANDARD_REQUIRED True)
@@ -59,9 +56,6 @@ if ((CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME OR BUILD_TESTING)
     add_subdirectory(tests)
 endif ()
 
-# Logging
-find_package(spdlog REQUIRED)
-
 # Define compile options interface target
 add_library(my_compile_options INTERFACE)
 target_compile_features(my_compile_options INTERFACE "cxx_std_${CMAKE_CXX_STANDARD}")
@@ -97,7 +91,6 @@ target_link_libraries(config
         my_link_options
         my_sanitizers
         my_stdlib
-        spdlog::spdlog
 )
 
 # Set IPO

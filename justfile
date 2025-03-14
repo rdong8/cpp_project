@@ -16,7 +16,7 @@ conan_build_profile := "default"
 conan_host_profile := "default"
 
 # The default target to build if none is provided to the `build` recipe
-default_build_target := "all"
+default_build_target := project
 
 # Default target to run if none is provided to the `run` recipe
 default_run_target := project
