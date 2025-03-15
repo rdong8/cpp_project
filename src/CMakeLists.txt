@@ -1,4 +1,5 @@
 find_package(Boost REQUIRED)
+find_package(spdlog REQUIRED)
 
 add_library(mathematics)
 target_sources(mathematics
@@ -16,5 +17,6 @@ target_link_libraries(cpp_project
         PRIVATE
         config
         Boost::headers
+        spdlog::spdlog
         mathematics
 )

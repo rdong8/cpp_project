@@ -54,11 +54,11 @@ conan-deps:
 			-pr:h {{ conan_host_profile }} \
 			-s build_type={{ build_type }}
 
-config:
+config config_preset="conan-default":
 	cmake \
 		-S . \
 		-B {{ build_dir }} \
-		--preset conan-default
+		--preset {{ config_preset }}
 
 build target=default_build_target:
 	cmake \

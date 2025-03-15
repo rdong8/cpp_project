@@ -24,6 +24,7 @@
 			"extensions": [
         "DavidAnson.vscode-markdownlint",
         "charliermarsh.ruff",
+        "cheshirekow.cmake-format",
         "cschlosser.doxdocgen",
         "eamodio.gitlens",
         "jeff-hykin.better-cpp-syntax",
@@ -35,7 +36,7 @@
         "nefrob.vscode-just-syntax",
         "usernamehw.errorlens",
         "vadimcn.vscode-lldb"
-			]
+      ]
 		}
 	},
   "build": {

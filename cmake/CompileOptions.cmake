@@ -6,7 +6,6 @@ function(set_project_compile_options project_name)
 
     set(DEBUG_OPTIONS
             "${DEBUG_INFO_OPTION}"
-            "${DEFAULT_SANITIZERS}"
             "-D_FORTIFY_SOURCE=3"
             "-Og"
             "-U_FORTIFY_SOURCE"
@@ -26,7 +25,6 @@ function(set_project_compile_options project_name)
 
     target_compile_options("${project_name}"
             INTERFACE
-            "$<$<CXX_COMPILER_ID:Clang>:-fsanitize=safe-stack>"
             "$<$<CONFIG:Debug>:${DEBUG_OPTIONS}>"
             "$<$<CONFIG:Release>:${RELEASE_OPTIONS}>"
             "$<$<CONFIG:RelWithDebInfo>:${RELWITHDEBINFO_OPTIONS}>"

@@ -1,13 +1,16 @@
 cmake_minimum_required(VERSION 3.30.0 FATAL_ERROR)
 
+if ("$<NOT:$<CXX_COMPILER_ID:Clang,GCC>>")
+    message(FATAL_ERROR "Invalid compiler. Must be either Clang or GCC.")
+endif ()
+
+set(CMAKE_COLOR_DIAGNOSTICS ON)
 set(CMAKE_EXPERIMENTAL_CXX_IMPORT_STD "0e5b6991-d74f-4b3d-a41c-cf096e0b2508")
 set(CMAKE_CXX_MODULE_STD ON)
 set(CMAKE_CXX_SCAN_FOR_MODULES ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_CXX_STANDARD 23) # TODO: Boost Conan package doesn't support C++26/CMAKE_CXX_STANDARD_LATEST
 set(CMAKE_CXX_STANDARD_REQUIRED True)
-set(CMAKE_COLOR_DIAGNOSTICS ON)
-
 
 project(cpp_project
         VERSION 0.0.1
@@ -16,35 +19,19 @@ project(cpp_project
         LANGUAGES CXX
 )
 
-if ("$<NOT:$<CXX_COMPILER_ID:Clang,GCC>>")
-    message(FATAL_ERROR "Invalid compiler. Must be either Clang or GCC.")
-endif ()
-
 # Only do these if this is the main project, and not if it is included through add_subdirectory
-if (CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
-    # TODO: Currently broken
-    # find_program(CLANG_TIDY NAMES clang-tidy REQUIRED)
-
-    # set(CMAKE_CXX_CLANG_TIDY
-    #     ${CLANG_TIDY}
-    #     "-checks=-*,cppcoreguidelines-*"
-    # )
+if (PROJECT_IS_TOP_LEVEL)
+    include(cmake/ClangTidy.cmake)
 
     # Generate compile_commands.json to make it easier to work with clang based tools
     set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-    # Nicely support folders in IDEs
-    set_property(GLOBAL PROPERTY USE_FOLDERS ON)
-
-    # Testing only available if this is the main app
     # Needs to be done in the main CMakeLists since it calls enable_testing, which must be in the main CMakeLists
     include(CTest)
+    add_subdirectory(tests)
 
-    # Make test target depend on all (allows you to run tests without manually building first)
-    set(CMAKE_SKIP_TEST_ALL_DEPENDENCY FALSE)
-
-    # Docs only available if this is the main app
     find_package(Doxygen COMPONENTS dot)
+
     if (Doxygen_FOUND)
         add_subdirectory(docs)
     else ()
@@ -52,55 +39,23 @@ if (CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
     endif ()
 endif ()
 
-# Testing only available if this is the main app
-# Emergency override BUILD_TESTING provided as well
-if ((CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME OR BUILD_TESTING)
-        AND BUILD_TESTING)
-    add_subdirectory(tests)
-endif ()
-
-# Logging
-find_package(spdlog REQUIRED)
-
-# Define compile options interface target
-add_library(my_compile_options INTERFACE)
-target_compile_features(my_compile_options INTERFACE "cxx_std_${CMAKE_CXX_STANDARD}")
-include(cmake/CompileOptions.cmake)
-set_project_compile_options(my_compile_options)
-
-# Define compile warnings interface target
-add_library(my_compile_warnings INTERFACE)
-include(cmake/CompileWarnings.cmake)
-set_project_warnings(my_compile_warnings)
-
-# Define link options interface target
-add_library(my_link_options INTERFACE)
-include(cmake/LinkOptions.cmake)
-set_project_link_options(my_link_options)
-
-# Define sanitizers interface target and DEFAULT_SANITIZERS
-add_library(my_sanitizers INTERFACE)
-include(cmake/Sanitizers.cmake)
-set_project_sanitizers(my_sanitizers)
-
-# Define standard library interface target
-add_library(my_stdlib INTERFACE)
-include(cmake/StandardLibrary.cmake)
-set_project_stdlib(my_stdlib)
-
-# Define config interface target
 add_library(config INTERFACE)
-target_link_libraries(config
-        INTERFACE
-        my_compile_options
-        my_compile_warnings
-        my_link_options
-        my_sanitizers
-        my_stdlib
-        spdlog::spdlog
-)
 
-# Set IPO
+target_compile_features(config INTERFACE "cxx_std_${CMAKE_CXX_STANDARD}")
+
+include(cmake/CompileOptions.cmake)
+set_project_compile_options(config)
+
+include(cmake/CompileWarnings.cmake)
+set_project_warnings(config)
+
+include(cmake/Sanitizers.cmake)
+set_project_sanitizers(config)
+
+include(cmake/StandardLibrary.cmake)
+set_project_stdlib(config)
+
 include(cmake/InterproceduralOptimization.cmake)
+include(cmake/LinkOptions.cmake)
 
 add_subdirectory(src)
