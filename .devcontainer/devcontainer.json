@@ -28,11 +28,16 @@
         "cschlosser.doxdocgen",
         "eamodio.gitlens",
         "jeff-hykin.better-cpp-syntax",
+        // Either use this or cpptools-extension-pack
+        "llvm-vs-code-extensions.vscode-clangd",
         "ms-azuretools.vscode-docker",
         "ms-python.isort",
         "ms-python.mypy-type-checker",
         "ms-python.python",
-        "ms-vscode.cpptools-extension-pack",
+        // "ms-vscode.cpptools-extension-pack",
+        // Comment out these two if using cpptools-extension-pack
+        "ms-vscode.cmake-tools",
+        "ms-vscode.cpptools-themes",
         "nefrob.vscode-just-syntax",
         "usernamehw.errorlens",
         "vadimcn.vscode-lldb"
