@@ -9,6 +9,7 @@ RUN \
     clang-tools-extra-devel \
     compiler-rt \
     doxygen \
+    gawk \
     helix \
     just \
     libcxx-devel \

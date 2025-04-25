@@ -56,7 +56,7 @@ tools.cmake.cmaketoolchain:generator=Ninja Multi-Config
 cmake/3.30
 
 [settings]
-arch=x86_64
+arch=armv8
 build_type=Release
 compiler=clang
 compiler.cppstd=23 # TODO: 26 causing problems
