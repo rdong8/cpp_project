@@ -41,6 +41,8 @@
         "nefrob.vscode-just-syntax",
         "usernamehw.errorlens",
         "vadimcn.vscode-lldb"
+        // Add project-specific extensions here:
+        // "llvm-vs-code-extensions.vscode-mlir"
       ]
 		}
 	},

@@ -9,6 +9,7 @@ RUN \
     clang-tools-extra-devel \
     compiler-rt \
     doxygen \
+    fish \
     gawk \
     helix \
     just \
@@ -21,5 +22,7 @@ RUN \
     wget \
   && dnf clean all && rm -rf /var/cache/dnf
 
-RUN useradd -ms /bin/bash dev
+SHELL ["/bin/fish", "-c"]
+
+RUN useradd -ms /bin/fish dev
 USER dev

@@ -7,14 +7,30 @@ Read through both the README and the `justfile` to better understand how everyth
 ## Notes
 
 - Only Linux is supported
+- This project uses [devcontainers](https://containers.dev/) to avoid dependencies polluting the host. Specifically, we use [podman](https://podman.io/) instead of Docker, which enables the devcontainer to run on a host that is itself containerized (ie. a [GCP Cloud Workstation](https://cloud.google.com/workstations?hl=en) instance)
 - All `justfile` commands should be run under a shell in which your `.bashrc`, `.zshrc` or equivalent has been sourced.
 
-## Clone
+## Initialize
+
+*On the host*:
 
 ```bash
 git clone --recurse-submodules https://github.com/rdong8/cpp_project.git
 cd cpp_project/
 ```
+
+Also make sure you have [`podman`](https://podman.io/docs/installation#installing-on-linux) installed on the host. For example:
+
+```bash
+# Fedora
+sudo dnf -y install podman
+
+# Ubuntu
+sudo apt update
+sudo apt -y install podman
+```
+
+All commands after this point are to be run *in the devcontainer*, not on the host.
 
 ## Dependencies
 

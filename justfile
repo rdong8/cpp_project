@@ -86,3 +86,6 @@ clean:
 
 clean-conan:
 	{{ conan }} remove "*"
+
+update-submodules:
+	git submodule update --init --recursive
