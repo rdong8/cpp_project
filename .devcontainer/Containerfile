@@ -4,6 +4,7 @@ RUN \
   dnf update -y \
   && dnf install -y \
     @development-tools \
+    btop \
     cmake \
     clang \
     clang-tools-extra-devel \
@@ -26,3 +27,12 @@ SHELL ["/bin/fish", "-c"]
 
 RUN useradd -ms /bin/fish dev
 USER dev
+
+# Fish completions
+
+# just: https://just.systems/man/en/shell-completion-scripts.html
+RUN just --completions fish > ~/.config/fish/completions/just.fish
+
+# uv: https://docs.astral.sh/uv/getting-started/installation/#shell-autocompletion
+RUN echo 'uv generate-shell-completion fish | source' > ~/.config/fish/completions/uv.fish
+RUN echo 'uvx --generate-shell-completion fish | source' > ~/.config/fish/completions/uvx.fish

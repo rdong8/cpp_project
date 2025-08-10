@@ -1,5 +1,8 @@
 set dotenv-load
 
+# hx, vim, cursor, etc.
+export EDITOR := "code"
+
 project := "cpp_project"
 
 # Set to any non-empty string for extra output
@@ -12,8 +15,8 @@ preset := "conan-" + shell('echo ' + build_type + ' | tr "[:upper:]" "[:lower:]"
 
 conan := "uv run conan"
 
-conan_build_profile := "default"
-conan_host_profile := "default"
+conan_build_profile := "build"
+conan_host_profile := "host"
 
 # The default target to build if none is provided to the `build` recipe
 default_build_target := "all"
@@ -28,9 +31,6 @@ default_args := ""
 # ie. Set to `firefox` so that docs are opened with `firefox index.html`
 default_browser := "xdg-open"
 
-# The default editor to edit configuration files with
-default_editor := "hx"
-
 venv:
 	uv venv --python 3.13
 
@@ -39,20 +39,27 @@ py-deps reinstall="0":
 	    {{ if reinstall == "1" { "--reinstall" } else { "" } }}
 
 # This only creates the profile, you still need to edit it to contain the details for your compiler and language
-conan-profile:
-	{{ conan }} profile detect --force
+conan-profiles force="":
+	{{ conan }} profile detect --name {{ conan_host_profile }} \
+		{{ if force != "" { "--force" } else { "" } }}
+	{{ conan }} profile detect --name {{ conan_build_profile }} \
+		{{ if force != "" { "--force" } else { "" } }}
 
-edit-conan-profile editor=default_editor profile="default":
-	{{ editor }} $({{ conan }} config home)/profiles/{{ profile }}
+edit-conan-profile profile:
+	{{ EDITOR }} $({{ conan }} config home)/profiles/{{ profile }}
 
-conan-deps:
+conan-install requires="":
 	BUILD_DIR={{ build_dir }} \
 		{{ conan }} \
-			install . \
+			install \
 			-b missing \
 			-pr:b {{ conan_build_profile }} \
 			-pr:h {{ conan_host_profile }} \
-			-s build_type={{ build_type }}
+			-s build_type={{ build_type }} \
+			{{ if requires != "" { "--requires=\"" + requires + "\"" } else { "." } }}
+
+conan-install-mold:
+	just conan-install "mold/[*]"
 
 config config_preset="conan-default":
 	cmake \
