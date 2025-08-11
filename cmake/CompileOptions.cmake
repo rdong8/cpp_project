@@ -7,7 +7,7 @@ function(set_project_compile_options project_name)
     set(DEBUG_OPTIONS
             "${DEBUG_INFO_OPTION}"
             "-D_FORTIFY_SOURCE=3"
-            "-O0"
+            "-Og"
             "-U_FORTIFY_SOURCE"
     )
 
