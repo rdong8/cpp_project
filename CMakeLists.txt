@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.30.0 FATAL_ERROR)
+cmake_minimum_required(VERSION 4.1.0 FATAL_ERROR)
 
 if ("$<NOT:$<CXX_COMPILER_ID:Clang,GCC>>")
     message(FATAL_ERROR "Invalid compiler. Must be either Clang or GCC.")

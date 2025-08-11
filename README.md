@@ -71,7 +71,7 @@ tools.cmake.cmaketoolchain:generator=Ninja Multi-Config
 
 [platform_tool_requires]
 # Tell Conan to look for CMake on the machine instead of installing it itself
-cmake/3.31
+cmake/4.1
 
 [settings]
 arch=x86_64
@@ -92,7 +92,7 @@ And edit your build profile with `just edit-conan-profile build`:
 tools.cmake.cmaketoolchain:generator=Ninja Multi-Config
 
 [platform_tool_requires]
-cmake/3.31
+cmake/4.1
 
 [settings]
 arch=x86_64
