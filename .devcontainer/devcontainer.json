@@ -22,7 +22,7 @@
 	"customizations": {
 		"vscode": {
 			"extensions": [
-        // BASE
+        // Base extensions
         "DavidAnson.vscode-markdownlint",
         "charliermarsh.ruff",
         "cheshirekow.cmake-format",

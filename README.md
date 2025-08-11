@@ -8,7 +8,8 @@ Read through both the README and the `justfile` to better understand how everyth
 
 - Only Linux is supported
 - This project uses [devcontainers](https://containers.dev/) to avoid dependencies polluting the host. Specifically, we use [podman](https://podman.io/) instead of Docker, which enables the devcontainer to run on a host that is itself containerized (ie. a [GCP Cloud Workstation](https://cloud.google.com/workstations?hl=en) instance)
-- All `justfile` commands should be run under a shell in which your `.bashrc`, `.zshrc` or equivalent has been sourced.
+- Because containers are rootless, most dev tools are installed with `brew` instead
+- The devcontainer is setup to use [fish](https://fishshell.com/) as the default shell
 
 ## Initialize
 
@@ -47,7 +48,7 @@ just py-deps # Installs the Python dependencies. Use `just py-deps 1` to force a
 
 #### Profile
 
-Check if you already have a Conan profile with `uv run conan profile list`. If you haven't already created them, this command will create a default host and build profile for you:
+Check if you already have a Conan profile with `uv run conan profile list` (you shouldn't if you set up the project with the devcontainer). If you haven't already created them, this command will create a default host and build profile for you:
 
 ```bash
 just conan-profiles

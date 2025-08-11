@@ -31,6 +31,10 @@ default_args := ""
 # ie. Set to `firefox` so that docs are opened with `firefox index.html`
 default_browser := "xdg-open"
 
+initialize-host:
+	sudo apt -y update
+	sudo apt -y install podman
+
 venv:
 	uv venv --python 3.13
 
