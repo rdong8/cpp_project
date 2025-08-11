@@ -1,18 +1,20 @@
 function(set_project_compile_options project_name)
-    set(DEBUG_INFO_OPTION
+    set(DEBUGGING_OPTIONS
             "$<$<CXX_COMPILER_ID:Clang>:-glldb>"
             "$<$<CXX_COMPILER_ID:GCC>:-ggdb>"
+            "-fno-omit-frame-pointer"
+            "-fno-sanitize-merge"
     )
 
     set(DEBUG_OPTIONS
-            "${DEBUG_INFO_OPTION}"
+            "${DEBUGGING_OPTIONS}"
             "-D_FORTIFY_SOURCE=3"
             "-Og"
             "-U_FORTIFY_SOURCE"
     )
 
     set(RELWITHDEBINFO_OPTIONS
-            "${DEBUG_INFO_OPTION}"
+            "${DEBUGGING_OPTIONS}"
             "-D_FORTIFY_SOURCE=1"
             "-O2"
     )
