@@ -10,7 +10,7 @@ verbose := ""
 
 build_dir := "build"
 
-build_type := "Debug"
+build_type := "Release"
 preset := "conan-" + shell('echo ' + build_type + ' | tr "[:upper:]" "[:lower:]"')
 
 conan := "uv run conan"
@@ -36,7 +36,7 @@ initialize-host:
 	sudo apt -y install podman
 
 venv:
-	uv venv --python 3.13
+	uv venv
 
 py-deps reinstall="0":
 	uv pip install --upgrade -e . \
@@ -59,11 +59,14 @@ conan-install requires="":
 			-b missing \
 			-pr:b {{ conan_build_profile }} \
 			-pr:h {{ conan_host_profile }} \
-			-s build_type={{ build_type }} \
 			{{ if requires != "" { "--requires=\"" + requires + "\"" } else { "." } }}
 
+# https://github.com/conan-io/conan/issues/17333#issuecomment-3084941843
 conan-install-mold:
 	just conan-install "mold/[*]"
+
+conan-install-all:
+	just conan-install-mold conan-install
 
 config config_preset="conan-default":
 	cmake \

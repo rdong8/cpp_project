@@ -104,22 +104,21 @@ compiler.version=20
 os=Linux
 ```
 
-Note that the build type here is for your dependencies, which you can compile in release mode even if you are building your own code in debug.
+Note that the build type here is for *your dependencies*, which you can compile in release mode even if you are building your own code in debug.
+
+The build type for your own code is controlled by the `build` variable in the justfile.
 
 #### Build Dependencies
 
 Now build the project's C++ dependencies with Conan:
 
 ```bash
-just conan-install-mold # https://github.com/conan-io/conan/issues/17333#issuecomment-3084941843
-just conan-install
+just conan-install-all
 ```
 
 ## Configure
 
-First, go in the `justfile` and set the paths to the C and C++ compilers.
-
-Then run:
+This command runs the CMake configure. Theoretically it only needs to be run once, since the `just build` command invokes `cmake --build` which should automatically reconfigure if necessary. In practice if you're having CMake issues, just try rerunning this.
 
 ```bash
 just config

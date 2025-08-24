@@ -1,4 +1,4 @@
 requirements:
-  - "boost/1.87.0"
-  - "catch2/3.8.0"
-  - "spdlog/1.15.1"
+  - "boost/1.88.0"
+  - "catch2/3.9.1"
+  - "spdlog/1.15.3"
