@@ -13,6 +13,8 @@ build_dir := "build"
 build_type := "Release"
 preset := "conan-" + shell('echo ' + build_type + ' | tr "[:upper:]" "[:lower:]"')
 
+log := "/tmp/out.log"
+
 conan := "uv run conan"
 
 conan_build_profile := "build"
@@ -32,74 +34,77 @@ default_args := ""
 default_browser := "xdg-open"
 
 initialize-host:
-	sudo apt -y update
-	sudo apt -y install podman
+    sudo apt -y update
+    sudo apt -y install podman
 
 venv:
-	uv venv
+    uv venv
 
 py-deps reinstall="0":
-	uv pip install --upgrade -e . \
-	    {{ if reinstall == "1" { "--reinstall" } else { "" } }}
+    uv pip install --upgrade -e . \
+        {{ if reinstall == "1" { "--reinstall" } else { "" } }}
 
 # This only creates the profile, you still need to edit it to contain the details for your compiler and language
 conan-profiles force="":
-	{{ conan }} profile detect --name {{ conan_host_profile }} \
-		{{ if force != "" { "--force" } else { "" } }}
-	{{ conan }} profile detect --name {{ conan_build_profile }} \
-		{{ if force != "" { "--force" } else { "" } }}
+    {{ conan }} profile detect --name {{ conan_host_profile }} \
+        {{ if force != "" { "--force" } else { "" } }}
+    {{ conan }} profile detect --name {{ conan_build_profile }} \
+        {{ if force != "" { "--force" } else { "" } }}
 
 edit-conan-profile profile:
-	{{ EDITOR }} $({{ conan }} config home)/profiles/{{ profile }}
+    {{ EDITOR }} $({{ conan }} config home)/profiles/{{ profile }}
 
 conan-install requires="":
-	BUILD_DIR={{ build_dir }} \
-		{{ conan }} \
-			install \
-			-b missing \
-			-pr:b {{ conan_build_profile }} \
-			-pr:h {{ conan_host_profile }} \
-			{{ if requires != "" { "--requires=\"" + requires + "\"" } else { "." } }}
+    BUILD_DIR={{ build_dir }} \
+        {{ conan }} \
+            install \
+            -b missing \
+            -pr:b {{ conan_build_profile }} \
+            -pr:h {{ conan_host_profile }} \
+            {{ if requires != "" { "--requires=\"" + requires + "\"" } else { "." } }}
 
 # https://github.com/conan-io/conan/issues/17333#issuecomment-3084941843
 conan-install-mold:
-	just conan-install "mold/[*]"
+    just conan-install "mold/[*]"
 
 conan-install-all:
-	just conan-install-mold conan-install
+    just conan-install-mold conan-install
 
 config config_preset="conan-default":
-	cmake \
-		-S . \
-		-B {{ build_dir }} \
-		--preset {{ config_preset }}
+    cmake \
+        -S . \
+        -B {{ build_dir }} \
+        --preset {{ config_preset }}
 
 build target=default_build_target:
-	cmake \
-		--build {{ build_dir }} \
-		--preset {{ preset }} \
-		{{ if target != "" { "-t " + target } else { "" } }} \
-		{{ if verbose != "" { "-v" } else { "" } }}
+    cmake \
+        --build {{ build_dir }} \
+        --preset {{ preset }} \
+        {{ if target != "" { "-t " + target } else { "" } }} \
+        {{ if verbose != "" { "-v" } else { "" } }} \
+        | tee {{ log }}
 
 run target=default_run_target *args=default_args:
-    ./{{ build_dir }}/src/{{ build_type }}/{{ if target == "all" { project } else { target } }} {{ args }}
+    ./{{ build_dir }}/src/{{ build_type }}/{{ if target == "all" { project } else { target } }} \
+        {{ args }} \
+        | tee {{ log }}
 
 docs browser=default_browser:
     {{ browser }} $(realpath {{ build_dir }})/docs/html/index.html
 
 test:
-	ctest \
-		--preset {{ preset }} \
-		{{ if verbose != "" { "--extra-verbose" } else { "" } }}
+    ctest \
+        --preset {{ preset }} \
+        {{ if verbose != "" { "--extra-verbose" } else { "" } }}
 
 pre-commit:
-	uv run pre-commit install
+    uv run pre-commit install
 
 clean:
-	rm -rf {{ build_dir }}
+    rm -rf {{ build_dir }}
 
 clean-conan:
-	{{ conan }} remove "*"
+    {{ conan }} remove "*"
 
 update-submodules:
-	git submodule update --init --recursive
+    git submodule update --init --recursive
