@@ -108,6 +108,8 @@ Note that the build type here is for *your dependencies*, which you can compile 
 
 The build type for your own code is controlled by the `build` variable in the justfile.
 
+Also, this is where you have to specify the C++ standard library you want to use, not in CMake.
+
 #### Build Dependencies
 
 Now build the project's C++ dependencies with Conan:

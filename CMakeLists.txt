@@ -53,9 +53,6 @@ set_project_warnings(config)
 include(cmake/Sanitizers.cmake)
 set_project_sanitizers(config)
 
-include(cmake/StandardLibrary.cmake)
-set_project_stdlib(config)
-
 include(cmake/InterproceduralOptimization.cmake)
 include(cmake/LinkOptions.cmake)
 
