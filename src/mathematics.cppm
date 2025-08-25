@@ -118,7 +118,7 @@ struct std::formatter<math::Vec<n, Float>> : std::formatter<typename math::Vec<n
 {
     [[nodiscard]]
     auto format(
-        this auto const &self,
+        this std::formatter<typename math::Vec<n, Float>::Data> const &self,
         math::Vec<n, Float> const &vec,
         std::format_context &ctx) -> std::format_context::iterator
     {

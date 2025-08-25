@@ -5,6 +5,7 @@ FROM docker.io/fedora:latest
 # - Dependencies of linuxbrew itself (curl, file, procps-ng)
 # - fish - because we have to append `brew shellenv` to the fish config, so the config needs to be created first
 # - which - to find fish for the useradd
+# - mathjax - dependency of doxygen, but not available via linuxbrew
 RUN \
   dnf update -y \
   && dnf install -y \
@@ -18,6 +19,7 @@ RUN \
     libcxx-devel \
     lldb \
     llvm \
+    mathjax \
     procps-ng \
     which \
   && dnf clean all && rm -rf /var/cache/dnf

@@ -19,51 +19,44 @@
     // For Podman
     "label=disable"
   ],
-	"customizations": {
-		"vscode": {
-			"extensions": [
+  "customizations": {
+    "vscode": {
+      "extensions": [
         // Base extensions
         "DavidAnson.vscode-markdownlint",
         "charliermarsh.ruff",
         "cheshirekow.cmake-format",
         "cschlosser.doxdocgen",
+        "denoland.vscode-deno", // Formatting for JSON, etc.
         "docker.docker",
         "eamodio.gitlens",
         "jeff-hykin.better-cpp-syntax",
-        // Clangd has better support for modules than cpptools-extension-pack
-        "llvm-vs-code-extensions.vscode-clangd",
+        "llvm-vs-code-extensions.vscode-clangd", // Better support for C++ modules than cpptools-extension-pack
         "ms-azuretools.vscode-docker",
         "ms-python.isort",
         "ms-python.mypy-type-checker",
         "ms-python.python",
         // "ms-vscode.cpptools-extension-pack",
-        // Comment out these two if using cpptools-extension-pack
-        "ms-vscode.cmake-tools",
-        "ms-vscode.cpptools-themes",
+        "ms-vscode.cmake-tools", // Comment out if using cpptools-extension-pack
+        "ms-vscode.cpptools-themes", // Comment out if using cpptools-extension-pack
+        "ms-vscode.live-server", // HTML previews
         "nefrob.vscode-just-syntax",
         "tamasfe.even-better-toml",
         "usernamehw.errorlens",
         "vadimcn.vscode-lldb"
-
         // LLVM
         // "llvm-vs-code-extensions.vscode-mlir",
-
         // Rust
         // "rust-lang.rust-analyzer",
-
         // Python
         // "ktnrg45.vscode-cython",
         // "ms-toolsai.jupyter",
-
-        // JavaScript
-        // "denoland.vscode-deno",
-
         // Kubernetes
         // "ms-kubernetes-tools.vscode-kubernetes-tools",
         // "redhat.vscode-yaml",
       ]
-		}
-	},
+    }
+  },
   "build": {
     "dockerfile": "Containerfile"
   },

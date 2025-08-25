@@ -30,8 +30,8 @@ default_run_target := project
 default_args := ""
 
 # Command that will be invoked to open the `index.html` from the documentation.
-# ie. Set to `firefox` so that docs are opened with `firefox index.html`
-default_browser := "xdg-open"
+# If running locally, you can use `xdg-open` to automatically select your system's default browser
+browser := "code"
 
 initialize-host:
     sudo apt -y update
@@ -89,7 +89,7 @@ run target=default_run_target *args=default_args:
         {{ args }} \
         | tee {{ log }}
 
-docs browser=default_browser:
+docs:
     {{ browser }} $(realpath {{ build_dir }})/docs/html/index.html
 
 test:
