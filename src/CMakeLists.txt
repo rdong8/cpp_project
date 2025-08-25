@@ -10,8 +10,8 @@ target_link_libraries(mathematics PRIVATE config)
 
 add_executable(cpp_project)
 target_sources(cpp_project
-        PUBLIC
-        main.cpp
+        PRIVATE FILE_SET CXX_MODULES FILES
+        main.cppm
 )
 target_link_libraries(cpp_project
         PRIVATE

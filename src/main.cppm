@@ -1,8 +1,12 @@
+module;
+
 #include <boost/cobalt/channel.hpp>
 #include <boost/cobalt/main.hpp>
 #include <boost/cobalt/promise.hpp>
 #include <spdlog/spdlog.h>
 #include <spdlog/sinks/basic_file_sink.h>
+
+export module main;
 
 import mathematics;
 
