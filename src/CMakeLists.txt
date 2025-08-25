@@ -9,10 +9,6 @@ target_sources(mathematics
 target_link_libraries(mathematics PRIVATE config)
 
 add_executable(cpp_project)
-# target_sources(cpp_project
-#         PRIVATE FILE_SET CXX_MODULES FILES
-#         main.cppm
-# )
 target_sources(cpp_project
         PUBLIC
         main.cpp

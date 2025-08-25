@@ -1,18 +1,14 @@
-// module;
-
 #include <boost/cobalt/channel.hpp>
 #include <boost/cobalt/main.hpp>
 #include <boost/cobalt/promise.hpp>
 #include <spdlog/spdlog.h>
 #include <spdlog/sinks/basic_file_sink.h>
 
-// export module main;
-
 import mathematics;
 
 import std;
 
-// namespace {
+namespace {
 
 // Configure the default logger to log to the file "log.txt", flushing on the info level or higher
 [[maybe_unused]]
@@ -97,7 +93,7 @@ auto differentiation_demo() -> void
     spdlog::info("f''(4) = {}", d_dx<dfdx>(4.0));
 }
 
-// }
+}
 
 auto co_main([[maybe_unused]] int argc, [[maybe_unused]] char *argv[]) -> boost::cobalt::main
 {
