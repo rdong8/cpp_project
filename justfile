@@ -101,7 +101,17 @@ pre-commit:
     uv run pre-commit install
 
 clean:
-    rm -rf {{ build_dir }}
+    rm -rf \
+        {{ build_dir }} \
+        *conan*.sh
+
+clean-python:
+    rm -rf \
+        uv.lock \
+        .venv
+
+clean-all:
+    just clean clean-python
 
 clean-conan:
     {{ conan }} remove "*"
