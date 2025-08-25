@@ -1,13 +1,18 @@
-module;
+// module;
 
-#include <boost/asio.hpp>
+#include <boost/cobalt/channel.hpp>
+#include <boost/cobalt/main.hpp>
+#include <boost/cobalt/promise.hpp>
 #include <spdlog/spdlog.h>
 #include <spdlog/sinks/basic_file_sink.h>
 
-export module main;
+// export module main;
 
 import mathematics;
 
+import std;
+
+// namespace {
 
 // Configure the default logger to log to the file "log.txt", flushing on the info level or higher
 [[maybe_unused]]
@@ -28,19 +33,34 @@ auto configure_file_logger() -> void
     spdlog::set_default_logger(logger);
 }
 
-// Demonstrate Boost ASIO
-auto asio_demo() -> void
+
+auto producer(boost::cobalt::channel<int> &channel) -> boost::cobalt::promise<void>
 {
-    spdlog::info("ASIO DEMO:");
+    for (auto i : std::views::iota(0, 5))
+    {
+        spdlog::info("Producing {}", i);
+        co_await channel.write(i);
+    }
 
-    spdlog::info("Starting wait for 2 seconds!");
+    channel.close();
+}
 
-    boost::asio::io_context io{};
-    boost::asio::steady_timer t{io, boost::asio::chrono::seconds{2}};
+// Demonstrate Boost Cobalt
+auto cobalt_demo() -> boost::cobalt::promise<void>
+{
+    spdlog::info("COBALT DEMO:");
 
-    t.wait();
+    boost::cobalt::channel<int> channel{};
 
-    spdlog::info("Finished waiting!");
+    auto promise = producer(channel);
+
+    while (channel.is_open())
+    {
+        spdlog::info("Consumer received {}", co_await channel.read());
+    }
+
+    // Force the producer to finish
+    co_await promise;
 }
 
 // Demonstrate 2D vector class
@@ -77,16 +97,18 @@ auto differentiation_demo() -> void
     spdlog::info("f''(4) = {}", d_dx<dfdx>(4.0));
 }
 
-auto main([[maybe_unused]] int argc, [[maybe_unused]] char *argv[]) -> int
+// }
+
+auto co_main([[maybe_unused]] int argc, [[maybe_unused]] char *argv[]) -> boost::cobalt::main
 {
     // By default spdlog will log to stdout
     // configure_file_logger();
 
-    asio_demo();
+    co_await cobalt_demo();
 
     vec_demo();
 
     differentiation_demo();
 
-    return 0;
+    co_return 0;
 }

@@ -13,9 +13,10 @@ export namespace math
     struct Vec
     {
         using Self = Vec<n, Float>; ///< Alias for the type of this vector (postfix doc comment)
+        using Data = std::array<Float, n>; ///< Alias for the underlying data type
 
         /// The components of the vector (regular doc comment)
-        std::array<Float, n> components{};
+        Data components{};
 
         /// Construct a new @ref Vec with the given components.
         /// @param[in] components The components of the vector
@@ -110,16 +111,17 @@ export namespace math
     }
 }
 
+// TODO: Make Vec an input range so that this isn't necessary
 /// Formatter specialization for @ref math::Vec
 export template <std::size_t n, std::floating_point Float>
-struct std::formatter<math::Vec<n, Float>> : std::formatter<std::string_view>
+struct std::formatter<math::Vec<n, Float>> : std::formatter<typename math::Vec<n, Float>::Data>
 {
     [[nodiscard]]
     auto format(
-        [[maybe_unused]] this auto const &self,
+        this auto const &self,
         math::Vec<n, Float> const &vec,
         std::format_context &ctx) -> std::format_context::iterator
     {
-        return std::format_to(ctx.out(), "{}", vec.components);
+        return self.format(vec.components, ctx);
     }
 };

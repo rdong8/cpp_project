@@ -84,7 +84,7 @@ macro(set_project_sanitizers project_name)
         )
         target_link_options("${project_name}"
             INTERFACE
-            "$<$<CONFIG:Release>:-fsanitize=${DEFAULT_RELEASE_SANIZERS}>"
+            "$<$<CONFIG:Release>:-fsanitize=${DEFAULT_RELEASE_SANITIZERS}>"
         )
     endif ()
 endmacro()
