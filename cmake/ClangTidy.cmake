@@ -3,5 +3,5 @@
 
 # set(CMAKE_CXX_CLANG_TIDY
 #     ${CLANG_TIDY}
-#     "-checks=-*,cppcoreguidelines-*"
+#     "-checks=-*,cppcoreguidelines-*,modernize-use-trailing-return-type,performance-*"
 # )
