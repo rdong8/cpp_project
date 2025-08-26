@@ -10,8 +10,13 @@ verbose := ""
 
 build_dir := "build"
 
+# The build type for your own code
+# TODO: not sure how to make this different from conan_build_type
 build_type := "Release"
-preset := "conan-" + shell('echo ' + build_type + ' | tr "[:upper:]" "[:lower:]"')
+
+# The build type for your dependencies, as specified in the conan profiles
+conan_build_type := "release"
+preset := "conan-" + shell('echo ' + conan_build_type + ' | tr "[:upper:]" "[:lower:]"')
 
 log := "/tmp/out.log"
 
@@ -33,6 +38,7 @@ default_args := ""
 # If running locally, you can use `xdg-open` to automatically select your system's default browser
 browser := "code"
 
+# Fedora already has the required packages
 initialize-host:
     sudo apt -y update
     sudo apt -y install podman

@@ -104,6 +104,8 @@ compiler.version=20
 os=Linux
 ```
 
+<!-- TODO: this is not currently true: -->
+
 Note that the build type here is for *your dependencies*, which you can compile in release mode even if you are building your own code in debug.
 
 The build type for your own code is controlled by the `build` variable in the justfile.
@@ -125,6 +127,8 @@ This command runs the CMake configure. Theoretically it only needs to be run onc
 ```bash
 just config
 ```
+
+At this point, you may want to restart clangd (`LSP: Restart Server` in VSCode command palette) so it picks up the new compile commands.
 
 ## Build
 

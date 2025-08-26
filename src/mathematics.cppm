@@ -8,108 +8,102 @@ import std;
 
 export namespace math
 {
-    /// An n-dimensional mathematical vector
-    template <std::size_t n, std::floating_point Float = double>
-    struct Vec
+/// An n-dimensional mathematical vector
+template <std::size_t n, std::floating_point Float = double> struct Vec
+{
+    using Self = Vec<n, Float>;        ///< Alias for the type of this vector (postfix doc comment)
+    using Data = std::array<Float, n>; ///< Alias for the underlying data type
+
+    /// The components of the vector (regular doc comment)
+    Data components{};
+
+    /// Construct a new @ref Vec with the given components.
+    /// @param[in] components The components of the vector
+    template <typename... Components>
+    constexpr Vec(Components &&...components) : components{std::forward<Components>(components)...}
     {
-        using Self = Vec<n, Float>; ///< Alias for the type of this vector (postfix doc comment)
-        using Data = std::array<Float, n>; ///< Alias for the underlying data type
-
-        /// The components of the vector (regular doc comment)
-        Data components{};
-
-        /// Construct a new @ref Vec with the given components.
-        /// @param[in] components The components of the vector
-        template <typename... Components>
-        constexpr Vec(Components &&...components)
-            : components{std::forward<Components>(components)...}
-        {
-        }
-
-        /// @name Rule of 5 special member functions
-        ///@{
-        /// This is a member group. Documentation comments here will be shared for all elements in the group.
-
-        constexpr ~Vec() = default;
-
-        constexpr Vec(Self const &other) noexcept = default;
-
-        constexpr Vec(Self &&other) noexcept = default;
-
-        auto constexpr operator=(Self const &other) noexcept -> Self & = default;
-
-        auto constexpr operator=(Self &&other) noexcept -> Self & = default;
-
-        ///@}
-
-        /// Compute the dot product of this vector and @p other
-        /// @param[in] other The second operand of the dot product operator
-        /// @param[in] initial The initial value of the dot product, defaults to 0
-        [[nodiscard]]
-        auto constexpr dot(this Self const &self, Self const &other, Float initial = {}) noexcept -> Float
-        {
-            return std::inner_product(
-                std::ranges::begin(self.components),
-                std::ranges::end(self.components),
-                std::ranges::begin(other.components),
-                initial);
-        }
-
-        /// Compute the norm of this vector
-        [[nodiscard]]
-        auto constexpr norm(this Self const &self) noexcept -> Float
-        {
-            return std::sqrt(self.dot(self));
-        }
-
-        /// Compare this vector and @p other by norm
-        [[nodiscard]]
-        auto constexpr operator<=>(this Self const &self, Self const &other) noexcept -> std::weak_ordering
-        {
-            return std::weak_order(self.norm(), other.norm());
-        }
-
-        /// Compute the scalar product of this vector and @p c
-        /// @param[in] c The scalar
-        [[nodiscard]]
-        auto constexpr operator*(this Self const &self, Float c) noexcept -> Self
-        {
-            return Self{[&]<std::size_t... I>(std::index_sequence<I...>)
-                        {
-                            return std::array{c * self.components[I]...};
-                        }(std::make_index_sequence<n>{})};
-        }
-
-        /// Compute the scalar product of @p c and @p vec
-        /// @param[in] c The scalar
-        /// @param[in] vec The vector
-        [[nodiscard]]
-        friend auto constexpr operator*(Float c, Vec const &vec) noexcept -> Vec
-        {
-            return vec * c;
-        }
-    };
-
-    /// Evaluate the approximate derivative of @p f at @p x
-    /// @tparam f A function @f$ f : \mathbb R \to \mathbb R @f$
-    /// @tparam Float A floating point type
-    /// @param[in] x The @f$ x @f$-value to evaluate the derivative at
-    ///
-    /// Example: @f$ f(x) = x^2 @f$
-    /// @code
-    /// auto f{[](double x) { return x * x; }};
-    /// std::println("{}", d_dx<f>(3.0)); // Prints 6
-    /// @endcode
-    template <auto f, std::floating_point Float = double, Float dx = 0.0001>
-        requires requires(Float x) {
-            { f(x) } -> std::same_as<Float>;
-        }
-    [[nodiscard]]
-    auto constexpr d_dx(Float x) noexcept(noexcept(f(std::declval<Float>()))) -> Float
-    {
-        return (f(x + dx) - f(x)) / dx;
     }
+
+    /// @name Rule of 5 special member functions
+    ///@{
+    /// This is a member group. Documentation comments here will be shared for all elements in the group.
+
+    constexpr ~Vec() = default;
+
+    constexpr Vec(Self const &other) noexcept = default;
+
+    constexpr Vec(Self &&other) noexcept = default;
+
+    auto constexpr operator=(Self const &other) noexcept -> Self & = default;
+
+    auto constexpr operator=(Self &&other) noexcept -> Self & = default;
+
+    ///@}
+
+    /// Compute the dot product of this vector and @p other
+    /// @param[in] other The second operand of the dot product operator
+    /// @param[in] initial The initial value of the dot product, defaults to 0
+    [[nodiscard]]
+    auto constexpr dot(this Self const &self, Self const &other, Float initial = {}) noexcept -> Float
+    {
+        return std::inner_product(std::ranges::begin(self.components), std::ranges::end(self.components),
+                                  std::ranges::begin(other.components), initial);
+    }
+
+    /// Compute the norm of this vector
+    [[nodiscard]]
+    auto constexpr norm(this Self const &self) noexcept -> Float
+    {
+        return std::sqrt(self.dot(self));
+    }
+
+    /// Compare this vector and @p other by norm
+    [[nodiscard]]
+    auto constexpr operator<=>(this Self const &self, Self const &other) noexcept -> std::weak_ordering
+    {
+        return std::weak_order(self.norm(), other.norm());
+    }
+
+    /// Compute the scalar product of this vector and @p c
+    /// @param[in] c The scalar
+    [[nodiscard]]
+    auto constexpr operator*(this Self const &self, Float c) noexcept -> Self
+    {
+        return Self{[&]<std::size_t... I>(std::index_sequence<I...>)
+                    { return std::array{c * self.components[I]...}; }(std::make_index_sequence<n>{})};
+    }
+
+    /// Compute the scalar product of @p c and @p vec
+    /// @param[in] c The scalar
+    /// @param[in] vec The vector
+    [[nodiscard]]
+    friend auto constexpr operator*(Float c, Vec const &vec) noexcept -> Vec
+    {
+        return vec * c;
+    }
+};
+
+/// Evaluate the approximate derivative of @p f at @p x
+/// @tparam f A function @f$ f : \mathbb R \to \mathbb R @f$
+/// @tparam Float A floating point type
+/// @param[in] x The @f$ x @f$-value to evaluate the derivative at
+///
+/// Example: @f$ f(x) = x^2 @f$
+/// @code
+/// auto f{[](double x) { return x * x; }};
+/// std::println("{}", d_dx<f>(3.0)); // Prints 6
+/// @endcode
+template <auto f, std::floating_point Float = double, Float dx = 0.0001>
+    requires requires(Float x) {
+        { f(x) } -> std::same_as<Float>;
+    }
+[[nodiscard]]
+auto constexpr d_dx(Float x) noexcept(noexcept(f(std::declval<Float>()))) -> Float
+{
+    return (f(x + dx) - f(x)) / dx;
 }
+
+} // namespace math
 
 // TODO: Make Vec an input range so that this isn't necessary
 /// Formatter specialization for @ref math::Vec
@@ -117,10 +111,8 @@ export template <std::size_t n, std::floating_point Float>
 struct std::formatter<math::Vec<n, Float>> : std::formatter<typename math::Vec<n, Float>::Data>
 {
     [[nodiscard]]
-    auto format(
-        this std::formatter<typename math::Vec<n, Float>::Data> const &self,
-        math::Vec<n, Float> const &vec,
-        std::format_context &ctx) -> std::format_context::iterator
+    auto format(this std::formatter<typename math::Vec<n, Float>::Data> const &self, math::Vec<n, Float> const &vec,
+                std::format_context &ctx) -> std::format_context::iterator
     {
         return self.format(vec.components, ctx);
     }

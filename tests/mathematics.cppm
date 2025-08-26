@@ -13,10 +13,7 @@ TEST_CASE("Vector algebra", "[Vec][math]")
     math::Vec<2> constexpr w{4., 5.};
 
     // SECTION("section name", "[section description]...")
-    SECTION("Dot product is commutative")
-    {
-        REQUIRE(v.dot(w) == w.dot(v));
-    }
+    SECTION("Dot product is commutative") { REQUIRE(v.dot(w) == w.dot(v)); }
 
     SECTION("Scalar dot product is associative")
     {

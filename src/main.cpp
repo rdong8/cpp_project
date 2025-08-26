@@ -1,14 +1,15 @@
 #include <boost/cobalt/channel.hpp>
 #include <boost/cobalt/main.hpp>
 #include <boost/cobalt/promise.hpp>
-#include <spdlog/spdlog.h>
 #include <spdlog/sinks/basic_file_sink.h>
+#include <spdlog/spdlog.h>
 
 import mathematics;
 
 import std;
 
-namespace {
+namespace
+{
 
 // Configure the default logger to log to the file "log.txt", flushing on the info level or higher
 [[maybe_unused]]
@@ -24,11 +25,10 @@ auto configure_file_logger() -> void
     // Automatically flush for info level or higher
     logger->flush_on(spdlog::level::info);
 
-    // Set the logger used by the `spdlog::<level>(msg)` logging functions to this logger
-    // ie. `spdlog::warn("Warning!!")`
+    // Set the logger used by the `spdlog::<level>(msg)` logging functions to this logger ie.
+    // `spdlog::warn("Warning!!")`
     spdlog::set_default_logger(logger);
 }
-
 
 auto producer(boost::cobalt::channel<int> &channel) -> boost::cobalt::promise<void>
 {
@@ -41,7 +41,6 @@ auto producer(boost::cobalt::channel<int> &channel) -> boost::cobalt::promise<vo
     channel.close();
 }
 
-// Demonstrate Boost Cobalt
 auto cobalt_demo() -> boost::cobalt::promise<void>
 {
     spdlog::info("COBALT DEMO:");
@@ -59,7 +58,6 @@ auto cobalt_demo() -> boost::cobalt::promise<void>
     co_await promise;
 }
 
-// Demonstrate 2D vector class
 auto vec_demo() -> void
 {
     spdlog::info("VECTOR DEMO:");
@@ -76,7 +74,6 @@ auto vec_demo() -> void
     spdlog::info("Is {} < {}? {}", east, northeast, east < northeast);
 }
 
-// Demonstrate differentiation operator
 auto differentiation_demo() -> void
 {
     using math::d_dx;
@@ -93,7 +90,7 @@ auto differentiation_demo() -> void
     spdlog::info("f''(4) = {}", d_dx<dfdx>(4.0));
 }
 
-}
+} // namespace
 
 auto co_main([[maybe_unused]] int argc, [[maybe_unused]] char *argv[]) -> boost::cobalt::main
 {
