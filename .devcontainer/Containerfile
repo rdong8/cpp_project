@@ -74,3 +74,5 @@ RUN \
   && echo 'uv generate-shell-completion fish | source' > ${FISH_COMPLETIONS}/uv.fish \
   && echo 'uvx --generate-shell-completion fish | source' > ${FISH_COMPLETIONS}/uvx.fish \
   && echo 'fzf --fish | source' > ${FISH_COMPLETIONS}/fzf.fish
+
+ENV EDITOR=code
