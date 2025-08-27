@@ -2,13 +2,12 @@ set dotenv-load
 
 # hx, vim, cursor, etc.
 export EDITOR := "code"
+export BUILD_DIR := "build"
 
 project := "cpp_project"
 
 # Set to any non-empty string for extra output
 verbose := ""
-
-build_dir := "build"
 
 # The build type for your own code
 build_type := "Debug"
@@ -64,14 +63,13 @@ edit-conan-profile profile:
 
 # &:build_type=XXX means "use the build type in the profile for my dependencies but build my code with XXX"
 conan-install requires="":
-    BUILD_DIR={{ build_dir }} \
-        {{ conan }} \
-            install \
-            -b missing \
-            -pr:b {{ conan_build_profile }} \
-            -pr:h {{ conan_host_profile }} \
-            -s '&:build_type={{ build_type }}' \
-            {{ if requires != "" { "--requires=\"" + requires + "\"" } else { "." } }}
+    {{ conan }} \
+        install \
+        -b missing \
+        -pr:b {{ conan_build_profile }} \
+        -pr:h {{ conan_host_profile }} \
+        -s '&:build_type={{ build_type }}' \
+        {{ if requires != "" { "--requires=\"" + requires + "\"" } else { "." } }}
 
 # https://github.com/conan-io/conan/issues/17333#issuecomment-3084941843
 conan-install-mold:
@@ -83,25 +81,25 @@ conan-install-all:
 config:
     cmake \
         -S . \
-        -B {{ build_dir }} \
+        -B {{ BUILD_DIR }} \
         --preset {{ cmake_configure_preset }} \
         | tee {{ log }}
 
 build target=default_build_target:
     cmake \
-        --build {{ build_dir }} \
+        --build {{ BUILD_DIR }} \
         --preset {{ cmake_build_preset }} \
         {{ if target != "" { "-t " + target } else { "" } }} \
         {{ if verbose != "" { "-v" } else { "" } }} \
         | tee {{ log }}
 
 run target=default_run_target *args=default_args:
-    ./{{ build_dir }}/src/{{ build_type }}/{{ if target == "all" { project } else { target } }} \
+    ./{{ BUILD_DIR }}/src/{{ build_type }}/{{ if target == "all" { project } else { target } }} \
         {{ args }} \
         | tee {{ log }}
 
 docs:
-    {{ browser }} $(realpath {{ build_dir }})/docs/html/index.html
+    {{ browser }} $(realpath {{ BUILD_DIR }})/docs/html/index.html
 
 test:
     ctest \
@@ -114,7 +112,7 @@ pre-commit:
 
 clean:
     rm -rf \
-        {{ build_dir }} \
+        {{ BUILD_DIR }} \
         *conan*.sh \
         CMakeUserPresets.json
 
