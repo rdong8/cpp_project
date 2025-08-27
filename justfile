@@ -115,7 +115,8 @@ pre-commit:
 clean:
     rm -rf \
         {{ build_dir }} \
-        *conan*.sh
+        *conan*.sh \
+        CMakeUserPresets.json
 
 clean-python:
     rm -rf \
