@@ -45,7 +45,29 @@ export CXX=clang++
 # Set up Conan
 uv venv
 uv pip install conan
-cat << EOF > $(uv run conan config home)/profiles/default
+
+cat << EOF > $(uv run conan config home)/profiles/host
+[buildenv]
+CC=clang
+CXX=clang++
+LD=mold
+
+[conf]
+tools.build:exelinkflags=["-fuse-ld=mold"]
+tools.build:sharedlinkflags=["-fuse-ld=mold"]
+tools.cmake.cmaketoolchain:generator=Ninja Multi-Config
+
+[settings]
+arch=x86_64
+build_type=${CONFIG}
+compiler=clang
+compiler.cppstd=23
+compiler.libcxx=libstdc++11
+compiler.version=20
+os=Linux
+EOF
+
+cat << EOF > $(uv run conan config home)/profiles/build
 [conf]
 tools.cmake.cmaketoolchain:generator=Ninja Multi-Config
 
@@ -59,9 +81,22 @@ compiler.version=20
 os=Linux
 EOF
 
-# Install dependencies
-uv run conan install \
+# Install mold
+uv run conan \
+    install \
     -b missing \
+    -pr:b build \
+    -pr:h host \
+    -s '&':build_type=${CONFIG} \
+    --requires='mold/[*]'
+
+# Install other dependencies
+uv run conan \
+    install \
+    -b missing \
+    -pr:b build \
+    -pr:h host \
+    -s '&':build_type=${CONFIG} \
     .
 
 # CMake configure
