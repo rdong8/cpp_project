@@ -69,6 +69,7 @@ conan-install requires="":
         -pr:b {{ conan_build_profile }} \
         -pr:h {{ conan_host_profile }} \
         -s '&:build_type={{ build_type }}' \
+        -s build_type={{ conan_build_type }} \
         {{ if requires != "" { "--requires=\"" + requires + "\"" } else { "." } }}
 
 # https://github.com/conan-io/conan/issues/17333#issuecomment-3084941843
