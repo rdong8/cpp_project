@@ -16,7 +16,7 @@ build_type := "Debug"
 conan_build_type := "Release"
 
 cmake_configure_preset := "conan-default"
-cmake_build_preset := "conan-" + shell('echo ' + conan_build_type + ' | tr "[:upper:]" "[:lower:]"')
+cmake_build_preset := "conan-" + shell('echo ' + build_type + ' | tr "[:upper:]" "[:lower:]"')
 cmake_test_preset := cmake_build_preset
 
 log := "/tmp/out.log"
