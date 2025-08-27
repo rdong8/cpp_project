@@ -7,9 +7,9 @@ option(ENABLE_TSAN "Enable thread sanitizer" OFF)
 option(ENABLE_UBSAN "Enable undefined behaviour sanitizer" OFF)
 
 # TODO: The nice checks below don't happen when you use these defaults
-set(DEFAULT_DEBUG_SANITIZERS "address,leak,undefined,safe-stack")
-set(DEFAULT_RELWITHDEBINFO_SANITIZERS "safe-stack")
-set(DEFAULT_RELEASE_SANITIZERS "safe-stack")
+set(DEFAULT_DEBUG_SANITIZERS "")
+set(DEFAULT_RELWITHDEBINFO_SANITIZERS "")
+set(DEFAULT_RELEASE_SANITIZERS "")
 
 macro(set_project_sanitizers project_name)
     if ("${ENABLE_ASAN}")

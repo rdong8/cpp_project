@@ -1,4 +1,0 @@
-requirements:
-  - "boost/1.88.0"
-  - "catch2/3.9.1"
-  - "spdlog/1.15.3"

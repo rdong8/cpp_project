@@ -1,7 +1,0 @@
-BasedOnStyle: LLVM
-IndentWidth: 4
----
-Language: Cpp
-BreakBeforeBraces: Allman
-ColumnLimit: 120
-QualifierAlignment: Right

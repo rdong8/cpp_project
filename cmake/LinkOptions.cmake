@@ -1,1 +1,0 @@
-set(CMAKE_LINKER_TYPE "MOLD")
