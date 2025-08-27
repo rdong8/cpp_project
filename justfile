@@ -15,6 +15,7 @@ build_type := "Debug"
 # The build type for your dependencies, as specified in the conan profiles
 conan_build_type := "Release"
 
+# We're using a multi-configuration generator so there's only one configure preset
 cmake_configure_preset := "conan-default"
 cmake_build_preset := "conan-" + shell('echo ' + build_type + ' | tr "[:upper:]" "[:lower:]"')
 cmake_test_preset := cmake_build_preset
@@ -61,8 +62,18 @@ conan-profiles force="":
 edit-conan-profile profile:
     {{ EDITOR }} $({{ conan }} config home)/profiles/{{ profile }}
 
+# https://github.com/conan-io/conan/issues/17333#issuecomment-3084941843
+conan-install-mold:
+    {{ conan }} \
+        install \
+        -b missing \
+        -pr:b {{ conan_build_profile }} \
+        -pr:h {{ conan_host_profile }} \
+        -s build_type={{ conan_build_type }} \
+        --requires='mold/[*]'
+
 # &:build_type=XXX means "use the build type in the profile for my dependencies but build my code with XXX"
-conan-install requires="":
+conan-install:
     {{ conan }} \
         install \
         -b missing \
@@ -70,11 +81,7 @@ conan-install requires="":
         -pr:h {{ conan_host_profile }} \
         -s '&:build_type={{ build_type }}' \
         -s build_type={{ conan_build_type }} \
-        {{ if requires != "" { "--requires=\"" + requires + "\"" } else { "." } }}
-
-# https://github.com/conan-io/conan/issues/17333#issuecomment-3084941843
-conan-install-mold:
-    just conan-install "mold/[*]"
+        .
 
 conan-install-all:
     just conan-install-mold conan-install
@@ -127,7 +134,7 @@ clean-all:
 
 # Cleans cached conan packages
 clean-conan:
-    {{ conan }} remove "*"
+    {{ conan }} remove '*'
 
 update-submodules:
     git submodule update --init --recursive
