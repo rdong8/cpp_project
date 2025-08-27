@@ -1,5 +1,11 @@
 FROM docker.io/fedora:latest
 
+# For now, only install the following with the system package manager:
+# - Compiler-related stuff - have had issues with linuxbrew
+# - Dependencies of linuxbrew itself (curl, file, procps-ng)
+# - fish - because we have to append `brew shellenv` to the fish config, so the config needs to be created first
+# - which - to find fish for the useradd
+# - mathjax - dependency of doxygen, but not available via linuxbrew
 RUN \
   dnf update -y \
   && dnf install -y \
@@ -7,21 +13,50 @@ RUN \
     curl \
     clang \
     clang-tools-extra-devel \
-    cmake \
     compiler-rt \
     file \
     fish \
     libcxx-devel \
     lldb \
     llvm \
-    ninja-build \
     procps-ng \
     which \
   && dnf clean all && rm -rf /var/cache/dnf
 
 ARG USERNAME=dev
-RUN useradd -ms /usr/bin/bash $USERNAME
+RUN useradd -ms /usr/sbin/bash $USERNAME
+
+# Install brew (generally more up to date than dnf)
+ARG HOMEBREW_PREFIX=/home/linuxbrew/.linuxbrew
+RUN \
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" \
+  && sudo chown -R $USERNAME $HOMEBREW_PREFIX \
+  && chmod u+w $HOMEBREW_PREFIX
 
 USER $USERNAME
+
+RUN echo "eval $(${HOMEBREW_PREFIX}/bin/brew shellenv)" >> ~/.bashrc
+
+RUN \
+  ${HOMEBREW_PREFIX}/bin/brew install \
+    bat \
+    btop \
+    cmake \
+    doxygen \
+    fastfetch \
+    fd \
+    fzf \
+    gawk \
+    git-delta \
+    helix \
+    jq \
+    just \
+    mold \
+    ninja \
+    ripgrep \
+    tree \
+    uv \
+    wget \
+    zellij
 
 ENV EDITOR=code

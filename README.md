@@ -37,23 +37,45 @@ All commands after this point are to be run *in the devcontainer*, not on the ho
 ```bash
 cd /workspaces/cpp_project
 
-BUILD_DIR=build
 CONFIG=Debug
+export BUILD_DIR=build
 export CC=clang
 export CXX=clang++
+
+# Set up Conan
+uv venv
+uv pip install conan
+cat << EOF > $(uv run conan config home)/profiles/default
+[conf]
+tools.cmake.cmaketoolchain:generator=Ninja Multi-Config
+
+[settings]
+arch=x86_64
+build_type=${CONFIG}
+compiler=clang
+compiler.cppstd=23
+compiler.libcxx=libstdc++11
+compiler.version=20
+os=Linux
+EOF
+
+# Install dependencies
+uv run conan install \
+    -b missing \
+    .
 
 # CMake configure
 cmake \
     -S . \
     -B ${BUILD_DIR} \
-    -G "Ninja Multi-Config"
+    --preset conan-default
 
 # CMake build
 cmake \
     --build ${BUILD_DIR} \
-    --config ${CONFIG} \
+    --preset conan-debug \
     --target main
 
 # Run
-./${BUILD_DIR}/${CONFIG}/main
+./${BUILD_DIR}/src/${CONFIG}/main
 ```
