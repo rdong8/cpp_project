@@ -11,12 +11,14 @@ verbose := ""
 build_dir := "build"
 
 # The build type for your own code
-# TODO: not sure how to make this different from conan_build_type
-build_type := "Release"
+build_type := "Debug"
 
 # The build type for your dependencies, as specified in the conan profiles
-conan_build_type := "release"
-preset := "conan-" + shell('echo ' + conan_build_type + ' | tr "[:upper:]" "[:lower:]"')
+conan_build_type := "Release"
+
+cmake_configure_preset := "conan-default"
+cmake_build_preset := "conan-" + shell('echo ' + conan_build_type + ' | tr "[:upper:]" "[:lower:]"')
+cmake_test_preset := cmake_build_preset
 
 log := "/tmp/out.log"
 
@@ -36,7 +38,7 @@ default_args := ""
 
 # Command that will be invoked to open the `index.html` from the documentation.
 # If running locally, you can use `xdg-open` to automatically select your system's default browser
-browser := "code"
+browser := EDITOR
 
 # Fedora already has the required packages
 initialize-host:
@@ -60,6 +62,7 @@ conan-profiles force="":
 edit-conan-profile profile:
     {{ EDITOR }} $({{ conan }} config home)/profiles/{{ profile }}
 
+# &:build_type=XXX means "use the build type in the profile for my dependencies but build my code with XXX"
 conan-install requires="":
     BUILD_DIR={{ build_dir }} \
         {{ conan }} \
@@ -67,6 +70,7 @@ conan-install requires="":
             -b missing \
             -pr:b {{ conan_build_profile }} \
             -pr:h {{ conan_host_profile }} \
+            -s '&:build_type={{ build_type }}' \
             {{ if requires != "" { "--requires=\"" + requires + "\"" } else { "." } }}
 
 # https://github.com/conan-io/conan/issues/17333#issuecomment-3084941843
@@ -76,16 +80,17 @@ conan-install-mold:
 conan-install-all:
     just conan-install-mold conan-install
 
-config config_preset="conan-default":
+config:
     cmake \
         -S . \
         -B {{ build_dir }} \
-        --preset {{ config_preset }}
+        --preset {{ cmake_configure_preset }} \
+        | tee {{ log }}
 
 build target=default_build_target:
     cmake \
         --build {{ build_dir }} \
-        --preset {{ preset }} \
+        --preset {{ cmake_build_preset }} \
         {{ if target != "" { "-t " + target } else { "" } }} \
         {{ if verbose != "" { "-v" } else { "" } }} \
         | tee {{ log }}
@@ -100,8 +105,9 @@ docs:
 
 test:
     ctest \
-        --preset {{ preset }} \
-        {{ if verbose != "" { "--extra-verbose" } else { "" } }}
+        --preset {{ cmake_test_preset }} \
+        {{ if verbose != "" { "--extra-verbose" } else { "" } }} \
+        | tee {{ log }}
 
 pre-commit:
     uv run pre-commit install
@@ -119,6 +125,7 @@ clean-python:
 clean-all:
     just clean clean-python
 
+# Cleans cached conan packages
 clean-conan:
     {{ conan }} remove "*"
 
