@@ -48,7 +48,7 @@ just py-deps # Installs the Python dependencies. Use `just py-deps 1` to force a
 
 #### Profile
 
-Check if you already have a Conan profile with `uv run conan profile list` (you shouldn't if you set up the project with the devcontainer). If you haven't already created them, this command will create a default host and build profile for you:
+In the [devcontainer configuration](.devcontainer/devcontainer.json), a volume has been configured for Conan's cache and configurations so this step only needs to be run once per devcontainer host. Check if you already have a Conan profile with `uv run conan profile list`. If you haven't already created them, this command will create a default host and build profile for you:
 
 ```bash
 just conan-profiles
@@ -142,25 +142,7 @@ To build a specific target:
 just build docs
 ```
 
-## Run
-
-To run the default target with the default arguments specified in the `justfile`:
-
-```bash
-just run
-```
-
-To run a specific target:
-
-```bash
-just run cpp_project
-```
-
-To run a target with arguments:
-
-```bash
-just run cpp_project arg1 arg2 arg3
-```
+The target will end up in `./build/src/path/to/target/build_type/target`.
 
 ## Docs
 

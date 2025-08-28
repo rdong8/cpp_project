@@ -19,7 +19,10 @@ RUN \
     libcxx-devel \
     lldb \
     llvm \
+    llvm-devel \
     mathjax \
+    mlir \
+    mlir-devel \
     procps-ng \
     which \
   && dnf clean all && rm -rf /var/cache/dnf
@@ -32,12 +35,13 @@ ARG HOMEBREW_PREFIX=/home/linuxbrew/.linuxbrew
 RUN \
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" \
   && sudo chown -R $USERNAME $HOMEBREW_PREFIX \
-  && chmod u+w $HOMEBREW_PREFIX
+  && chown -R $USERNAME $HOMEBREW_PREFIX
 
 USER $USERNAME
 
 ARG FISH_COMPLETIONS=/home/${USERNAME}/.config/fish/completions
 RUN \
+  chmod u+w $HOMEBREW_PREFIX \
   mkdir -p $FISH_COMPLETIONS \
   && echo "eval (${HOMEBREW_PREFIX}/bin/brew shellenv)" >> ~/.config/fish/config.fish
 

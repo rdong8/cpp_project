@@ -1,23 +1,2 @@
-find_package(Boost REQUIRED)
-find_package(spdlog REQUIRED)
-
-add_library(mathematics)
-target_sources(mathematics
-        PUBLIC FILE_SET CXX_MODULES FILES
-        mathematics.cppm
-)
-target_link_libraries(mathematics PRIVATE config)
-
-add_executable(cpp_project)
-target_sources(cpp_project
-        PUBLIC
-        main.cpp
-)
-target_link_libraries(cpp_project
-        PRIVATE
-        config
-        mathematics
-        Boost::headers
-        Boost::cobalt
-        spdlog::spdlog
-)
+add_subdirectory(library_usage)
+add_subdirectory(toy)

@@ -15,7 +15,7 @@ project(cpp_project
         VERSION 0.0.1
         DESCRIPTION "Template for a modern C++ project using CMake."
         HOMEPAGE_URL "https://github.com/rdong8/cpp_project"
-        LANGUAGES CXX
+        LANGUAGES C CXX
 )
 
 # Only do these if this is the main project, and not if it is included through add_subdirectory
@@ -52,7 +52,7 @@ include(cmake/CompileOptions.cmake)
 set_project_compile_options(config)
 
 include(cmake/CompileWarnings.cmake)
-set_project_warnings(config)
+set_project_compile_warnings(config)
 
 include(cmake/Sanitizers.cmake)
 set_project_sanitizers(config)

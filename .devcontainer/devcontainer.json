@@ -21,6 +21,13 @@
     // For Podman
     "label=disable"
   ],
+  "mounts": [
+    {
+      "source": "conan",
+      "target": "/home/dev/.conan2",
+      "type": "volume"
+    }
+  ],
   "customizations": {
     "vscode": {
       "extensions": [
