@@ -109,10 +109,11 @@ run target=default_run_target *args=default_args:
 docs:
     {{ browser }} $(realpath {{ BUILD_DIR }})/docs/html/index.html
 
-test:
+test *args:
     ctest \
         --preset {{ cmake_test_preset }} \
         {{ if verbose != "" { "--extra-verbose" } else { "" } }} \
+        {{ args }} \
         | tee {{ log }}
 
 pre-commit:
