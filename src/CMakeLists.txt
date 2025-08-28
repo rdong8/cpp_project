@@ -16,8 +16,8 @@ target_sources(cpp_project
 target_link_libraries(cpp_project
         PRIVATE
         config
+        mathematics
         Boost::headers
         Boost::cobalt
         spdlog::spdlog
-        mathematics
 )
