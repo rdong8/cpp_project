@@ -1,7 +1,10 @@
 # Credit: https://github.com/cpp-best-practices/cmake_template/blogit b/main/cmake/CompilerWarnings.cmake
 # https://best.openssf.org/Compiler-Hardening-Guides/Compiler-Options-Hardening-Guide-for-C-and-C++.html
 
-function(set_project_warnings project_name)
+function(set_project_compile_warnings project_name)
+    set_property(TARGET "${project_name}" PROPERTY COMPILE_WARNING_AS_ERROR ON)
+    set_property(TARGET "${project_name}" PROPERTY LINK_WARNING_AS_ERROR ON)
+
     set(CLANG_WARNINGS
     )
 
@@ -21,7 +24,6 @@ function(set_project_warnings project_name)
             "-Wcast-align" # Warn for potential performance problem casts
             "-Wconversion" # Warn on type conversions that may lose data
             "-Wdouble-promotion" # Warn if float is implicit promoted to double
-            "-Werror"
             "-Wextra" # Reasonable and standard
             "-Wformat=2" # Warn on security issues around functions that format output (ie printf)
             "-Wimplicit-fallthrough" # Warn on statements that fallthrough without an explicit annotation
