@@ -1,7 +1,5 @@
 #include <spdlog/spdlog.h>
 
-import std;
-
 // Use some C++20/23 features
 
 class Example

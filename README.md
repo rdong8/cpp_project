@@ -11,8 +11,7 @@ You need the following installed:
 
 - Python with pip
 - Clang 20+ (you may need to change the `CLANG_MAJOR_VERSION` variable below)
-- CMake 3.30+ (you may need to change [this line](./CMakeLists.txt#L6) to correspond with [this value](https://gitlab.kitware.com/cmake/cmake/-/blob/master/Help/dev/experimental.rst?ref_type=heads&plain=1#L84) on the corresponding CMake branch)
-- Relatively recent Ninja, shouldn't be an issue
+- Relatively recent CMake and Ninja, shouldn't be an issue
 
 ## Issue Reproduction
 
@@ -27,12 +26,10 @@ export CXX=clang++
 # Create Python virtual environment
 mkdir -p .venv
 python -m venv .venv
-
-# Activate virtual environment
 source .venv/bin/activate
-pip install conan
 
-# Set up Conan profile
+# Set up Conan profile (only needs to be run once)
+pip install conan
 mkdir -p ~/.conan2/profiles
 cat << EOF > $(conan config home)/profiles/default
 [buildenv]
