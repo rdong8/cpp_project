@@ -17,8 +17,6 @@ You need the following installed:
 ## Issue Reproduction
 
 ```bash
-cd cpp_project/
-
 CONFIG=Debug
 # You may need to change this
 CLANG_MAJOR_VERSION=20
