@@ -9,7 +9,6 @@ set(CMAKE_COLOR_DIAGNOSTICS ON)
 set(CMAKE_EXPERIMENTAL_CXX_IMPORT_STD "d0edc3af-4c50-42ea-a356-e2862fe7a444")
 set(CMAKE_CXX_MODULE_STD ON)
 set(CMAKE_CXX_SCAN_FOR_MODULES ON)
-set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 project(cpp_project
         VERSION 0.0.1
@@ -21,9 +20,6 @@ project(cpp_project
 # Only do these if this is the main project, and not if it is included through add_subdirectory
 if (PROJECT_IS_TOP_LEVEL)
     include(cmake/ClangTidy.cmake)
-
-    set(CMAKE_CXX_EXTENSIONS OFF)
-    set(CMAKE_CXX_STANDARD 23) # TODO: Boost Conan package doesn't support C++26/CMAKE_CXX_STANDARD_LATEST
 
     # Generate compile_commands.json to make it easier to work with clang based tools
     set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
@@ -58,6 +54,5 @@ include(cmake/Sanitizers.cmake)
 set_project_sanitizers(config)
 
 include(cmake/InterproceduralOptimization.cmake)
-include(cmake/LinkOptions.cmake)
 
 add_subdirectory(src)
