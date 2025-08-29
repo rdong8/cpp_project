@@ -42,24 +42,23 @@ export BUILD_DIR=build
 export CC=clang
 export CXX=clang++
 
-# Set up Conan
+# Create virtual environment and install Conan
 uv venv
 uv pip install conan
 
-cat << EOF > $(uv run conan config home)/profiles/host
+# Set up Conan profile
+mkdir -p ~/.conan2/profiles
+cat << EOF > $(uv run conan config home)/profiles/default
 [buildenv]
 CC=clang
 CXX=clang++
-LD=mold
 
 [conf]
-tools.build:exelinkflags=["-fuse-ld=mold"]
-tools.build:sharedlinkflags=["-fuse-ld=mold"]
 tools.cmake.cmaketoolchain:generator=Ninja Multi-Config
 
 [settings]
 arch=x86_64
-build_type=${CONFIG}
+build_type=Release
 compiler=clang
 compiler.cppstd=23
 compiler.libcxx=libstdc++11
@@ -67,35 +66,11 @@ compiler.version=20
 os=Linux
 EOF
 
-cat << EOF > $(uv run conan config home)/profiles/build
-[conf]
-tools.cmake.cmaketoolchain:generator=Ninja Multi-Config
-
-[settings]
-arch=x86_64
-build_type=${CONFIG}
-compiler=clang
-compiler.cppstd=23
-compiler.libcxx=libstdc++11
-compiler.version=20
-os=Linux
-EOF
-
-# Install mold
+# Install spdlog via Conan
 uv run conan \
     install \
     -b missing \
-    -pr:b build \
-    -pr:h host \
-    -s '&':build_type=${CONFIG} \
-    --requires='mold/[*]'
-
-# Install other dependencies
-uv run conan \
-    install \
-    -b missing \
-    -pr:b build \
-    -pr:h host \
+    -pr:a default \
     -s '&':build_type=${CONFIG} \
     .
 

@@ -8,8 +8,6 @@ set(CMAKE_CXX_SCAN_FOR_MODULES ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
-
-# Generate compile_commands.json to make it easier to work with clang based tools
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 project(cpp_project
@@ -22,17 +20,5 @@ project(cpp_project
 add_library(config INTERFACE)
 
 target_compile_features(config INTERFACE "cxx_std_${CMAKE_CXX_STANDARD}")
-
-include(cmake/CompileOptions.cmake)
-set_project_compile_options(config)
-
-include(cmake/CompileWarnings.cmake)
-set_project_warnings(config)
-
-include(cmake/Sanitizers.cmake)
-set_project_sanitizers(config)
-
-include(cmake/InterproceduralOptimization.cmake)
-include(cmake/LinkOptions.cmake)
 
 add_subdirectory(src)
