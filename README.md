@@ -89,3 +89,5 @@ cmake \
 # Run
 ./${BUILD_DIR}/src/${CONFIG}/main
 ```
+
+Then restart clangd in VS Code, go into [main.cpp](src/main.cpp) and then CTRL + click on the include (`<spdlog/spdlog.h>`). Clangd should then crash.
