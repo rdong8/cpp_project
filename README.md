@@ -48,13 +48,15 @@ just py-deps # Installs the Python dependencies. Use `just py-deps 1` to force a
 
 #### Profile
 
-In the [devcontainer configuration](.devcontainer/devcontainer.json), a volume has been configured for Conan's cache and configurations so this step only needs to be run once per devcontainer host. Check if you already have a Conan profile with `uv run conan profile list`. If you haven't already created them, this command will create a default host and build profile for you:
+In the [devcontainer configuration](.devcontainer/devcontainer.json), a volume has been configured for Conan's cache and configurations so this step only needs to be run once per devcontainer host.
+
+Check if you already have a Conan profile with `uv run conan profile list`. If you haven't already created them, this command will create a default host and build profile for you:
 
 ```bash
 just conan-profiles
 ```
 
-Then, edit the host profile with `just edit-conan-profile host`.
+Then, edit the host profile with `just edit-conan-profile host`. For example:
 
 ```toml
 [buildenv]
@@ -63,6 +65,7 @@ CXX=clang++
 LD=mold
 
 [conf]
+# TODO: https://github.com/conan-io/conan/issues/15864
 tools.build:exelinkflags=["-fuse-ld=mold"]
 tools.build:sharedlinkflags=["-fuse-ld=mold"]
 tools.cmake.cmaketoolchain:generator=Ninja Multi-Config
@@ -85,7 +88,7 @@ compiler.version=20
 os=Linux
 ```
 
-And edit your build profile with `just edit-conan-profile build`:
+And edit your build profile with `just edit-conan-profile build`. For example:
 
 ```toml
 [conf]
@@ -108,8 +111,6 @@ Note that the build type here is for *your dependencies*, which you can compile 
 
 The build type for your own code is controlled by the `build` variable in the justfile.
 
-Also, this is where you have to specify the C++ standard library you want to use, not in CMake.
-
 #### Build Dependencies
 
 Now build the project's C++ dependencies with Conan:
@@ -126,43 +127,47 @@ This command runs the CMake configure. Theoretically it only needs to be run onc
 just config
 ```
 
-At this point, you may want to restart clangd (`LSP: Restart Server` in VSCode command palette) so it picks up the new compile commands.
+At this point, you may want to restart clangd (`clangd: Restart language server` in VSCode command palette) so it picks up the new compile commands.
 
 ## Build
 
-To build the default target with the default arguments specified in the `justfile`:
+Build a target:
 
 ```bash
-just build
+just build target-name
 ```
 
-To build a specific target:
-
-```bash
-just build docs
-```
+You can omit the target name to build everything.
 
 The target will end up in `./build/src/path/to/target/build_type/target`.
 
 ## Docs
 
-To open the documentation (must be built first via `just build docs`):
+To open the documentation in the default browser (must be built first via `just build docs`):
 
 ```bash
 just docs
 ```
 
-To open with a particular browser, pass the path to the command that will be passed the `index.html` file of the browser:
+You may also pass a command that will be used to open the `index.html` file:
 
 ```bash
 just docs firefox
-just docs "flatpak run com.brave.Browser" # You need to use Flatseal to give the flatpak permission in this case
+just docs 'flatpak run com.brave.Browser' # You need to use Flatseal to give the flatpak permission in this case
 ```
 
 ## Test
 
+Run all tests:
+
 ```bash
 just test
+```
+
+Any [flags](https://cmake.org/cmake/help/book/mastering-cmake/chapter/Testing%20With%20CMake%20and%20CTest.html#testing-using-ctest) will be forwarded to `ctest`, for example:
+
+```bash
+just test -R math # Run tests matching regular expression "math"
 ```
 
 ## Pre-Commit
@@ -175,10 +180,23 @@ just pre-commit
 
 ## Clean
 
-Cleans the build directory.
+Clean the build directory and Conan generated files:
 
 ```bash
 just clean
 ```
 
+Clean Python files as well:
+
+```bash
+just clean-all
+```
+
 You'll need to make the project's Conan dependencies and run the CMake config again with `just conan-deps config`.
+
+You can also delete all installed Conan packages matching a pattern:
+
+```bash
+just clean-conan 'boost/*'
+just clean-conan # Removes everything
+```

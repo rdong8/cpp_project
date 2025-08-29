@@ -122,8 +122,8 @@ clean-all:
     just clean clean-python
 
 # Cleans cached conan packages
-clean-conan:
-    {{ conan }} remove '*'
+clean-conan pattern='*':
+    {{ conan }} remove {{ pattern }}
 
 update-submodules:
     git submodule update --init --recursive
