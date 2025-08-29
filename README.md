@@ -1,54 +1,42 @@
-# cpp_project
+# Clangd Issue 860 Reproduction
 
-Template for a modern C++ project using CMake.
-
-## Notes
-
-- Only Linux is supported
-- This project uses [devcontainers](https://containers.dev/) to avoid dependencies polluting the host. Specifically, we use [podman](https://podman.io/) instead of Docker, which enables the devcontainer to run on a host that is itself containerized (ie. a [GCP Cloud Workstation](https://cloud.google.com/workstations?hl=en) instance)
-- Because containers are rootless, most dev tools are installed with `brew` instead
-
-## Initialize
-
-*On the host*:
+## Dependencies
 
 ```bash
-git clone --recurse-submodules https://github.com/rdong8/cpp_project.git
+git clone -b clangd-issue-860 https://github.com/rdong8/cpp_project.git
 cd cpp_project/
 ```
 
-Also make sure you have [`podman`](https://podman.io/docs/installation#installing-on-linux) installed on the host. For example:
+You need the following installed:
 
-```bash
-# Fedora
-sudo dnf -y install podman
-
-# Ubuntu
-sudo apt update
-sudo apt -y install podman
-```
-
-Open the devcontainer in your IDE (CTRL + Shift + P in VS Code, then "Dev Containers: Rebuild and Reopen in Container").
-
-All commands after this point are to be run *in the devcontainer*, not on the host.
+- Python with pip
+- Clang 20+ (you may need to change the `CLANG_MAJOR_VERSION` variable below)
+- CMake 3.30+ (you may need to change [this line](./CMakeLists.txt#L6) to correspond with [this value](https://gitlab.kitware.com/cmake/cmake/-/blob/master/Help/dev/experimental.rst?ref_type=heads&plain=1#L84) on the corresponding CMake branch)
+- Relatively recent Ninja, shouldn't be an issue
 
 ## Issue Reproduction
 
 ```bash
-cd /workspaces/cpp_project
+cd cpp_project/
 
 CONFIG=Debug
+# You may need to change this
+CLANG_MAJOR_VERSION=20
 export BUILD_DIR=build
 export CC=clang
 export CXX=clang++
 
-# Create virtual environment and install Conan
-uv venv
-uv pip install conan
+# Create Python virtual environment
+mkdir -p .venv
+python -m venv .venv
+
+# Activate virtual environment
+source .venv/bin/activate
+pip install conan
 
 # Set up Conan profile
 mkdir -p ~/.conan2/profiles
-cat << EOF > $(uv run conan config home)/profiles/default
+cat << EOF > $(conan config home)/profiles/default
 [buildenv]
 CC=clang
 CXX=clang++
@@ -61,13 +49,13 @@ arch=x86_64
 build_type=Release
 compiler=clang
 compiler.cppstd=23
-compiler.libcxx=libstdc++11
-compiler.version=20
+compiler.libcxx=libc++
+compiler.version=${CLANG_MAJOR_VERSION}
 os=Linux
 EOF
 
-# Install spdlog via Conan
-uv run conan \
+# Install spdlog
+conan \
     install \
     -b missing \
     -pr:a default \
@@ -90,4 +78,4 @@ cmake \
 ./${BUILD_DIR}/src/${CONFIG}/main
 ```
 
-Then restart clangd in VS Code, go into [main.cpp](src/main.cpp) and then CTRL + click on the include (`<spdlog/spdlog.h>`). Clangd should then crash.
+Then restart clangd in VS Code, go into [main.cpp](src/main.cpp) and then CTRL + click on the include ([`<spdlog/spdlog.h>`](src/main.cpp#L1)). Clangd should then crash.
