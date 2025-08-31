@@ -62,15 +62,17 @@ Then, edit the host profile with `just edit-conan-profile host`. For example:
 [buildenv]
 CC=clang
 CXX=clang++
-LD=mold
+# TODO: "Mold can only be built with libstdc++11", using LLD for now
+# TODO: https://github.com/conan-io/conan/issues/15864
+# TODO: https://github.com/conan-io/conan/issues/14174
+# LD=mold
 
 [conf]
-# TODO: https://github.com/conan-io/conan/issues/15864
-tools.build:exelinkflags=["-fuse-ld=mold"]
-tools.build:sharedlinkflags=["-fuse-ld=mold"]
+# tools.build:exelinkflags=["-fuse-ld=mold"]
+# tools.build:sharedlinkflags=["-fuse-ld=mold"]
 tools.cmake.cmaketoolchain:generator=Ninja Multi-Config
-# Paths to your compilers if they're not `clang` and `clang++`
-# tools.build:compiler_executables={"c": "clang-20", "cpp": "clang++-20"}
+# Like CC and CXX
+tools.build:compiler_executables={"c": "clang", "cpp": "clang++"}
 
 [platform_tool_requires]
 # Tell Conan to look for CMake on the machine instead of installing it itself
@@ -82,8 +84,7 @@ build_type=Release
 compiler=clang
 # TODO: 26 causing problems
 compiler.cppstd=23
-# TODO: "Mold can only be built with libstdc++11", can't use libc++
-compiler.libcxx=libstdc++11
+compiler.libcxx=libc++
 compiler.version=20
 os=Linux
 ```
@@ -102,7 +103,7 @@ arch=x86_64
 build_type=Release
 compiler=clang
 compiler.cppstd=23
-compiler.libcxx=libstdc++11
+compiler.libcxx=libc++
 compiler.version=20
 os=Linux
 ```
