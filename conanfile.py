@@ -13,7 +13,13 @@ class ConanApplication(ConanFile):
         self.tool_requires("cmake/[>=4.1]")
 
     def configure(self):
-        self.options["spdlog"].use_std_fmt = True
+        spdlog_options = self.options["spdlog"]
+        spdlog_options.use_std_fmt = True
+
+        # https://github.com/conan-io/conan-center-index/issues/28311
+        boost_options = self.options["boost"]
+        boost_options.without_locale = True
+        boost_options.without_stacktrace = True
 
     def layout(self):
         if not (build_dir := os.getenv("BUILD_DIR")):

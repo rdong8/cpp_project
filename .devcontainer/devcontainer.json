@@ -9,7 +9,7 @@
     // For Podman
     "HOME": "/home/dev"
   },
-  //  For Podman
+  // For Podman
   "remoteUser": "dev",
   "capAdd": [
     // For C++
@@ -73,7 +73,14 @@
     }
   },
   "build": {
-    "dockerfile": "Containerfile"
+    "dockerfile": "Containerfile",
+    "args": {
+      "REMOTE_USER": "dev",
+      // https://github.com/devcontainers/spec/issues/631
+      // Run `id` on the host to get these
+      "HOST_UID": "1001",
+      "HOST_GID": "1002"
+    }
   },
   "runArgs": [
     // For Podman

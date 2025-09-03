@@ -1,10 +1,10 @@
 # Credit: https://github.com/cpp-best-practices/cmake_template/blogit b/main/cmake/CompilerWarnings.cmake
 # https://best.openssf.org/Compiler-Hardening-Guides/Compiler-Options-Hardening-Guide-for-C-and-C++.html
 
-function(set_project_compile_warnings project_name)
-    set_property(TARGET "${project_name}" PROPERTY COMPILE_WARNING_AS_ERROR ON)
-    set_property(TARGET "${project_name}" PROPERTY LINK_WARNING_AS_ERROR ON)
+set(CMAKE_COMPILE_WARNING_AS_ERROR ON)
+set(CMAKE_LINK_WARNING_AS_ERROR ON)
 
+function(set_project_compile_warnings project_name)
     set(CLANG_WARNINGS
     )
 

@@ -31,7 +31,9 @@ sudo apt update
 sudo apt -y install podman
 ```
 
-All commands after this point are to be run *in the devcontainer*, not on the host.
+Then run `id` on the host to determine your user's UID and GID. Use that to fill in the `build.dockerfile.args.HOST_UID` and `build.dockerfile.args.HOST_GID` values in the [devcontainer.json](.devcontainer/devcontainer.json) file.
+
+Then build the devcontainer. All commands after this point are to be run *in the devcontainer*, not on the host.
 
 ## Dependencies
 
@@ -50,29 +52,28 @@ just py-deps # Installs the Python dependencies. Use `just py-deps 1` to force a
 
 In the [devcontainer configuration](.devcontainer/devcontainer.json), a volume has been configured for Conan's cache and configurations so this step only needs to be run once per devcontainer host.
 
-Check if you already have a Conan profile with `uv run conan profile list`. If you haven't already created them, this command will create a default host and build profile for you:
+Check if you already have a Conan profile with `just list-conan-profiles`.
+
+If you haven't already created them, this command will create a default for you:
 
 ```bash
-just conan-profiles
+just create-conan-profile default
 ```
 
-Then, edit the host profile with `just edit-conan-profile host`. For example:
+Then, edit the profile with `just edit-conan-profile default`. For example:
 
 ```toml
-[buildenv]
-CC=clang
-CXX=clang++
-# TODO: "Mold can only be built with libstdc++11", using LLD for now
-# TODO: https://github.com/conan-io/conan/issues/15864
-# TODO: https://github.com/conan-io/conan/issues/14174
-# LD=mold
+# TODO: brew's LLVM is build with libstdc++, can't use libc++
+# [buildenv]
+# CXXFLAGS=-isystem ${HOMEBREW_PREFIX}/include/c++/v1
+# LDFLAGS=-L${HOMEBREW_PREFIX}/lib -Wl,-rpath,${HOMEBREW_PREFIX}/lib
 
 [conf]
-# tools.build:exelinkflags=["-fuse-ld=mold"]
-# tools.build:sharedlinkflags=["-fuse-ld=mold"]
+tools.build:compiler_executables={'c': 'clang', 'cpp': 'clang++'}
+# TODO: https://github.com/conan-io/conan/issues/15864
+# TODO: https://github.com/conan-io/conan/issues/14174
+tools.cmake.cmaketoolchain:extra_variables={'CMAKE_LINKER_TYPE': 'MOLD'}
 tools.cmake.cmaketoolchain:generator=Ninja Multi-Config
-# Like CC and CXX
-tools.build:compiler_executables={"c": "clang", "cpp": "clang++"}
 
 [platform_tool_requires]
 # Tell Conan to look for CMake on the machine instead of installing it itself
@@ -80,44 +81,22 @@ cmake/4.1
 
 [settings]
 arch=x86_64
-build_type=Release
 compiler=clang
-# TODO: 26 causing problems
+# TODO: https://github.com/conan-io/conan-center-index/issues/26390
 compiler.cppstd=23
-compiler.libcxx=libc++
-compiler.version=20
+compiler.libcxx=libstdc++
+compiler.version=21
 os=Linux
 ```
 
-And edit your build profile with `just edit-conan-profile build`. For example:
-
-```toml
-[conf]
-tools.cmake.cmaketoolchain:generator=Ninja Multi-Config
-
-[platform_tool_requires]
-cmake/4.1
-
-[settings]
-arch=x86_64
-build_type=Release
-compiler=clang
-compiler.cppstd=23
-compiler.libcxx=libc++
-compiler.version=20
-os=Linux
-```
-
-Note that the build type here is for *your dependencies*, which you can compile in release mode even if you are building your own code in debug.
-
-The build type for your own code is controlled by the `build` variable in the justfile.
+Note that if your `compiler.version` is too new, you may get an error from Conan.
 
 #### Build Dependencies
 
 Now build the project's C++ dependencies with Conan:
 
 ```bash
-just conan-install-all
+just conan-install
 ```
 
 ## Configure

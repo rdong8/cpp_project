@@ -8,9 +8,9 @@ module;
 
 export module toyc;
 
-import toyc:ast;
-import toyc:lexer;
-import toyc:parser;
+import :ast;
+import :lexer;
+import :parser;
 
 import std;
 
@@ -31,7 +31,7 @@ cl::opt<std::string> input_filename{cl::Positional, cl::desc("<input toy file>")
 cl::opt<Action> emit_action{"emit", cl::desc("Select the kind of output desired"),
                             cl::values(clEnumValN(Action::DumpAST, "ast", "output the AST dump"))};
 
-auto parse_input_file(std::string_view filename) -> std::unique_ptr<toy::ModuleAST>
+auto parse_input_file(llvm::StringRef filename) -> std::unique_ptr<toy::ModuleAST>
 {
     llvm::ErrorOr<std::unique_ptr<llvm::MemoryBuffer>> file_or_error = llvm::MemoryBuffer::getFileOrSTDIN(filename);
 
@@ -67,7 +67,7 @@ auto main(int argc, char *argv[]) -> int
         toy::dump(*module_ast);
         return 0;
     }
-    default:
+    case Action::None:
     {
         llvm::errs() << "No action specified (parsing only?), use -emit=<action>\n";
         return 1;

@@ -26,8 +26,9 @@ log := '/tmp/out.log'
 
 conan := 'uv run conan'
 
-conan_build_profile := 'build'
-conan_host_profile := 'host'
+# For cross-compilation you want separate host and build profiles
+conan_build_profile := 'default'
+conan_host_profile := conan_build_profile
 
 # Command that will be invoked to open the `index.html` from the documentation.
 # If running locally, you can use `xdg-open` to automatically select your system's default browser
@@ -45,39 +46,27 @@ py-deps reinstall="0":
     uv pip install --upgrade -e . \
         {{ if reinstall == '1' { '--reinstall' } else { '' } }}
 
-# This only creates the profile, you still need to edit it to contain the details for your compiler and language
-conan-profiles force='':
-    {{ conan }} profile detect --name {{ conan_host_profile }} \
-        {{ if force != '' { '--force' } else { '' } }}
-    {{ conan }} profile detect --name {{ conan_build_profile }} \
+list-conan-profiles:
+    {{ conan }} profile list
+
+create-conan-profile name force='':
+    {{ conan }} profile detect --name {{ name }} \
         {{ if force != '' { '--force' } else { '' } }}
 
 edit-conan-profile profile:
     {{ EDITOR }} $({{ conan }} config home)/profiles/{{ profile }}
 
-# https://github.com/conan-io/conan/issues/17333#issuecomment-3084941843
-conan-install-mold:
-    {{ conan }} \
-        install \
-        -b missing \
-        -pr:b {{ conan_build_profile }} \
-        -pr:h {{ conan_host_profile }} \
-        -s build_type={{ conan_build_type }} \
-        --requires='mold/[*]'
-
-# &:build_type=XXX means "use the build type in the profile for my dependencies but build my code with XXX"
+# build_type=XXX means "use this build type for my dependencies"
+# &:build_type=XXX means "use this build type for my code"
 conan-install:
     {{ conan }} \
         install \
         -b missing \
         -pr:b {{ conan_build_profile }} \
         -pr:h {{ conan_host_profile }} \
-        -s '&:build_type={{ build_type }}' \
         -s build_type={{ conan_build_type }} \
+        -s '&':build_type={{ build_type }} \
         .
-
-conan-install-all:
-    just conan-install-mold conan-install
 
 config:
     cmake \
@@ -122,8 +111,9 @@ clean-all:
     just clean clean-python
 
 # Cleans cached conan packages
-clean-conan pattern='*':
-    {{ conan }} remove {{ pattern }}
+clean-conan pattern='*' force='':
+    {{ conan }} remove '{{ pattern }}' \
+        {{ if force != '' { '--confirm' } else { '' } }}
 
 update-submodules:
     git submodule update --init --recursive

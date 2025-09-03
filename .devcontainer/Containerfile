@@ -1,72 +1,66 @@
 FROM docker.io/fedora:latest
 
 # For now, only install the following with the system package manager:
-# - Compiler-related stuff - have had issues with linuxbrew
 # - Dependencies of linuxbrew itself (curl, file, procps-ng)
-# - fish - because we have to append `brew shellenv` to the fish config, so the config needs to be created first
+# - gcc-c++ - system toolchain needed for linuxbrew's LLVM
+# - fish - need to set user's shell when we create it
 # - which - to find fish for the useradd
 # - mathjax - dependency of doxygen, but not available via linuxbrew
 RUN \
   dnf update -y \
   && dnf install -y \
-    @development-tools \
-    curl \
-    clang \
-    clang-tools-extra-devel \
-    compiler-rt \
-    file \
-    fish \
-    libcxx-devel \
-    lldb \
-    llvm \
-    llvm-devel \
-    mathjax \
-    mlir \
-    mlir-devel \
-    procps-ng \
-    which \
+  @development-tools \
+  curl \
+  file \
+  fish \
+  gcc-c++ \
+  mathjax \
+  procps-ng \
+  which \
   && dnf clean all && rm -rf /var/cache/dnf
 
-ARG USERNAME=dev
-RUN useradd -ms $(which fish) $USERNAME
+ARG REMOTE_USER
+ARG HOST_UID
+ARG HOST_GID
+RUN \
+  groupadd --gid ${HOST_GID} ${REMOTE_USER} \
+  && useradd -ms $(which fish) --uid ${HOST_UID} --gid ${HOST_GID} ${REMOTE_USER}
+USER ${REMOTE_USER}
 
-# Install brew (generally more up to date than dnf)
 ARG HOMEBREW_PREFIX=/home/linuxbrew/.linuxbrew
-RUN \
-  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" \
-  && sudo chown -R $USERNAME $HOMEBREW_PREFIX \
-  && chown -R $USERNAME $HOMEBREW_PREFIX
+COPY \
+  --from=docker.io/homebrew/brew:latest \
+  --chown=${REMOTE_USER} \
+  ${HOMEBREW_PREFIX} ${HOMEBREW_PREFIX}
 
-USER $USERNAME
-
-ARG FISH_COMPLETIONS=/home/${USERNAME}/.config/fish/completions
+ARG FISH_COMPLETIONS=/home/${REMOTE_USER}/.config/fish/completions
 RUN \
-  chmod u+w $HOMEBREW_PREFIX \
-  mkdir -p $FISH_COMPLETIONS \
+  mkdir -p ${FISH_COMPLETIONS} \
   && echo "eval (${HOMEBREW_PREFIX}/bin/brew shellenv)" >> ~/.config/fish/config.fish
 
 RUN \
-  eval $(${HOMEBREW_PREFIX}/bin/brew shellenv) \
+  eval "$(${HOMEBREW_PREFIX}/bin/brew shellenv)" \
   && brew install \
-    bat \
-    btop \
-    cmake \
-    doxygen \
-    fastfetch \
-    fd \
-    fzf \
-    gawk \
-    git-delta \
-    helix \
-    jq \
-    just \
-    mold \
-    ninja \
-    ripgrep \
-    tree \
-    uv \
-    wget \
-    zellij
+  bat \
+  btop \
+  cmake \
+  doxygen \
+  fastfetch \
+  fd \
+  fzf \
+  gawk \
+  git-delta \
+  helix \
+  jq \
+  just \
+  llvm \
+  mold \
+  ninja \
+  ripgrep \
+  tree \
+  uv \
+  wget \
+  zellij
 
 # Fish completions
 
