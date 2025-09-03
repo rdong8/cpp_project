@@ -18,10 +18,11 @@ You need the following installed:
 ```bash
 CONFIG=Debug
 # You may need to change this
-CLANG_MAJOR_VERSION=20
+CLANG_MAJOR_VERSION=21
 export BUILD_DIR=build
 export CC=clang
 export CXX=clang++
+PROFILE_NAME=clangd_issue_860
 
 # Create Python virtual environment
 mkdir -p .venv
@@ -31,7 +32,7 @@ source .venv/bin/activate
 # Set up Conan profile (only needs to be run once)
 pip install conan
 mkdir -p ~/.conan2/profiles
-cat << EOF > $(conan config home)/profiles/default
+cat << EOF > $(conan config home)/profiles/${PROFILE_NAME}
 [buildenv]
 CC=clang
 CXX=clang++
@@ -44,7 +45,7 @@ arch=x86_64
 build_type=Release
 compiler=clang
 compiler.cppstd=23
-compiler.libcxx=libc++
+compiler.libcxx=libstdc++11
 compiler.version=${CLANG_MAJOR_VERSION}
 os=Linux
 EOF
@@ -53,7 +54,7 @@ EOF
 conan \
     install \
     -b missing \
-    -pr:a default \
+    -pr:a ${PROFILE_NAME} \
     -s '&':build_type=${CONFIG} \
     .
 
