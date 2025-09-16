@@ -53,7 +53,6 @@ RUN \
   helix \
   jq \
   just \
-  llvm \
   mold \
   ninja \
   ripgrep \
@@ -61,6 +60,12 @@ RUN \
   uv \
   wget \
   zellij
+
+# Unsure why postinstall fails, works when you run it manually in the devcontainer
+RUN \
+  eval "$(${HOMEBREW_PREFIX}/bin/brew shellenv)" \
+  && brew install llvm --HEAD -vd \
+  ; exit 0
 
 # Fish completions
 

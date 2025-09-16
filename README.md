@@ -8,7 +8,9 @@ Read through both the README and the `justfile` to better understand how everyth
 
 - Only Linux is supported
 - This project uses [devcontainers](https://containers.dev/) to avoid dependencies polluting the host. Specifically, we use [podman](https://podman.io/) instead of Docker, which enables the devcontainer to run on a host that is itself containerized (ie. a [GCP Cloud Workstation](https://cloud.google.com/workstations?hl=en) instance)
-- Because containers are rootless, most dev tools are installed with `brew` instead
+- The devcontainer uses [`brew`](https://brew.sh/) for a few reasons:
+  - We use a non-root user in the container so you can't use the system package manager
+  - The LLVM build in Fedora's repos lacks debug symbols
 - The devcontainer is setup to use [fish](https://fishshell.com/) as the default shell
 
 ## Initialize
@@ -62,7 +64,7 @@ just create-conan-profile default
 
 Then, edit the profile with `just edit-conan-profile default`. For example:
 
-```toml
+```ini
 # TODO: brew's LLVM is build with libstdc++, can't use libc++
 # [buildenv]
 # CXXFLAGS=-isystem ${HOMEBREW_PREFIX}/include/c++/v1
@@ -72,12 +74,12 @@ Then, edit the profile with `just edit-conan-profile default`. For example:
 tools.build:compiler_executables={'c': 'clang', 'cpp': 'clang++'}
 # TODO: https://github.com/conan-io/conan/issues/15864
 # TODO: https://github.com/conan-io/conan/issues/14174
-tools.cmake.cmaketoolchain:extra_variables={'CMAKE_LINKER_TYPE': 'MOLD'}
+tools.cmake.cmaketoolchain:extra_variables={'CMAKE_LINKER_TYPE': 'MOLD', 'CMAKE_OPTIMIZE_DEPENDENCIES': 'ON'}
 tools.cmake.cmaketoolchain:generator=Ninja Multi-Config
 
 [platform_tool_requires]
 # Tell Conan to look for CMake on the machine instead of installing it itself
-cmake/4.1
+cmake/4.1.1
 
 [settings]
 arch=x86_64
@@ -85,11 +87,11 @@ compiler=clang
 # TODO: https://github.com/conan-io/conan-center-index/issues/26390
 compiler.cppstd=23
 compiler.libcxx=libstdc++
-compiler.version=21
+compiler.version=22
 os=Linux
 ```
 
-Note that if your `compiler.version` is too new, you may get an error from Conan.
+Note that if your `compiler.version` is too new, you may get an error from Conan. Just [edit `~/.conan2/settings.yml`](http://docs.conan.io/2/knowledge/faq.html#error-invalid-setting) and add it there.
 
 #### Build Dependencies
 

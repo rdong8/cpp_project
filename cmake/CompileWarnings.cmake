@@ -1,7 +1,8 @@
 # Credit: https://github.com/cpp-best-practices/cmake_template/blogit b/main/cmake/CompilerWarnings.cmake
 # https://best.openssf.org/Compiler-Hardening-Guides/Compiler-Options-Hardening-Guide-for-C-and-C++.html
 
-set(CMAKE_COMPILE_WARNING_AS_ERROR ON)
+# TODO: Want to turn this on but LLVM headers cause too many warnings
+set(CMAKE_COMPILE_WARNING_AS_ERROR OFF)
 set(CMAKE_LINK_WARNING_AS_ERROR ON)
 
 function(set_project_compile_warnings project_name)
