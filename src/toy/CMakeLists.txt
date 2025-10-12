@@ -1,71 +1,76 @@
-
 include(LLVM.cmake)
-
-# Run `llvm-config --components` to see all available components
-llvm_map_components_to_libnames(llvm_libs support)
 
 add_library(toyc_macros)
 target_sources(toyc_macros
-        PUBLIC FILE_SET HEADERS FILES
+    PUBLIC FILE_SET HEADERS FILES
         macros.hpp
 )
 target_link_libraries(toyc_macros
-        PRIVATE 
+    PRIVATE
         config
         llvm_config
-        ${llvm_libs}
 )
 
-add_executable(toyc_lexer)
+add_library(toyc_lexer)
 target_sources(toyc_lexer
     PUBLIC FILE_SET CXX_MODULES FILES
-    lexer.cppm
+        lexer.cppm
 )
 target_link_libraries(toyc_lexer
-        PRIVATE 
+    PRIVATE
         config
         llvm_config
-        ${llvm_libs}
-        MLIRSupport
+        toyc_macros
+)
+
+add_library(toyc_ast)
+target_sources(toyc_ast
+    PUBLIC FILE_SET CXX_MODULES FILES
+        ast/mod.cppm
+    PRIVATE
+        ast/dumper.cppm
+)
+target_link_libraries(toyc_ast
+    PRIVATE`
+        config
+        llvm_config
+        toyc_lexer
+)
+
+add_library(toyc_parser)
+target_sources(toyc_parser
+    PUBLIC FILE_SET CXX_MODULES FILES
+        parser.cppm
+)
+target_link_libraries(toyc_parser
+    PRIVATE
+        config
+        llvm_config
+)
+
+add_library(toyc_lib)
+target_sources(toyc_lib
+    PUBLIC FILE_SET CXX_MODULES FILES
+        lib.cppm
+)
+target_link_libraries(toyc_lib
+    PRIVATE
+        config
+        llvm_config
+        toyc_ast
+        toyc_lexer
+        toyc_macros
+        toyc_parser
 )
 
 add_executable(toyc)
 target_sources(toyc
     PUBLIC FILE_SET CXX_MODULES FILES
-    toyc.cppm
+        main.cppm
 )
 target_link_libraries(toyc
-        PRIVATE 
+    PRIVATE
         config
         llvm_config
-        ${llvm_libs}
-        MLIRSupport
-)
-
-# add_executable(tmp)
-# target_sources(tmp
-#         PUBLIC FILE_SET CXX_MODULES FILES
-#         tmp.cppm
-# )
-# target_link_libraries(tmp
-#         PRIVATE 
-#         config
-#         llvm_config
-#         toyc_macros
-#         ${llvm_libs}
-#         MLIRSupport
-# )
-
-add_executable(tmp_non_module)
-target_sources(tmp_non_module
-        PRIVATE
-        tmp.cpp
-)
-target_link_libraries(tmp_non_module
-        PRIVATE 
-        config
-        llvm_config
-        toyc_macros
-        ${llvm_libs}
-        MLIRSupport
+        toyc_lib
 )

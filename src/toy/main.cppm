@@ -6,11 +6,9 @@ module;
 #include "llvm/Support/MemoryBuffer.h"
 #include "llvm/Support/raw_ostream.h"
 
-export module toyc;
+export module main;
 
-import :ast;
-import :lexer;
-import :parser;
+import toyc;
 
 import std;
 

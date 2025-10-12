@@ -93,6 +93,9 @@ test *args:
         {{ args }} \
         | tee {{ log }}
 
+log:
+    {{ EDITOR }} {{ log }}
+
 pre-commit:
     uv run pre-commit install
 
