@@ -27,6 +27,12 @@
       "target": "/home/dev/.conan2",
       "type": "volume"
     }
+    // For Python development
+    // {
+    //   "source": "uv",
+    //   "target": "/home/dev/.cache/uv",
+    //   "type": "volume"
+    // }
   ],
   "customizations": {
     "vscode": {
