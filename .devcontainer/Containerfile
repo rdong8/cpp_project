@@ -61,11 +61,13 @@ RUN \
   wget \
   zellij
 
-# Unsure why postinstall fails, works when you run it manually in the devcontainer
-RUN \
-  eval "$(${HOMEBREW_PREFIX}/bin/brew shellenv)" \
-  && brew install llvm --HEAD -vd \
-  ; exit 0
+# NOTE: to install LLVM from head, you can add remove llvm from the list above and add this
+# TODO: exit 0 is there because the postinstall fails for some reason
+# You have to run `brew postinstall llvm` manually in the devcontainer
+# RUN \
+#   eval "$(${HOMEBREW_PREFIX}/bin/brew shellenv)" \
+#   && brew install llvm --HEAD -vd \
+#   ; exit 0
 
 # Fish completions
 
