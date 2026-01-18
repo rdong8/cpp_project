@@ -53,6 +53,5 @@ uv.lock
 # Python distribution / packaging
 *.egg-info/
 
-
 # Conan
 *conan*.sh
