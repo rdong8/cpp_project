@@ -55,7 +55,6 @@
         "nefrob.vscode-just-syntax",
         "redhat.vscode-yaml",
         "tamasfe.even-better-toml",
-        "usernamehw.errorlens",
         "vadimcn.vscode-lldb"
         // LLVM
         // "llvm-vs-code-extensions.vscode-mlir",
