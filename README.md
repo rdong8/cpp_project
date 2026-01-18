@@ -66,7 +66,7 @@ Note that if your `compiler.version` is too new, you may get an error from Conan
 
 #### Build Dependencies
 
-Now build the project's C++ dependencies with Conan:
+This step needs to be run each time anything in [`conan/`](./conan) is modified. Build the project's C++ dependencies with Conan:
 
 ```bash
 just conan-install
