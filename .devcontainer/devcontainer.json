@@ -82,8 +82,8 @@
       "REMOTE_USER": "dev",
       // https://github.com/devcontainers/spec/issues/631
       // Run `id` on the host to get these
-      "HOST_UID": "1001",
-      "HOST_GID": "1002"
+      "HOST_UID": "1000",
+      "HOST_GID": "1000"
     }
   },
   "runArgs": [
