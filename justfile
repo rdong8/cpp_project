@@ -18,8 +18,6 @@ cmake_configure_preset := 'conan-default'
 cmake_build_preset := 'conan-' + shell('echo ' + build_type + ' | tr "[:upper:]" "[:lower:]"')
 cmake_test_preset := cmake_build_preset
 
-log := '/tmp/out.log'
-
 # For cross-compilation you want separate host and build profiles
 conan_build_profile := 'default'
 conan_host_profile := conan_build_profile
@@ -66,16 +64,14 @@ config:
     cmake \
         -S . \
         -B {{ BUILD_DIR }} \
-        --preset {{ cmake_configure_preset }} \
-        | tee {{ log }}
+        --preset {{ cmake_configure_preset }}
 
 build target='all':
     cmake \
         --build {{ BUILD_DIR }} \
         --preset {{ cmake_build_preset }} \
         {{ if target != '' { '-t ' + target } else { '' } }} \
-        {{ if verbose != '' { '-v' } else { '' } }} \
-        | tee {{ log }}
+        {{ if verbose != '' { '-v' } else { '' } }}
 
 docs:
     {{ browser }} $(realpath {{ BUILD_DIR }})/docs/html/index.html
@@ -84,11 +80,7 @@ test *args:
     ctest \
         --preset {{ cmake_test_preset }} \
         {{ if verbose != '' { '--extra-verbose' } else { '' } }} \
-        {{ args }} \
-        | tee {{ log }}
-
-log:
-    {{ EDITOR }} {{ log }}
+        {{ args }}
 
 pre-commit:
     prek install
