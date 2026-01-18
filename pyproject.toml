@@ -4,7 +4,7 @@ version = "0.1.0"
 description = "Add your description here"
 requires-python = ">=3.13"
 dependencies = [
-    "conan >= 2.19.1",
+    "conan >= 2.24.0",
     "pre-commit"
 ]
 
