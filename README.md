@@ -60,34 +60,7 @@ If you haven't already created them, this command will create a default for you:
 just create-conan-profile default
 ```
 
-Then, edit the profile with `just edit-conan-profile default`. For example:
-
-```ini
-# TODO: brew's LLVM is build with libstdc++, can't use libc++
-# [buildenv]
-# CXXFLAGS=-isystem ${HOMEBREW_PREFIX}/include/c++/v1
-# LDFLAGS=-L${HOMEBREW_PREFIX}/lib -Wl,-rpath,${HOMEBREW_PREFIX}/lib
-
-[conf]
-tools.build:compiler_executables={'c': 'clang', 'cpp': 'clang++'}
-# TODO: https://github.com/conan-io/conan/issues/15864
-# TODO: https://github.com/conan-io/conan/issues/14174
-tools.cmake.cmaketoolchain:extra_variables={'CMAKE_LINKER_TYPE': 'MOLD', 'CMAKE_OPTIMIZE_DEPENDENCIES': 'ON'}
-tools.cmake.cmaketoolchain:generator=Ninja Multi-Config
-
-[platform_tool_requires]
-# Tell Conan to look for CMake on the machine instead of installing it itself
-cmake/4.1.1
-
-[settings]
-arch=x86_64
-compiler=clang
-# TODO: https://github.com/conan-io/conan-center-index/issues/26390
-compiler.cppstd=23
-compiler.libcxx=libstdc++
-compiler.version=22
-os=Linux
-```
+Then, edit the profile with `just edit-conan-profile default`. An example is given in [conan/profiles/default](conan/profiles/default).
 
 Note that if your `compiler.version` is too new, you may get an error from Conan. Just [edit `~/.conan2/settings.yml`](http://docs.conan.io/2/knowledge/faq.html#error-invalid-setting) and add it there.
 
