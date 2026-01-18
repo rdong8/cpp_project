@@ -3,8 +3,6 @@ set dotenv-load
 # hx, vim, cursor, etc.
 export EDITOR := 'code'
 export BUILD_DIR := 'build'
-export CC := 'clang'
-export CXX := 'clang++'
 
 project := 'cpp_project'
 
