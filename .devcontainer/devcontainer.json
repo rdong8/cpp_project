@@ -37,7 +37,6 @@
         "cheshirekow.cmake-format",
         "cschlosser.doxdocgen",
         "denoland.vscode-deno",
-        // Formatting for JSON, etc.
         "docker.docker",
         "eamodio.gitlens",
         // Better support for C++ modules than cpptools-extension-pack
