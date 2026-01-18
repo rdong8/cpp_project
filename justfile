@@ -22,8 +22,6 @@ cmake_test_preset := cmake_build_preset
 
 log := '/tmp/out.log'
 
-conan := 'uv run conan'
-
 # For cross-compilation you want separate host and build profiles
 conan_build_profile := 'default'
 conan_host_profile := conan_build_profile
@@ -45,19 +43,19 @@ py-deps reinstall="0":
         {{ if reinstall == '1' { '--reinstall' } else { '' } }}
 
 list-conan-profiles:
-    {{ conan }} profile list
+    conan profile list
 
 create-conan-profile name force='':
-    {{ conan }} profile detect --name {{ name }} \
+    conan profile detect --name {{ name }} \
         {{ if force != '' { '--force' } else { '' } }}
 
 edit-conan-profile profile:
-    {{ EDITOR }} $({{ conan }} config home)/profiles/{{ profile }}
+    {{ EDITOR }} $(conan config home)/profiles/{{ profile }}
 
 # build_type=XXX means "use this build type for my dependencies"
 # &:build_type=XXX means "use this build type for my code"
 conan-install:
-    {{ conan }} \
+    conan \
         install \
         -b missing \
         -pr:b {{ conan_build_profile }} \
@@ -113,7 +111,7 @@ clean-all:
 
 # Cleans cached conan packages
 clean-conan pattern='*' force='':
-    {{ conan }} remove '{{ pattern }}' \
+    conan remove '{{ pattern }}' \
         {{ if force != '' { '--confirm' } else { '' } }}
 
 update-submodules:
