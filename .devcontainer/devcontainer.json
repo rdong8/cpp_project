@@ -31,39 +31,42 @@
   "customizations": {
     "vscode": {
       "extensions": [
-        // Base extensions
-        "DavidAnson.vscode-markdownlint",
-        "charliermarsh.ruff",
-        "cheshirekow.cmake-format",
-        "cschlosser.doxdocgen",
-        "denoland.vscode-deno",
-        "docker.docker",
-        "eamodio.gitlens",
-        // Better support for C++ modules than cpptools-extension-pack
+        // C++
         "llvm-vs-code-extensions.vscode-clangd",
-        "meta.pyrefly",
-        "ms-azuretools.vscode-docker",
-        "ms-python.isort",
-        "ms-python.python",
-        "ms-vscode.cmake-tools",
-        // "ms-vscode.cpptools-extension-pack",
-        // Comment out if using cpptools-extension-pack
         "ms-vscode.cpptools-themes",
-        "ms-vscode.live-server",
-        // HTML previews
+        // CMake
+        "cheshirekow.cmake-format",
+        "ms-vscode.cmake-tools",
+        // Containers
+        "docker.docker",
+        "ms-azuretools.vscode-containers",
+        // Doxygen
+        "cschlosser.doxdocgen",
+        // Git
+        "eamodio.gitlens",
+        // Just
         "nefrob.vscode-just-syntax",
-        "redhat.vscode-yaml",
-        "tamasfe.even-better-toml",
-        "vadimcn.vscode-lldb"
-        // LLVM
-        // "llvm-vs-code-extensions.vscode-mlir",
-        // Rust
-        // "rust-lang.rust-analyzer",
-        // Python
-        // "ktnrg45.vscode-cython",
-        // "ms-toolsai.jupyter",
         // Kubernetes
         // "ms-kubernetes-tools.vscode-kubernetes-tools",
+        // LLVM
+        "vadimcn.vscode-lldb",
+        // "llvm-vs-code-extensions.vscode-mlir",
+        // Manifest files
+        "DavidAnson.vscode-markdownlint",
+        "redhat.vscode-yaml",
+        "tamasfe.even-better-toml",
+        // Python
+        "charliermarsh.ruff",
+        "meta.pyrefly",
+        "ms-python.isort",
+        "ms-python.python",
+        // "ktnrg45.vscode-cython",
+        // "ms-toolsai.jupyter",
+        // Rust
+        // "rust-lang.rust-analyzer",
+        // Web
+        "denoland.vscode-deno",
+        "ms-vscode.live-server"
       ]
     }
   },
