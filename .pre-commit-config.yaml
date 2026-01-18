@@ -3,7 +3,8 @@ repos:
     hooks:
       - id: check-added-large-files
       - id: check-case-conflict
-      - id: check-json
+      # TODO: https://github.com/j178/prek/issues/1401
+      - id: check-json5
       - id: check-merge-conflict
       - id: check-symlinks
       - id: check-toml
