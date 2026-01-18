@@ -4,8 +4,6 @@ set dotenv-load
 export EDITOR := 'code'
 export BUILD_DIR := 'build'
 
-project := 'cpp_project'
-
 # Set to any non-empty string for extra output
 verbose := ''
 
