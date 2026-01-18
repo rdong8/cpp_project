@@ -2,7 +2,7 @@
 
 Template for a modern C++ project using CMake.
 
-Read through both the README and the `justfile` to better understand how everything works.
+Read through both the README and the [justfile](./justfile) to better understand how everything works.
 
 ## Notes
 
