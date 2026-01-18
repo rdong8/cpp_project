@@ -40,7 +40,6 @@
         // Formatting for JSON, etc.
         "docker.docker",
         "eamodio.gitlens",
-        "jeff-hykin.better-cpp-syntax",
         "llvm-vs-code-extensions.vscode-clangd",
         // Better support for C++ modules than cpptools-extension-pack
         "ms-azuretools.vscode-docker",
