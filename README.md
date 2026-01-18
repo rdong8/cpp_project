@@ -41,8 +41,6 @@ Then build the devcontainer. All commands after this point are to be run *in the
 
 ### Python
 
-First ensure you have [uv](https://github.com/astral-sh/uv) installed. Then:
-
 ```bash
 just venv # Creates a virtual environment
 just py-deps # Installs the Python dependencies. Use `just py-deps 1` to force a reinstall.
