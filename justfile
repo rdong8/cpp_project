@@ -93,7 +93,7 @@ log:
     {{ EDITOR }} {{ log }}
 
 pre-commit:
-    uv run pre-commit install
+    prek install
 
 clean:
     rm -rf \

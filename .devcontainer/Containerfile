@@ -56,6 +56,7 @@ RUN \
   just \
   mold \
   ninja \
+  prek \
   ripgrep \
   tree \
   uv \
@@ -71,14 +72,9 @@ RUN \
 #   ; exit 0
 
 # Fish completions
-
-# just: https://just.systems/man/en/shell-completion-scripts.html
-# uv: https://docs.astral.sh/uv/getting-started/installation/#shell-autocompletion
-# fzf: https://github.com/junegunn/fzf?tab=readme-ov-file#setting-up-shell-integration
+# Only necessary if not builtin: https://github.com/fish-shell/fish-shell/tree/master/share/completions
+# prek: https://prek.j178.dev/installation/#shell-completion
 RUN \
-  ${HOMEBREW_PREFIX}/bin/just --completions fish > ${FISH_COMPLETIONS}/just.fish \
-  && echo 'uv generate-shell-completion fish | source' > ${FISH_COMPLETIONS}/uv.fish \
-  && echo 'uvx --generate-shell-completion fish | source' > ${FISH_COMPLETIONS}/uvx.fish \
-  && echo 'fzf --fish | source' > ${FISH_COMPLETIONS}/fzf.fish
+  COMPLETE=fish prek > ${FISH_COMPLETIONS}/prek.fish
 
 ENV EDITOR=code
