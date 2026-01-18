@@ -66,7 +66,7 @@ conan-install:
         -pr:h {{ conan_host_profile }} \
         -s build_type={{ conan_build_type }} \
         -s '&':build_type={{ build_type }} \
-        .
+        conan
 
 config:
     cmake \

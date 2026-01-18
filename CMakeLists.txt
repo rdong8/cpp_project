@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 4.1.0 FATAL_ERROR)
+cmake_minimum_required(VERSION 4.2 FATAL_ERROR)
 
 if ("$<NOT:$<CXX_COMPILER_ID:Clang,GCC>>")
     message(FATAL_ERROR "Invalid compiler. Must be either Clang or GCC.")
@@ -24,7 +24,7 @@ if (PROJECT_IS_TOP_LEVEL)
     # Generate compile_commands.json to make it easier to work with clang based tools
     set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-    # Let's nicely support folders in IDEs
+    # Nicely support folders in IDEs
     set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
     # Needs to be done in the main CMakeLists since it calls enable_testing, which must be in the main CMakeLists
