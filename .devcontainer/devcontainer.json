@@ -40,17 +40,16 @@
         // Formatting for JSON, etc.
         "docker.docker",
         "eamodio.gitlens",
+        // Better support for C++ modules than cpptools-extension-pack
         "llvm-vs-code-extensions.vscode-clangd",
         "meta.pyrefly",
-        // Better support for C++ modules than cpptools-extension-pack
         "ms-azuretools.vscode-docker",
         "ms-python.isort",
         "ms-python.python",
-        // "ms-vscode.cpptools-extension-pack",
         "ms-vscode.cmake-tools",
+        // "ms-vscode.cpptools-extension-pack",
         // Comment out if using cpptools-extension-pack
         "ms-vscode.cpptools-themes",
-        // Comment out if using cpptools-extension-pack
         "ms-vscode.live-server",
         // HTML previews
         "nefrob.vscode-just-syntax",
