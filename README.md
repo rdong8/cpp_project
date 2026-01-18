@@ -2,7 +2,7 @@
 
 Template for a modern C++ project using CMake.
 
-Read through both the README and the [justfile](./justfile) to better understand how everything works.
+Also read the [justfile](./justfile) to see available commands.
 
 ## Notes
 
@@ -54,7 +54,7 @@ In the [devcontainer configuration](.devcontainer/devcontainer.json), a volume h
 
 Check if you already have a Conan profile with `just list-conan-profiles`.
 
-If you haven't already created them, this command will create a default for you:
+If you haven't already created one, this command will create a default for you:
 
 ```bash
 just create-conan-profile default
@@ -74,7 +74,7 @@ just conan-install
 
 ## Configure
 
-This command runs the CMake configure. Theoretically it only needs to be run once, since the `just build` command invokes `cmake --build` which should automatically reconfigure if necessary. In practice if you're having CMake issues, just try rerunning this.
+This command runs the CMake configure. Theoretically it only needs to be run once, since the `just build` command invokes `cmake --build` which should automatically reconfigure if necessary. In practice if you're having CMake issues, just try cleaning and rerunning this.
 
 ```bash
 just config
@@ -125,7 +125,7 @@ just test -R math # Run tests matching regular expression "math"
 
 ## Pre-Commit
 
-While developing, you may want to have some tasks automatically run with pre-commit.
+Registers pre-commit hooks to run automatically.
 
 ```bash
 just pre-commit
