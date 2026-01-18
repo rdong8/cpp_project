@@ -33,13 +33,9 @@ COPY \
   --chown=${REMOTE_USER} \
   ${HOMEBREW_PREFIX} ${HOMEBREW_PREFIX}
 
-ARG FISH_COMPLETIONS=/home/${REMOTE_USER}/.config/fish/completions
 RUN \
-  mkdir -p ${FISH_COMPLETIONS} \
-  && echo "eval (${HOMEBREW_PREFIX}/bin/brew shellenv)" >> ~/.config/fish/config.fish
-
-RUN \
-  eval "$(${HOMEBREW_PREFIX}/bin/brew shellenv)" \
+  echo "eval (${HOMEBREW_PREFIX}/bin/brew shellenv)" >> ~/.config/fish/config.fish \
+  && eval "$(${HOMEBREW_PREFIX}/bin/brew shellenv)" \
   && brew install \
   bat \
   btop \
@@ -74,7 +70,7 @@ RUN \
 # Fish completions
 # Only necessary if not builtin: https://github.com/fish-shell/fish-shell/tree/master/share/completions
 # prek: https://prek.j178.dev/installation/#shell-completion
+ARG FISH_COMPLETIONS=/home/${REMOTE_USER}/.config/fish/completions
 RUN \
+  mkdir -p ${FISH_COMPLETIONS} && \
   COMPLETE=fish prek > ${FISH_COMPLETIONS}/prek.fish
-
-ENV EDITOR=code
