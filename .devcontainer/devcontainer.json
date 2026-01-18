@@ -65,7 +65,6 @@
         // "ms-toolsai.jupyter",
         // Kubernetes
         // "ms-kubernetes-tools.vscode-kubernetes-tools",
-        // "redhat.vscode-yaml",
       ]
     }
   },
