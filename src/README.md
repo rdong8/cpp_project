@@ -1,6 +1,6 @@
 # Demos
 
-This directory contains several demo projects that illustrate how to use some of the tricker features of C++.
+This directory contains several demo projects that illustrate how to use some of the trickier features of C++.
 
 ## library_usage
 
