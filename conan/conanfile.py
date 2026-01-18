@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 
 from conan import ConanFile
 from conan.tools.cmake import CMakeToolchain, cmake_layout
@@ -7,7 +8,7 @@ from conan.tools.cmake import CMakeToolchain, cmake_layout
 class ConanApplication(ConanFile):
     package_type = "application"
     settings = "os", "compiler", "build_type", "arch"
-    generators = "CMakeDeps"
+    generators = ["CMakeDeps"]
 
     def build_requirements(self):
         # Specify CMake version in CMakeLists.txt, not here
@@ -25,8 +26,8 @@ class ConanApplication(ConanFile):
     def layout(self):
         if not (build_dir := os.getenv("BUILD_DIR")):
             raise KeyError(f"Environment variable BUILD_DIR not set in {__file__}")
-
-        cmake_layout(self, build_folder=build_dir)
+        
+        cmake_layout(self, src_folder=Path(".."), build_folder=Path("..") / build_dir)
 
     def generate(self):
         tc = CMakeToolchain(self)
