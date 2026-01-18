@@ -23,6 +23,11 @@
   ],
   "mounts": [
     {
+      "source": "brew",
+      "target": "/home/dev/.cache/Homebrew",
+      "type": "volume"
+    },
+    {
       "source": "conan",
       "target": "/home/dev/.conan2",
       "type": "volume"
