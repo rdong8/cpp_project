@@ -41,10 +41,10 @@
         "docker.docker",
         "eamodio.gitlens",
         "llvm-vs-code-extensions.vscode-clangd",
+        "meta.pyrefly",
         // Better support for C++ modules than cpptools-extension-pack
         "ms-azuretools.vscode-docker",
         "ms-python.isort",
-        "ms-python.mypy-type-checker",
         "ms-python.python",
         // "ms-vscode.cpptools-extension-pack",
         "ms-vscode.cmake-tools",
