@@ -74,7 +74,7 @@ just conan-install
 
 ## Configure
 
-This command runs the CMake configure. Theoretically it only needs to be run once, since the `just build` command invokes `cmake --build` which should automatically reconfigure if necessary. In practice if you're having CMake issues, just try cleaning and rerunning this.
+Run the CMake configure. Generates the underlying build system files.
 
 ```bash
 just config
@@ -139,13 +139,15 @@ Clean the build directory and Conan generated files:
 just clean
 ```
 
+After cleaning, you have to re-run everything from `just conan-install` and after.
+
 Clean Python files as well:
 
 ```bash
 just clean-all
 ```
 
-You'll need to make the project's Conan dependencies and run the CMake config again with `just conan-deps config`.
+After this you also have to run `just venv py-deps`.
 
 You can also delete all installed Conan packages matching a pattern:
 
