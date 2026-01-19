@@ -55,3 +55,6 @@ uv.lock
 
 # Conan
 *conan*.sh
+
+# Python
+.venv/
