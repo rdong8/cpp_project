@@ -104,5 +104,8 @@ clean-conan pattern='*' force='':
     conan remove '{{ pattern }}' \
         {{ if force != '' { '--confirm' } else { '' } }}
 
-update-submodules:
+init-submodules:
     git submodule update --init --recursive
+
+update-submodules:
+    git submodule foreach git pull origin main
