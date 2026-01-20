@@ -1,7 +1,11 @@
 BasedOnStyle: LLVM
 IndentWidth: 4
+UseTab: Never
 ---
 Language: Cpp
+AlignAfterOpenBracket: true
+AllowShortIfStatementsOnASingleLine: Never
 BreakBeforeBraces: Allman
 ColumnLimit: 120
+PointerAlignment: Right
 QualifierAlignment: Right
