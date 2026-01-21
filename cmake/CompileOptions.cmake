@@ -4,6 +4,7 @@ function(set_project_compile_options project_name)
             "$<$<CXX_COMPILER_ID:GCC>:-ggdb>"
             "-fno-omit-frame-pointer"
             "-fno-sanitize-merge"
+            "-gmodules"
     )
 
     set(DEBUG_OPTIONS
