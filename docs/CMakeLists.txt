@@ -33,3 +33,5 @@ doxygen_add_docs(docs
         "${PROJECT_SOURCE_DIR}/tests"
         ALL
 )
+
+set_target_properties(docs PROPERTIES EXCLUDE_FROM_ALL TRUE)
