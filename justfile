@@ -18,9 +18,8 @@ cmake_configure_preset := 'conan-default'
 cmake_build_preset := 'conan-' + shell('echo ' + build_type + ' | tr "[:upper:]" "[:lower:]"')
 cmake_test_preset := cmake_build_preset
 
-# For cross-compilation you want separate host and build profiles
-conan_build_profile := 'default'
-conan_host_profile := conan_build_profile
+conan_build_profile := 'build'
+conan_host_profile := 'conan/profiles/host'
 
 # Command that will be invoked to open the `index.html` from the documentation.
 # If running locally, you can use `xdg-open` to automatically select your system's default browser
@@ -44,6 +43,9 @@ list-conan-profiles:
 create-conan-profile name force='':
     conan profile detect --name {{ name }} \
         {{ if force != '' { '--force' } else { '' } }}
+
+copy-conan-profile name:
+    cp conan/profiles/{{ name }} $(conan config home)/profiles/
 
 edit-conan-profile profile:
     {{ EDITOR }} $(conan config home)/profiles/{{ profile }}

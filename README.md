@@ -48,21 +48,36 @@ just py-deps # Installs the Python dependencies. Use `just py-deps 1` to force a
 
 ### Conan
 
+In the [devcontainer configuration](.devcontainer/devcontainer.json), a volume has been configured for Conan. This helps persist Conan's cache and build profile even when the container is destroyed.
+
 #### Profile
 
-In the [devcontainer configuration](.devcontainer/devcontainer.json), a volume has been configured for Conan's cache and configurations so this step only needs to be run once per devcontainer host.
+Conan profiles specify toolchain details for building packages. There are 2 kinds:
 
-Check if you already have a Conan profile with `just list-conan-profiles`.
+- Build profile: describes the system where the build is happening
+  - Used to build tools that will run on the build machine during the build process like CMake, Ninja, etc.
+- Host profile: describes the system where the built binaries will run
+  - Used to build your project and its dependencies
 
-If you haven't already created one, this command will create a default for you:
+In other words, the build profile is used to build *tools*, whereas the host profile is used to build *your project*. Conan can automatically detect an appropriate build profile for you:
 
 ```bash
-just create-conan-profile default
+just create-conan-profile build
 ```
 
-Then, edit the profile with `just edit-conan-profile default`. An example is given in [conan/profiles/default](conan/profiles/default).
+You can run this once and will basically never have to touch it again unless the toolchain provided by the container image changes (ie. you switch to a newer Fedora image).
 
-Note that if your `compiler.version` is too new, you may get an error from Conan. Just [edit `~/.conan2/settings.yml`](http://docs.conan.io/2/knowledge/faq.html#error-invalid-setting) and add it there.
+On the other hand, the host profile specifies the things you care about like the C++ version, compiler, standard library, etc. you plan on using. An example is given in [conan/profiles/host](conan/profiles/host). The project is configured to use this profile by default. If you want to copy it into the standard Conan config location you can run:
+
+```bash
+just copy-conan-profile host
+```
+
+And then set the `conan_host_profile` variable in the justfile to its name (`host`) instead of a relative path.
+
+You can edit a profile in the config location with `just edit-conan-profile host`.
+
+Note that if your `compiler.version` in your host profile is too new, you may get an error from Conan. Just [edit `~/.conan2/settings.yml`](http://docs.conan.io/2/knowledge/faq.html#error-invalid-setting) and add it there.
 
 #### Build Dependencies
 
