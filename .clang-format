@@ -4,8 +4,10 @@ UseTab: Never
 ---
 Language: Cpp
 AlignAfterOpenBracket: true
+AllowShortFunctionsOnASingleLine: None
 AllowShortIfStatementsOnASingleLine: Never
 BreakBeforeBraces: Allman
+BreakConstructorInitializers: BeforeComma
 ColumnLimit: 120
 PointerAlignment: Right
 QualifierAlignment: Right
