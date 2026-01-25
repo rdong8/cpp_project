@@ -1,0 +1,3 @@
+Checks: -checks=-*,cppcoreguidelines-*,modernize-use-trailing-return-type,performance-*
+CheckOptions:
+  modernize-use-trailing-return-type.TransformLambdas: none
