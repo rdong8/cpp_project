@@ -16,7 +16,7 @@
             llvm::errs().changeColor(llvm::raw_ostream::RED)                                                           \
                 << location.file_name() << ':' << location.function_name() << ':' << location.line() << ':'            \
                 << location.column();                                                                                  \
-            llvm::errs().resetColor() << " Assertion failed: " #expr ": " << msg << '\n';                              \
+            llvm::errs().resetColor() << " Assertion `" << #expr << "` failed: " << msg << '\n';                       \
             std::abort();                                                                                              \
         }                                                                                                              \
     } while (false)
