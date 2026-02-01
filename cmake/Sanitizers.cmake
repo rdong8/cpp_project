@@ -88,4 +88,13 @@ macro(set_project_sanitizers project_name)
             "$<$<CONFIG:Release>:-fsanitize=${DEFAULT_RELEASE_SANITIZERS}>"
         )
     endif ()
+
+    target_compile_options("${project_name}"
+        INTERFACE
+        "-fno-sanitize-recover=all"
+    )
+    target_link_options("${project_name}"
+        INTERFACE
+        "-fno-sanitize-recover=all"
+    )
 endmacro()
