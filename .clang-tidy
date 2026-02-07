@@ -1,3 +1,8 @@
-Checks: -checks=-*,cppcoreguidelines-*,modernize-use-trailing-return-type,performance-*
+Checks:
+  checks=*,
+  cppcoreguidelines-*,
+  modernize-use-trailing-return-type,
+  performance-*,
+  google-explicit-constructor
 CheckOptions:
   modernize-use-trailing-return-type.TransformLambdas: none
