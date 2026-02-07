@@ -85,6 +85,9 @@ test *args:
         {{ args }}
 
 pre-commit:
+    prek run --all-files
+
+pre-commit-install:
     prek install
 
 clean:

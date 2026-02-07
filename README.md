@@ -143,7 +143,7 @@ just test -R math # Run tests matching regular expression "math"
 Registers pre-commit hooks to run automatically.
 
 ```bash
-just pre-commit
+just pre-commit-install
 ```
 
 ## Clean
