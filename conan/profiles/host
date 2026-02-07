@@ -7,6 +7,7 @@
 tools.build:compiler_executables={'c': 'clang', 'cpp': 'clang++'}
 # TODO: https://github.com/conan-io/conan/issues/15864
 # TODO: https://github.com/conan-io/conan/issues/14174
+# CMAKE_OPTIMIZE_DEPENDENCIES is known to cause issues: https://github.com/conan-io/conan-center-index/issues/29431#issuecomment-3804881699
 tools.cmake.cmaketoolchain:extra_variables={'CMAKE_LINKER_TYPE': 'MOLD', 'CMAKE_OPTIMIZE_DEPENDENCIES': 'ON'}
 tools.cmake.cmaketoolchain:generator=Ninja Multi-Config
 
