@@ -60,7 +60,7 @@
         // Kubernetes
         // "ms-kubernetes-tools.vscode-kubernetes-tools",
         // LLVM
-        "vadimcn.vscode-lldb",
+        "llvm-vs-code-extensions.lldb-dap",
         // "llvm-vs-code-extensions.vscode-mlir",
         // Manifest files
         "DavidAnson.vscode-markdownlint",
