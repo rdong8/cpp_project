@@ -8,7 +8,7 @@
 
 // Macros you want to share between modules have to be defined in a header
 #define TOY_ASSERT(expr, msg)                                                                                          \
-    do                                                                                                                 \
+    [&]                                                                                                                \
     {                                                                                                                  \
         if (!(expr)) [[unlikely]]                                                                                      \
         {                                                                                                              \
@@ -19,4 +19,4 @@
             llvm::errs().resetColor() << " Assertion `" << #expr << "` failed: " << msg << '\n';                       \
             std::abort();                                                                                              \
         }                                                                                                              \
-    } while (false)
+    }()
