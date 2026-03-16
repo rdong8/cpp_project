@@ -110,9 +110,10 @@ auto constexpr d_dx(Float x) noexcept(noexcept(f(std::declval<Float>()))) -> Flo
 export template <std::size_t n, std::floating_point Float>
 struct std::formatter<math::Vec<n, Float>> : std::formatter<typename math::Vec<n, Float>::Data>
 {
+    template <typename FormatContext>
     [[nodiscard]]
     auto format(this std::formatter<typename math::Vec<n, Float>::Data> const &self, math::Vec<n, Float> const &vec,
-                std::format_context &ctx) -> std::format_context::iterator
+                FormatContext &ctx) -> FormatContext::iterator
     {
         return self.format(vec.components, ctx);
     }
