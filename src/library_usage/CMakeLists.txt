@@ -18,3 +18,11 @@ target_link_libraries(library_usage
         Boost::cobalt
         spdlog::spdlog
 )
+
+# Install Common Package Specification (CPS) package description
+# https://cmake.org/cmake/help/latest/command/install.html#package-info
+install(
+    PACKAGE_INFO Mathematics
+    EXPORT mathematics
+    VERSION 0.0.1
+)

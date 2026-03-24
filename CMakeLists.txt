@@ -1,14 +1,16 @@
-cmake_minimum_required(VERSION 4.2 FATAL_ERROR)
+cmake_minimum_required(VERSION 4.3 FATAL_ERROR)
 
 if ("$<NOT:$<CXX_COMPILER_ID:Clang,GCC>>")
     message(FATAL_ERROR "Invalid compiler. Must be either Clang or GCC.")
 endif ()
 
 set(CMAKE_COLOR_DIAGNOSTICS ON)
-# https://gitlab.kitware.com/cmake/cmake/-/blob/master/Help/dev/experimental.rst?ref_type=heads
-set(CMAKE_EXPERIMENTAL_CXX_IMPORT_STD "d0edc3af-4c50-42ea-a356-e2862fe7a444")
 set(CMAKE_CXX_MODULE_STD ON)
 set(CMAKE_CXX_SCAN_FOR_MODULES ON)
+# https://gitlab.kitware.com/cmake/cmake/-/blob/master/Help/dev/experimental.rst?ref_type=heads
+set(CMAKE_EXPERIMENTAL_CXX_IMPORT_STD "451f2fe2-a8a2-47c3-bc32-94786d8fc91b")
+set(CMAKE_EXPERIMENTAL_EXPORT_BUILD_DATABASE "73194a1d-c0b5-41b9-9190-a4512925e192")
+set(CMAKE_EXPORT_BUILD_DATABASE ON)
 
 project(cpp_project
         VERSION 0.0.1
