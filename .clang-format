@@ -1,5 +1,6 @@
 BasedOnStyle: LLVM
 IndentWidth: 4
+InsertNewlineAtEOF: true
 UseTab: Never
 ---
 Language: Cpp
