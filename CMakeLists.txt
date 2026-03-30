@@ -6,6 +6,8 @@ endif ()
 
 set(CMAKE_CXX_MODULE_STD ON)
 set(CMAKE_CXX_SCAN_FOR_MODULES ON)
+# TODO: https://gitlab.kitware.com/cmake/cmake/-/work_items/27728
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 project(cpp_project
     VERSION 0.0.1
@@ -17,9 +19,6 @@ project(cpp_project
 # Only do these if this is the main project, and not if it is included through add_subdirectory
 if (PROJECT_IS_TOP_LEVEL)
     include(cmake/ClangTidy.cmake)
-
-    # Generate compile_commands.json to make it easier to work with clang based tools
-    set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
     # Needs to be done in the main CMakeLists since it calls enable_testing, which must be in the main CMakeLists
     include(CTest)
