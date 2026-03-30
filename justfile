@@ -90,6 +90,9 @@ pre-commit:
 pre-commit-install:
     prek install
 
+pre-commit-update:
+    prek autoupdate
+
 clean:
     rm -rf \
         {{ BUILD_DIR }} \
