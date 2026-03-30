@@ -10,15 +10,15 @@ function(set_project_compile_warnings project_name)
     )
 
     set(GCC_WARNINGS
-            "-Wduplicated-branches" # Warn if if / else branches have duplicated code
-            "-Wduplicated-cond" # Warn if if / else chain has duplicated conditions
-            "-Wlogical-op" # Warn about logical operations being used where bitwise were probably wanted
-            "-Wmisleading-indentation" # Warn if indentation implies blocks where blocks do not exist
-            "-Wuseless-cast" # Warn if you perform a cast to the same type
+        "-Wduplicated-branches" # Warn if if / else branches have duplicated code
+        "-Wduplicated-cond" # Warn if if / else chain has duplicated conditions
+        "-Wlogical-op" # Warn about logical operations being used where bitwise were probably wanted
+        "-Wmisleading-indentation" # Warn if indentation implies blocks where blocks do not exist
+        "-Wuseless-cast" # Warn if you perform a cast to the same type
     )
 
     target_compile_options("${project_name}"
-            INTERFACE
+        INTERFACE
             "$<$<CXX_COMPILER_ID:Clang>:${CLANG_WARNINGS}>"
             "$<$<CXX_COMPILER_ID:GCC>:${GCC_WARNINGS}>"
             "-Wall"

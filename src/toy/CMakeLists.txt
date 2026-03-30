@@ -31,7 +31,7 @@ target_sources(toyc_ast
         ast/dumper.cppm
 )
 target_link_libraries(toyc_ast
-    PRIVATE`
+    PRIVATE
         config
         llvm_config
         toyc_lexer

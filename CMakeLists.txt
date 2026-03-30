@@ -8,10 +8,10 @@ set(CMAKE_CXX_MODULE_STD ON)
 set(CMAKE_CXX_SCAN_FOR_MODULES ON)
 
 project(cpp_project
-        VERSION 0.0.1
-        DESCRIPTION "Template for a modern C++ project using CMake."
-        HOMEPAGE_URL "https://github.com/rdong8/cpp_project"
-        LANGUAGES C CXX
+    VERSION 0.0.1
+    DESCRIPTION "Template for a modern C++ project using CMake."
+    HOMEPAGE_URL "https://github.com/rdong8/cpp_project"
+    LANGUAGES C CXX
 )
 
 # Only do these if this is the main project, and not if it is included through add_subdirectory
