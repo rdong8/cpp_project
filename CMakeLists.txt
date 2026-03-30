@@ -26,9 +26,6 @@ if (PROJECT_IS_TOP_LEVEL)
     # Generate compile_commands.json to make it easier to work with clang based tools
     set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-    # Nicely support folders in IDEs
-    set_property(GLOBAL PROPERTY USE_FOLDERS ON)
-
     # Needs to be done in the main CMakeLists since it calls enable_testing, which must be in the main CMakeLists
     include(CTest)
     add_subdirectory(tests)
