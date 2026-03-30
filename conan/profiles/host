@@ -12,8 +12,6 @@ tools.build:compiler_executables={'c': 'clang', 'cpp': 'clang++'}
 {%
     set cmake_extra_variables = {
         'CMAKE_COLOR_DIAGNOSTICS': 'ON',
-        'CMAKE_CXX_MODULE_STD': 'ON',
-        'CMAKE_CXX_SCAN_FOR_MODULES': 'ON',
         'CMAKE_CXX_VISIBILITY_PRESET': 'hidden',
         'CMAKE_EXPERIMENTAL_CXX_IMPORT_STD': 'd0edc3af-4c50-42ea-a356-e2862fe7a444',
         'CMAKE_EXPERIMENTAL_EXPORT_BUILD_DATABASE': '73194a1d-c0b5-41b9-9190-a4512925e192',

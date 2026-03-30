@@ -4,6 +4,9 @@ if ("$<NOT:$<CXX_COMPILER_ID:Clang,GCC>>")
     message(FATAL_ERROR "Invalid compiler. Must be either Clang or GCC.")
 endif ()
 
+set(CMAKE_CXX_MODULE_STD ON)
+set(CMAKE_CXX_SCAN_FOR_MODULES ON)
+
 project(cpp_project
         VERSION 0.0.1
         DESCRIPTION "Template for a modern C++ project using CMake."
