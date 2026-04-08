@@ -1,5 +1,5 @@
-find_package(Boost REQUIRED)
-find_package(spdlog REQUIRED)
+find_package(Boost REQUIRED CONFIG)
+find_package(spdlog REQUIRED CONFIG)
 
 add_library(mathematics)
 target_sources(mathematics

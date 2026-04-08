@@ -24,7 +24,11 @@ if (PROJECT_IS_TOP_LEVEL)
     include(CTest)
     add_subdirectory(tests)
 
-    find_package(Doxygen COMPONENTS dot)
+    find_package(Doxygen
+        CONFIG
+        COMPONENTS
+            dot
+    )
 
     if (Doxygen_FOUND)
         add_subdirectory(docs)
