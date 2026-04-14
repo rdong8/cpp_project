@@ -1,11 +1,11 @@
 Checks:
-  checks=*,
+  bugprone-*,
   cppcoreguidelines-*,
-  google-explicit-constructor,
-  modernize-use-trailing-return-type,
-  performance-*,
-  readability-else-after-return,
   -cppcoreguidelines-avoid-const-or-ref-data-members
+  google-explicit-constructor,
+  modernize-*,
+  performance-*,
+  readability-*,
 CheckOptions:
-  modernize-use-trailing-return-type.TransformLambdas: none
   cppcoreguidelines-special-member-functions.AllowSoleDefaultDtor: true
+  modernize-use-trailing-return-type.TransformLambdas: none
