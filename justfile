@@ -20,6 +20,7 @@ cmake_test_preset := cmake_build_preset
 
 conan_build_profile := 'build'
 conan_host_profile := 'conan/profiles/host'
+conan_settings_user := 'conan/settings_user.yml'
 
 # Command that will be invoked to open the `index.html` from the documentation.
 # If running locally, you can use `xdg-open` to automatically select your system's default browser
@@ -53,6 +54,7 @@ edit-conan-profile profile:
 # build_type=XXX means "use this build type for my dependencies"
 # &:build_type=XXX means "use this build type for my code"
 conan-install:
+    conan config install {{ conan_settings_user }}
     conan \
         install \
         -b missing \
