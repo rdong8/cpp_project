@@ -45,8 +45,7 @@ create-conan-profile name force='':
     conan profile detect --name {{ name }} \
         {{ if force != '' { '--force' } else { '' } }}
 
-copy-conan-profile name:
-    cp conan/profiles/{{ name }} $(conan config home)/profiles/
+create-conan-build-profile force='': (create-conan-profile conan_build_profile)
 
 edit-conan-profile profile:
     {{ EDITOR }} $(conan config home)/profiles/{{ profile }}
@@ -106,8 +105,7 @@ clean-python:
         uv.lock \
         .venv
 
-clean-all:
-    just clean clean-python
+clean-all: clean clean-python
 
 # Cleans cached conan packages
 clean-conan pattern='*' force='':

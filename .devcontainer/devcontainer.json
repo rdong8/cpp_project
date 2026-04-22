@@ -62,6 +62,8 @@
         // LLVM
         "llvm-vs-code-extensions.lldb-dap",
         // "llvm-vs-code-extensions.vscode-mlir",
+        // Log files
+        "iliazeus.vscode-ansi",
         // Manifest files
         "DavidAnson.vscode-markdownlint",
         "redhat.vscode-yaml",

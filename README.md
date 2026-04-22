@@ -67,17 +67,11 @@ just create-conan-profile build
 
 You can run this once and will basically never have to touch it again unless the toolchain provided by the container image changes (ie. you switch to a newer Fedora image).
 
-On the other hand, the host profile specifies the things you care about like the C++ version, compiler, standard library, etc. you plan on using. An example is given in [conan/profiles/host](conan/profiles/host). The project is configured to use this profile by default. If you want to copy it into the standard Conan config location you can run:
-
-```bash
-just copy-conan-profile host
-```
-
-And then set the `conan_host_profile` variable in the justfile to its name (`host`) instead of a relative path.
+On the other hand, the host profile specifies the things you care about like the C++ version, compiler, standard library, etc. you plan on using. An example is given in [conan/profiles/host](conan/profiles/host). The project is configured to use this profile by default.
 
 You can edit a profile in the config location with `just edit-conan-profile host`.
 
-Note that if your `compiler.version` in your host profile is too new, you may get an error from Conan. Just [edit `~/.conan2/settings.yml`](http://docs.conan.io/2/knowledge/faq.html#error-invalid-setting) and add it there.
+Note that if your `compiler.version` in your host profile is too new, you may get an error from Conan. Just [edit `conan/settings_user.yml`](http://docs.conan.io/2/knowledge/faq.html#error-invalid-setting) and add it there.
 
 #### Build Dependencies
 
