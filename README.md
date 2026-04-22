@@ -62,7 +62,7 @@ Conan profiles specify toolchain details for building packages. There are 2 kind
 In other words, the build profile is used to build *tools*, whereas the host profile is used to build *your project*. Conan can automatically detect an appropriate build profile for you:
 
 ```bash
-just create-conan-profile build
+just create-conan-build-profile built
 ```
 
 You can run this once and will basically never have to touch it again unless the toolchain provided by the container image changes (ie. you switch to a newer Fedora image).
