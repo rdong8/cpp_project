@@ -13,8 +13,6 @@ build_type := 'Debug'
 # The build type for your dependencies, as specified in the conan profiles
 conan_build_type := 'Release'
 
-# TODO: remove
-
 # We're using a multi-configuration generator so there's only one configure preset
 cmake_configure_preset := 'conan-default'
 cmake_build_preset := 'conan-' + shell('echo ' + build_type + ' | tr "[:upper:]" "[:lower:]"')

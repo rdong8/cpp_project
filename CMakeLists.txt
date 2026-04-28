@@ -2,8 +2,6 @@ cmake_minimum_required(VERSION 4.3 FATAL_ERROR)
 
 set(CMAKE_CXX_MODULE_STD ON)
 set(CMAKE_CXX_SCAN_FOR_MODULES ON)
-# TODO: why is this broken again https://gitlab.kitware.com/cmake/cmake/-/work_items/27728
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 project(cpp_project
     VERSION 0.0.1

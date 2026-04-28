@@ -2,9 +2,6 @@
 # TODO: brew's LLVM is build with libstdc++, can't use libc++
 # CXXFLAGS=-stdlib++-isystem ${HOMEBREW_PREFIX}/include/c++/v1
 # LDFLAGS=-L${HOMEBREW_PREFIX}/lib -Wl,-rpath,${HOMEBREW_PREFIX}/lib
-# Use GCC's standard library (as far as I can see this is unnecessary)
-# {% set gcc_dir = '/usr/lib/gcc/x86_64-redhat-linux/16' %}
-# CXXFLAGS=--gcc-install-dir={{ gcc_dir }}
 
 [conf]
 tools.build:compiler_executables={'c': 'clang', 'cpp': 'clang++'}
