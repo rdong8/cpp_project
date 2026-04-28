@@ -1,15 +1,18 @@
-FROM docker.io/fedora:latest
+# Using 44 instead of latest (43) for Boost Cobalt
+FROM docker.io/fedora:44
 
 # For now, only install the following with the system package manager:
 # - Dependencies of linuxbrew itself (curl, file, procps-ng)
-# - gcc-c++ - system toolchain needed for linuxbrew's LLVM
-# - fish - need to set user's shell when we create it
-# - which - to find fish for the useradd
-# - mathjax - dependency of doxygen, but not available via linuxbrew
+# - boost-devel: see comment in conan/conandata.yml about conan's boost currently being broken
+# - gcc-c++: system toolchain needed for linuxbrew's LLVM
+# - fish: need to set user's shell when we create it
+# - which: to find fish for the useradd
+# - mathjax: dependency of doxygen, but not available via linuxbrew
 RUN \
   dnf update -y \
   && dnf install -y \
   @development-tools \
+  boost-devel \
   curl \
   file \
   fish \

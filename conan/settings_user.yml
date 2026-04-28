@@ -1,0 +1,3 @@
+compiler:
+  gcc:
+    version: ["16"]

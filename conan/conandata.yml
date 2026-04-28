@@ -1,5 +1,6 @@
 requirements:
   # TODO: https://github.com/conan-io/conan-center-index/pull/26030
-  - "boost/1.90.0"
-  - "catch2/3.13.0"
+  # Currently installed via brew
+  # - "boost/1.90.0"
+  - "catch2/3.14.0"
   - "spdlog/1.17.0"

@@ -213,7 +213,7 @@ class ASTDumper
     }
 
     /// Print a function prototype, first the function name, then the list of parameter names
-    auto dump(this ASTDumper &self, PrototypeAST const *node) -> void;
+    auto dump(this ASTDumper &self, PrototypeAST const *node) -> void
     {
         INDENT();
         llvm::errs() << "Prototype '" << node->get_name() << "' " << loc(node) << '\n';

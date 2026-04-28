@@ -39,13 +39,6 @@ Then build the devcontainer. All commands after this point are to be run *in the
 
 ## Dependencies
 
-### Python
-
-```bash
-just venv # Creates a virtual environment
-just py-deps # Installs the Python dependencies. Use `just py-deps 1` to force a reinstall.
-```
-
 ### Conan
 
 In the [devcontainer configuration](.devcontainer/devcontainer.json), a volume has been configured for Conan. This helps persist Conan's cache and build profile even when the container is destroyed.
@@ -62,7 +55,7 @@ Conan profiles specify toolchain details for building packages. There are 2 kind
 In other words, the build profile is used to build *tools*, whereas the host profile is used to build *your project*. Conan can automatically detect an appropriate build profile for you:
 
 ```bash
-just create-conan-build-profile built
+just create-conan-build-profile
 ```
 
 You can run this once and will basically never have to touch it again unless the toolchain provided by the container image changes (ie. you switch to a newer Fedora image).
@@ -149,14 +142,6 @@ just clean
 ```
 
 After cleaning, you have to re-run everything from `just conan-install` and after.
-
-Clean Python files as well:
-
-```bash
-just clean-all
-```
-
-After this you also have to run `just venv py-deps`.
 
 You can also delete all installed Conan packages matching a pattern:
 

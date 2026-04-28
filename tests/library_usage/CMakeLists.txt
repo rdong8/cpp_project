@@ -1,11 +1,6 @@
-add_executable(test_math)
-target_sources(test_math
-    PRIVATE FILE_SET CXX_MODULES FILES
-        mathematics.cppm
-)
+add_module_executable(test_math mathematics)
 target_link_libraries(test_math
     PRIVATE
-        config
         Catch2::Catch2WithMain
         mathematics
 )

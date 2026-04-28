@@ -1,23 +1,28 @@
+[buildenv]
 # TODO: brew's LLVM is build with libstdc++, can't use libc++
-# [buildenv]
 # CXXFLAGS=-stdlib++-isystem ${HOMEBREW_PREFIX}/include/c++/v1
 # LDFLAGS=-L${HOMEBREW_PREFIX}/lib -Wl,-rpath,${HOMEBREW_PREFIX}/lib
+# Use GCC's standard library (as far as I can see this is unnecessary)
+# {% set gcc_dir = '/usr/lib/gcc/x86_64-redhat-linux/16' %}
+# CXXFLAGS=--gcc-install-dir={{ gcc_dir }}
 
 [conf]
 tools.build:compiler_executables={'c': 'clang', 'cpp': 'clang++'}
 
 # CMAKE_EXPERIMENTAL_*: https://gitlab.kitware.com/cmake/cmake/-/blob/master/Help/dev/experimental.rst?ref_type=heads
 # CMAKE_LINKER_TYPE: TODO: https://github.com/conan-io/conan/issues/15864, https://github.com/conan-io/conan/issues/14174
-# CMAKE_OPTIMIZE_DEPENDENCIES known to cause issues: https://github.com/conan-io/conan-center-index/issues/29431#issuecomment-3804881699
+# CMAKE_OPTIMIZE_DEPENDENCIES known to cause issues:
+#   - https://github.com/conan-io/conan-center-index/issues/29431#issuecomment-3804881699
+#   - https://gitlab.kitware.com/cmake/cmake/-/work_items/27777
 {%
     set cmake_extra_variables = {
         'CMAKE_COLOR_DIAGNOSTICS': 'ON',
         'CMAKE_CXX_VISIBILITY_PRESET': 'hidden',
-        'CMAKE_EXPERIMENTAL_CXX_IMPORT_STD': 'd0edc3af-4c50-42ea-a356-e2862fe7a444',
+        'CMAKE_EXPERIMENTAL_CXX_IMPORT_STD': '451f2fe2-a8a2-47c3-bc32-94786d8fc91b',
         'CMAKE_EXPERIMENTAL_EXPORT_BUILD_DATABASE': '73194a1d-c0b5-41b9-9190-a4512925e192',
         'CMAKE_LINKER_TYPE': 'MOLD',
-        'CMAKE_VISIBILITY_INLINES_HIDDEN': 'ON',
-        'CMAKE_OPTIMIZE_DEPENDENCIES': 'ON'
+        'CMAKE_OPTIMIZE_DEPENDENCIES': 'OFF',
+        'CMAKE_VISIBILITY_INLINES_HIDDEN': 'ON'
     }
 %}
 tools.cmake.cmaketoolchain:extra_variables={{ cmake_extra_variables }}
@@ -26,7 +31,7 @@ tools.cmake.cmaketoolchain:generator=Ninja Multi-Config
 
 [platform_tool_requires]
 # Tell Conan to look for CMake on the machine instead of installing it itself
-cmake/4.3.1
+cmake/4.3.2
 
 [settings]
 arch=x86_64

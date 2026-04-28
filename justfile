@@ -13,6 +13,8 @@ build_type := 'Debug'
 # The build type for your dependencies, as specified in the conan profiles
 conan_build_type := 'Release'
 
+# TODO: remove
+
 # We're using a multi-configuration generator so there's only one configure preset
 cmake_configure_preset := 'conan-default'
 cmake_build_preset := 'conan-' + shell('echo ' + build_type + ' | tr "[:upper:]" "[:lower:]"')
@@ -31,13 +33,6 @@ initialize-host:
     sudo apt -y update
     sudo apt -y install podman
 
-venv:
-    uv venv
-
-py-deps reinstall="0":
-    uv pip install --upgrade -e . \
-        {{ if reinstall == '1' { '--reinstall' } else { '' } }}
-
 list-conan-profiles:
     conan profile list
 
@@ -45,7 +40,7 @@ create-conan-profile name force='':
     conan profile detect --name {{ name }} \
         {{ if force != '' { '--force' } else { '' } }}
 
-create-conan-build-profile force='': (create-conan-profile conan_build_profile)
+create-conan-build-profile force='': (create-conan-profile conan_build_profile force)
 
 edit-conan-profile profile:
     {{ EDITOR }} $(conan config home)/profiles/{{ profile }}
@@ -99,13 +94,6 @@ clean:
         {{ BUILD_DIR }} \
         *conan*.sh \
         CMakeUserPresets.json
-
-clean-python:
-    rm -rf \
-        uv.lock \
-        .venv
-
-clean-all: clean clean-python
 
 # Cleans cached conan packages
 clean-conan pattern='*' force='':

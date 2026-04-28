@@ -147,7 +147,7 @@ class VarDeclExprAST : public ExprAST
 {
   public:
     [[nodiscard]]
-    auto classof(ExprAST const *c) -> bool
+    static auto classof(ExprAST const *c) -> bool
     {
         return c->get_kind() == Kind::VarDecl;
     }
