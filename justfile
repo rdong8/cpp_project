@@ -1,8 +1,7 @@
 set dotenv-load
 
-# hx, vim, cursor, etc.
-export EDITOR := 'code'
 export BUILD_DIR := 'build'
+export UBSAN_OPTIONS := 'print_stacktrace=1'
 
 # Set to any non-empty string for extra output
 verbose := ''
@@ -24,7 +23,7 @@ conan_settings_user := 'conan/settings_user.yml'
 
 # Command that will be invoked to open the `index.html` from the documentation.
 # If running locally, you can use `xdg-open` to automatically select your system's default browser
-browser := EDITOR
+browser := env("EDITOR", "code")
 
 # Fedora already has the required packages
 initialize-host:
@@ -41,7 +40,7 @@ create-conan-profile name force='':
 create-conan-build-profile force='': (create-conan-profile conan_build_profile force)
 
 edit-conan-profile profile:
-    {{ EDITOR }} $(conan config home)/profiles/{{ profile }}
+    ${EDITOR} $(conan config home)/profiles/{{ profile }}
 
 # build_type=XXX means "use this build type for my dependencies"
 # &:build_type=XXX means "use this build type for my code"

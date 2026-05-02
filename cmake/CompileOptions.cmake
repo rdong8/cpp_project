@@ -1,4 +1,4 @@
-function(set_project_compile_options project_name)
+function(set_compile_options config)
     set(DEBUGGING_OPTIONS
         "$<$<CXX_COMPILER_ID:Clang>:-glldb>"
         "$<$<CXX_COMPILER_ID:GCC>:-ggdb>"
@@ -31,7 +31,7 @@ function(set_project_compile_options project_name)
         # "-pg"
     )
 
-    target_compile_options("${project_name}"
+    target_compile_options("${config}"
         INTERFACE
             "$<$<CONFIG:Debug>:${DEBUG_OPTIONS}>"
             "$<$<CONFIG:Release>:${RELEASE_OPTIONS}>"

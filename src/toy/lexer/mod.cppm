@@ -1,22 +1,27 @@
+/// @module toyc.lexer
+
 module;
 
-#include "macros.hpp"
+#include <llvm/ADT/StringRef.h>
+#include <llvm/Support/FormatProviders.h>
+#include <llvm/Support/FormatVariadic.h>
+#include <llvm/Support/raw_ostream.h>
+#include <magic_enum/magic_enum.hpp>
 
-#include "llvm/ADT/StringRef.h"
-#include "llvm/Support/FormatProviders.h"
-#include "llvm/Support/FormatVariadic.h"
-#include "llvm/Support/raw_ostream.h"
+#include "macros.hpp"
 
 export module toyc.lexer;
 
 import std;
 
-export namespace toy
+import toyc.utility;
+
+export namespace toyc
 {
 
 // TODO: use std::float64_t
 using Value = double;
-using Character = std::int32_t;
+using Character = int;
 using Position = std::int32_t;
 
 /// A location in a file
@@ -27,6 +32,7 @@ struct Location
     Position col{};
 };
 
+// NOLINTNEXTLINE(performance-enum-size)
 enum class Token : Character
 {
     Semicolon = ';',
@@ -49,73 +55,75 @@ enum class Token : Character
     Number = -6,
 };
 
-} // namespace toy
+} // namespace toyc
 
 export namespace llvm
 {
 
-template <> struct format_provider<toy::Token>
+using namespace toyc;
+
+template <> struct format_provider<Token>
 {
-    static auto format(toy::Token token, llvm::raw_ostream &os, llvm::StringRef style) -> void
+    static auto format(Token token, llvm::raw_ostream &os, llvm::StringRef style) -> void
     {
         switch (token)
         {
-        case toy::Token::Semicolon:
-            [[fallthrough]];
-        case toy::Token::ParenthesesOpen:
-            [[fallthrough]];
-        case toy::Token::ParenthesesClose:
-            [[fallthrough]];
-        case toy::Token::BraceOpen:
-            [[fallthrough]];
-        case toy::Token::BraceClose:
-            [[fallthrough]];
-        case toy::Token::BracketOpen:
-            [[fallthrough]];
-        case toy::Token::BracketClose:
-        {
-            return format_provider<char>::format(static_cast<char>(token), os, style);
-        }
-        case toy::Token::Eof:
-        {
-            return format_provider<StringRef>::format("EOF", os, style);
-        }
-        case toy::Token::Return:
-        {
-            return format_provider<StringRef>::format("return", os, style);
-        }
-        case toy::Token::Var:
-        {
-            return format_provider<StringRef>::format("var", os, style);
-        }
-        case toy::Token::Def:
-        {
-            return format_provider<StringRef>::format("def", os, style);
-        }
-        case toy::Token::Identifier:
-        {
-            return format_provider<StringRef>::format("identifier", os, style);
-        }
-        case toy::Token::Number:
-        {
-            return format_provider<StringRef>::format("number", os, style);
-        }
+            case Token::Semicolon:
+                [[fallthrough]];
+            case Token::ParenthesesOpen:
+                [[fallthrough]];
+            case Token::ParenthesesClose:
+                [[fallthrough]];
+            case Token::BraceOpen:
+                [[fallthrough]];
+            case Token::BraceClose:
+                [[fallthrough]];
+            case Token::BracketOpen:
+                [[fallthrough]];
+            case Token::BracketClose:
+            {
+                return format_provider<char>::format(static_cast<char>(token), os, style);
+            }
+            case Token::Eof:
+            {
+                return format_provider<StringRef>::format("EOF", os, style);
+            }
+            case Token::Return:
+            {
+                return format_provider<StringRef>::format("return", os, style);
+            }
+            case Token::Var:
+            {
+                return format_provider<StringRef>::format("var", os, style);
+            }
+            case Token::Def:
+            {
+                return format_provider<StringRef>::format("def", os, style);
+            }
+            case Token::Identifier:
+            {
+                return format_provider<StringRef>::format("identifier", os, style);
+            }
+            case Token::Number:
+            {
+                return format_provider<StringRef>::format("number", os, style);
+            }
         }
 
         return format_provider<StringRef>::format(
-            formatv("{0} ({1})", std::to_underlying(token), static_cast<char>(token)).str(), os, style);
+            formatv("{} ({})", std::to_underlying(token), static_cast<char>(token)).str(), os, style);
     }
 };
 
-auto operator<<(llvm::raw_ostream &os, toy::Token token) -> llvm::raw_ostream &
+auto operator<<(llvm::raw_ostream &os, Token token) -> llvm::raw_ostream &
 {
-    format_provider<toy::Token>::format(token, os, {});
+    format_provider<Token>::format(token, os, {});
     return os;
 }
 
 } // namespace llvm
 
-export namespace toy
+export namespace toyc
 {
 
 /// The Lexer is an abstract base class providing all the facilities that the Parser expects. It goes through the
@@ -124,6 +132,8 @@ export namespace toy
 /// standard input or from a mmapped file.
 class Lexer
 {
+    using Self = Lexer;
+
   public:
     /// Create a lexer with the given filename. The filename is kept only for debugging purposes (attaching a
     /// Location to a Token).
@@ -135,58 +145,97 @@ class Lexer
     virtual ~Lexer() = default;
 
     /// Look at the current token in the stream
-    [[nodiscard]] auto get_current_token(this Lexer const &self) -> Token { return self.current_token; }
+    [[nodiscard]] auto get_current_token(this Self const &self) -> Token
+    {
+        return self.current_token;
+    }
 
     /// Move to the next token in the stream and return it
-    [[nodiscard]] auto get_next_token(this Lexer &self) -> Token { return self.current_token = self.get_token(); }
+    [[nodiscard]] auto get_next_token(this Self &self) -> Token
+    {
+        return self.current_token = self.get_token();
+    }
 
     /// Move to the next token in the stream, asserting ont eh current token matching the expectation
-    auto consume(this Lexer &self, Token token) -> void
+    auto consume(this Self &self, Token token) -> void
     {
-        TOY_ASSERT(token == self.current_token,
-                   "Token " << token << " doesn't match current_token " << self.current_token);
+        TOYC_ASSERT(token == self.current_token, "Token {} doesn't match current_token {}", token, self.current_token);
         std::ignore = self.get_next_token();
     }
 
     /// Return the current identifier (prequisite: get_current_token() == token_identifier)
-    [[nodiscard]] auto get_identifier(this Lexer const &self) -> llvm::StringRef
+    [[nodiscard]] auto get_identifier(this Self const &self) -> llvm::StringRef
     {
-        TOY_ASSERT(self.current_token == Token::Identifier,
-                   "Expected Token::identifier, got current_token = " << self.current_token);
+        TOYC_ASSERT(self.current_token == Token::Identifier, "Expected Token::identifier, got current_token = {}",
+                    self.current_token);
         return self.identifier_str;
     }
 
     /// Return the current number (prequisite: get_current_token() == token_number)
-    [[nodiscard]] auto get_value(this Lexer const &self) -> Value
+    [[nodiscard]] auto get_value(this Self const &self) -> Value
     {
-        TOY_ASSERT(self.current_token == Token::Number,
-                   "Expected Token::number, got current_token = " << self.current_token);
+        TOYC_ASSERT(self.current_token == Token::Number, "Expected Token::number, got current_token = {}",
+                    self.current_token);
         return self.number_value;
     }
 
     /// Return the location for the beginning of the current token
-    [[nodiscard]] auto get_last_location(this Lexer const &self) -> Location { return self.last_location; }
+    [[nodiscard]] auto get_last_location(this Self const &self) -> Location
+    {
+        return self.last_location;
+    }
 
     /// Return the current line in the file
-    [[nodiscard]] auto get_line(this Lexer const &self) -> Position { return self.current_line_number; }
+    [[nodiscard]] auto get_line(this Self const &self) -> Position
+    {
+        return self.current_line_number;
+    }
 
     /// Return the current column in the file
-    [[nodiscard]] auto get_column(this Lexer const &self) -> Position { return self.current_column_number; }
+    [[nodiscard]] auto get_column(this Self const &self) -> Position
+    {
+        return self.current_column_number;
+    }
 
   private:
+    /// The last token read from the input
+    Token current_token{Token::Eof};
+
+    /// Location for `current_token`
+    Location last_location;
+
+    /// If current_token is an identifier, this string contains its value
+    std::string identifier_str{};
+
+    /// If the current Token is a number, this contains the value
+    Value number_value{};
+
+    /// The last value returned by get_next_char(). We need to keep it around as we always need to read ahead 1
+    /// character to decide when to end a token and we can't put it back in the stream after reading from it.
+    Token last_char{' '};
+
+    /// Keep track of the current line number in the input stream
+    Position current_line_number{0};
+
+    /// Keep track of the current column number in the input stream
+    Position current_column_number{0};
+
+    /// Buffer supplied by the derived class on class to `read_next_line()`
+    llvm::StringRef current_line_buffer{"\n"};
+
     /// Delegate to a derived class fetching the next line. Returns an empty string to signal EOF. Lines are always
     /// expected to finish with '\n'.
     [[nodiscard]] virtual auto read_next_line() -> llvm::StringRef = 0;
 
     /// Return the last character read from the stream as a Character
-    [[nodiscard]] auto get_last_char(this Lexer const &self) -> Character
+    [[nodiscard]] auto get_last_char(this Self const &self) -> Character
     {
         return static_cast<Character>(self.last_char);
     }
 
     /// Return the next character from the stream. This manages the buffer for the current line and requests the
     /// next line buffer to the derived class as needed.
-    [[nodiscard]] auto get_next_char(this Lexer &self) -> Character
+    [[nodiscard]] auto get_next_char(this Self &self) -> Character
     {
         // The current line buffer should not be empty unless it's the EOF
         if (self.current_line_buffer.empty())
@@ -214,9 +263,10 @@ class Lexer
     }
 
     /// Return the next token from stdin
-    [[nodiscard]] auto get_token(this Lexer &self) -> Token
+    [[nodiscard]] auto get_token(this Self &self) -> Token
     {
         // Skip any whitespace
+        // NOLINTNEXTLINE(readability-implicit-bool-conversion)
         while (std::isspace(self.get_last_char()))
         {
             self.last_char = Token{self.get_next_char()};
@@ -227,10 +277,12 @@ class Lexer
         self.last_location.col = self.current_column_number;
 
         // Identifier: [a-zA-Z][a-zA-Z0-9_]*
+        // NOLINTNEXTLINE(readability-implicit-bool-conversion)
         if (std::isalpha(self.get_last_char()))
         {
             self.identifier_str = static_cast<char>(self.get_last_char());
 
+            // NOLINTNEXTLINE(readability-implicit-bool-conversion)
             while (std::isalnum(static_cast<Character>(self.last_char = Token{self.get_next_char()})) ||
                    self.get_last_char() == '_')
             {
@@ -256,6 +308,7 @@ class Lexer
         }
 
         // Number: [0-9.]+
+        // NOLINTNEXTLINE(readability-implicit-bool-conversion)
         if (std::isdigit(self.get_last_char()) || self.get_last_char() == '.')
         {
             std::string number_str{};
@@ -264,13 +317,13 @@ class Lexer
             {
                 number_str += static_cast<char>(self.last_char);
                 self.last_char = Token{self.get_next_char()};
+                // NOLINTNEXTLINE(readability-implicit-bool-conversion)
             } while (std::isdigit(self.get_last_char()) || self.get_last_char() == '.');
 
-            auto const result =
-                std::from_chars(number_str.data(), number_str.data() + number_str.size(), self.number_value);
-            TOY_ASSERT(result.ec == std::errc{},
-                       "from_chars failed on " << number_str << " after parsing " << (result.ptr - number_str.data())
-                                               << " characters: got error code " << std::to_underlying(result.ec));
+            auto const result{std::from_chars(std::to_address(number_str.begin()), std::to_address(number_str.end()),
+                                              self.number_value)};
+            TOYC_ASSERT(result.ec == std::errc{}, "from_chars failed on {} after parsing {} characters: got error: {}",
+                        number_str, result.ptr - number_str.data(), magic_enum::enum_name(result.ec));
 
             return Token::Number;
         }
@@ -300,31 +353,6 @@ class Lexer
         self.last_char = Token{self.get_next_char()};
         return this_char;
     }
-
-    /// The last token read from the input
-    Token current_token{Token::Eof};
-
-    /// Location for `current_token`
-    Location last_location{};
-
-    /// If current_token is an identifier, this string contains its value
-    std::string identifier_str{};
-
-    /// If the current Token is a number, this contains the value
-    Value number_value{};
-
-    /// The last value returned by get_next_char(). We need to keep it around as we always need to read ahead 1
-    /// character to decide when to end a token and we can't put it back in the stream after reading from it.
-    Token last_char{' '};
-
-    /// Keep track of the current line number in the input stream
-    Position current_line_number{0};
-
-    /// Keep track of the current column number in the input stream
-    Position current_column_number{0};
-
-    /// Buffer supplied by the derived class on class to `read_next_line()`
-    llvm::StringRef current_line_buffer{"\n"};
 };
 
 /// A lexer implementation operating on an in-memory buffer
@@ -332,15 +360,19 @@ class LexerBuffer final : public Lexer
 {
   public:
     LexerBuffer(char const *begin, char const *end, std::string filename)
-        : Lexer{std::move(filename)}, current{begin}, end{end}
+        : Lexer{std::move(filename)}
+        , current{begin}
+        , end{end}
     {
     }
 
   private:
+    char const *current{}, *end{};
+
     /// Provide 1 line at a time to the Lexer, return an empty string when reaching the end of buffer
     [[nodiscard]] auto read_next_line() -> llvm::StringRef override
     {
-        auto *begin = current;
+        auto *begin{current};
 
         while (this->current <= this->end && *this->current != '\0' && *this->current != '\n')
         {
@@ -354,8 +386,6 @@ class LexerBuffer final : public Lexer
 
         return llvm::StringRef{begin, static_cast<std::size_t>(this->current - begin)};
     }
-
-    char const *current{}, *end{};
 };
 
-} // namespace toy
+} // namespace toyc

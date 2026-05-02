@@ -1,14 +1,21 @@
-[buildenv]
-# TODO: brew's LLVM is build with libstdc++, can't use libc++
-# CXXFLAGS=-stdlib++-isystem ${HOMEBREW_PREFIX}/include/c++/v1
-# LDFLAGS=-L${HOMEBREW_PREFIX}/lib -Wl,-rpath,${HOMEBREW_PREFIX}/lib
-
 [conf]
 tools.build:compiler_executables={'c': 'clang', 'cpp': 'clang++'}
 
+# TODO: brew's LLVM is build with libstdc++, can't use libc++
+# To use libc++:
+# Add to cxxflags: -stdlib++-isystem ${HOMEBREW_PREFIX}/include/c++/v1: commented out because
+# Add to linkflags: -L${HOMEBREW_PREFIX}/lib -Wl,-rpath,${HOMEBREW_PREFIX}/lib
+
+# Initializes [this](https://cmake.org/cmake/help/latest/variable/CMAKE_LANG_FLAGS_CONFIG.html) variable
+{%
+    set cxxflags = [
+    ]
+%}
+tools.build:cxxflags += {{ cxxflags }}
+
 # CMAKE_EXPERIMENTAL_*: https://gitlab.kitware.com/cmake/cmake/-/blob/master/Help/dev/experimental.rst?ref_type=heads
 # CMAKE_LINKER_TYPE: TODO: https://github.com/conan-io/conan/issues/15864, https://github.com/conan-io/conan/issues/14174
-# CMAKE_OPTIMIZE_DEPENDENCIES known to cause issues:
+# CMAKE_OPTIMIZE_DEPENDENCIES: TODO: causes issues:
 #   - https://github.com/conan-io/conan-center-index/issues/29431#issuecomment-3804881699
 #   - https://gitlab.kitware.com/cmake/cmake/-/work_items/27777
 {%
@@ -22,19 +29,18 @@ tools.build:compiler_executables={'c': 'clang', 'cpp': 'clang++'}
         'CMAKE_VISIBILITY_INLINES_HIDDEN': 'ON'
     }
 %}
-tools.cmake.cmaketoolchain:extra_variables={{ cmake_extra_variables }}
+tools.cmake.cmaketoolchain:extra_variables = {{ cmake_extra_variables }}
 
-tools.cmake.cmaketoolchain:generator=Ninja Multi-Config
+tools.cmake.cmaketoolchain:generator = Ninja Multi-Config
 
 [platform_tool_requires]
 # Tell Conan to look for CMake on the machine instead of installing it itself
 cmake/4.3.2
 
 [settings]
-arch=x86_64
-compiler=clang
-# TODO: https://github.com/conan-io/conan-center-index/issues/26390
-compiler.cppstd=26
-compiler.libcxx=libstdc++11
-compiler.version=22
-os=Linux
+arch = x86_64
+compiler = clang
+compiler.cppstd = 26
+compiler.libcxx = libstdc++11
+compiler.version = 22
+os = Linux

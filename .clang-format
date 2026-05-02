@@ -10,5 +10,6 @@ AllowShortIfStatementsOnASingleLine: Never
 BreakBeforeBraces: Allman
 BreakConstructorInitializers: BeforeComma
 ColumnLimit: 120
+IndentCaseLabels: true
 PointerAlignment: Right
 QualifierAlignment: Right

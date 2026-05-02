@@ -20,7 +20,8 @@ template <std::size_t n, std::floating_point Float = double> struct Vec
     /// Construct a new @ref Vec with the given components.
     /// @param[in] components The components of the vector
     template <typename... Components>
-    constexpr Vec(Components &&...components) : components{std::forward<Components>(components)...}
+    constexpr Vec(Components &&...components)
+        : components{std::forward<Components>(components)...}
     {
     }
 
@@ -46,8 +47,7 @@ template <std::size_t n, std::floating_point Float = double> struct Vec
     [[nodiscard]]
     auto constexpr dot(this Self const &self, Self const &other, Float initial = {}) noexcept -> Float
     {
-        return std::inner_product(std::ranges::begin(self.components), std::ranges::end(self.components),
-                                  std::ranges::begin(other.components), initial);
+        return std::inner_product(self.components.begin(), self.components.end(), other.components.begin(), initial);
     }
 
     /// Compute the norm of this vector
@@ -110,10 +110,10 @@ auto constexpr d_dx(Float x) noexcept(noexcept(f(std::declval<Float>()))) -> Flo
 export template <std::size_t n, std::floating_point Float>
 struct std::formatter<math::Vec<n, Float>> : std::formatter<typename math::Vec<n, Float>::Data>
 {
+    using Self = std::formatter<typename math::Vec<n, Float>::Data>;
+
     template <typename FormatContext>
-    [[nodiscard]]
-    auto format(this std::formatter<typename math::Vec<n, Float>::Data> const &self, math::Vec<n, Float> const &vec,
-                FormatContext &ctx) -> FormatContext::iterator
+    auto format(this Self const &self, math::Vec<n, Float> const &vec, FormatContext &ctx) -> FormatContext::iterator
     {
         return self.format(vec.components, ctx);
     }

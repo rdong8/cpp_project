@@ -1,3 +1,5 @@
+# Credit: https://github.com/cpp-best-practices/cmake_template/blob/main/cmake/Sanitizers.cmake
+
 option(ENABLE_ASAN "Enable address sanitizer" OFF)
 option(ENABLE_LSAN "Enable leak sanitizer" OFF)
 option(ENABLE_MSAN "Enable memory sanitizer" OFF)
@@ -11,90 +13,96 @@ set(DEFAULT_DEBUG_SANITIZERS "address,leak,undefined")
 set(DEFAULT_RELWITHDEBINFO_SANITIZERS "safe-stack")
 set(DEFAULT_RELEASE_SANITIZERS "safe-stack")
 
-macro(set_project_sanitizers project_name)
+macro(set_sanitizers config)
     if ("${ENABLE_ASAN}")
         list(APPEND SANITIZERS "address")
-    endif ()
+    endif()
 
     if ("${ENABLE_LSAN}")
         list(APPEND SANITIZERS "leak")
-    endif ()
+    endif()
 
     if ("${ENABLE_MSAN}")
         if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
             message(SEND_ERROR "Memory sanitizer doesn't work with GCC")
-        endif ()
+        endif()
         list(APPEND SANITIZERS "memory")
-    endif ()
+    endif()
 
     if ("${ENABLE_RTSAN}")
         if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
             message(SEND_ERROR "Realtime sanitizer doesn't work with GCC")
-        endif ()
+        endif()
         list(APPEND SANITIZERS "realtime")
-    endif ()
+    endif()
 
     if ("${ENABLE_SAFE_STACK}")
         if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
             message(SEND_ERROR "Safe stack doesn't work with GCC")
-        endif ()
+        endif()
         list(APPEND SANITIZERS "safe-stack")
-    endif ()
+    endif()
 
     if ("${ENABLE_TSAN}")
         list(APPEND SANITIZERS "thread")
-    endif ()
+    endif()
 
     if ("${ENABLE_UBSAN}")
         list(APPEND SANITIZERS "undefined")
-    endif ()
+    endif()
 
     list(JOIN SANITIZERS "," LIST_OF_SANITIZERS)
 
     if (LIST_OF_SANITIZERS AND (NOT "${LIST_OF_SANITIZERS}" STREQUAL ""))
-        target_compile_options("${project_name}" INTERFACE "-fsanitize=${LIST_OF_SANITIZERS}")
-        target_link_options("${project_name}" INTERFACE "-fsanitize=${LIST_OF_SANITIZERS}")
-    endif ()
+        target_compile_options("${config}"
+            INTERFACE
+                "-fsanitize=${LIST_OF_SANITIZERS}"
+        )
+        target_link_options("${config}"
+            INTERFACE
+                "-fsanitize=${LIST_OF_SANITIZERS}"
+        )
+    endif()
 
     if (DEFAULT_DEBUG_SANITIZERS AND (NOT "${DEFAULT_DEBUG_SANITIZERS}" STREQUAL ""))
-        target_compile_options("${project_name}"
+        target_compile_options("${config}"
             INTERFACE
-            "$<$<CONFIG:Debug>:-fsanitize=${DEFAULT_DEBUG_SANITIZERS}>"
+                "$<$<CONFIG:Debug>:-fsanitize=${DEFAULT_DEBUG_SANITIZERS}>"
         )
-        target_link_options("${project_name}"
+        target_link_options("${config}"
             INTERFACE
-            "$<$<CONFIG:Debug>:-fsanitize=${DEFAULT_DEBUG_SANITIZERS}>"
+                "$<$<CONFIG:Debug>:-fsanitize=${DEFAULT_DEBUG_SANITIZERS}>"
         )
-    endif ()
+    endif()
 
     if (DEFAULT_RELWITHDEBINFO_SANITIZERS AND (NOT "${DEFAULT_RELWITHDEBINFO_SANITIZERS}" STREQUAL ""))
-        target_compile_options("${project_name}"
+        target_compile_options("${config}"
             INTERFACE
-            "$<$<CONFIG:RelWithDebInfo>:-fsanitize=${DEFAULT_RELWITHDEBINFO_SANITIZERS}>"
+                "$<$<CONFIG:RelWithDebInfo>:-fsanitize=${DEFAULT_RELWITHDEBINFO_SANITIZERS}>"
         )
-        target_link_options("${project_name}"
+        target_link_options("${config}"
             INTERFACE
-            "$<$<CONFIG:RelWithDebInfo>:-fsanitize=${DEFAULT_RELWITHDEBINFO_SANITIZERS}>"
+                "$<$<CONFIG:RelWithDebInfo>:-fsanitize=${DEFAULT_RELWITHDEBINFO_SANITIZERS}>"
         )
-    endif ()
+    endif()
 
     if (DEFAULT_RELEASE_SANITIZERS AND (NOT "${DEFAULT_RELEASE_SANITIZERS}" STREQUAL ""))
-        target_compile_options("${project_name}"
+        target_compile_options("${config}"
             INTERFACE
-            "$<$<CONFIG:Release>:-fsanitize=${DEFAULT_RELEASE_SANITIZERS}>"
+                "$<$<CONFIG:Release>:-fsanitize=${DEFAULT_RELEASE_SANITIZERS}>"
         )
-        target_link_options("${project_name}"
+        target_link_options("${config}"
             INTERFACE
-            "$<$<CONFIG:Release>:-fsanitize=${DEFAULT_RELEASE_SANITIZERS}>"
+                "$<$<CONFIG:Release>:-fsanitize=${DEFAULT_RELEASE_SANITIZERS}>"
         )
-    endif ()
+    endif()
 
-    target_compile_options("${project_name}"
+    target_compile_options("${config}"
         INTERFACE
-        "-fno-sanitize-recover=all"
+            "-fno-sanitize-recover=all"
     )
-    target_link_options("${project_name}"
+    target_link_options("${config}"
         INTERFACE
-        "-fno-sanitize-recover=all"
+            "-fno-sanitize-recover=all"
     )
 endmacro()

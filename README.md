@@ -1,8 +1,8 @@
 # cpp_project
 
-Template for a modern C++ project using CMake.
+Template for a modern C++ project using CMake. Holds some of my personal experiments as example projects.
 
-Also read the [justfile](./justfile) to see available commands.
+Read the [justfile](./justfile) to see available commands.
 
 ## Notes
 

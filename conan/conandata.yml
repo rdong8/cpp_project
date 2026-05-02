@@ -3,4 +3,6 @@ requirements:
   # Currently installed via brew
   # - "boost/1.90.0"
   - "catch2/3.14.0"
+  - "cpptrace/1.0.4"
+  - "magic_enum/0.9.7"
   - "spdlog/1.17.0"

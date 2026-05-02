@@ -1,5 +1,4 @@
-# Using 44 instead of latest (43) for Boost Cobalt
-FROM docker.io/fedora:44
+FROM docker.io/fedora:latest
 
 # For now, only install the following with the system package manager:
 # - Dependencies of linuxbrew itself (curl, file, procps-ng)

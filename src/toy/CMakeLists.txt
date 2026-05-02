@@ -1,76 +1,50 @@
+find_package(cpptrace REQUIRED CONFIG)
+find_package(magic_enum REQUIRED CONFIG)
+
 include(LLVM.cmake)
 
-add_library(toyc_macros)
-target_sources(toyc_macros
+add_library(toyc.config)
+target_sources(toyc.config
     PUBLIC FILE_SET HEADERS FILES
         macros.hpp
 )
-target_link_libraries(toyc_macros
-    PRIVATE
+target_link_libraries(toyc.config
+    INTERFACE
+        cpptrace::cpptrace
         config
         llvm_config
 )
 
-add_library(toyc_lexer)
-target_sources(toyc_lexer
-    PUBLIC FILE_SET CXX_MODULES FILES
-        lexer.cppm
-)
-target_link_libraries(toyc_lexer
+add_module_library(toyc.utility utility)
+target_link_libraries(toyc.utility
     PRIVATE
-        config
-        llvm_config
-        toyc_macros
-)
-
-add_library(toyc_ast)
-target_sources(toyc_ast
-    PUBLIC FILE_SET CXX_MODULES FILES
-        ast/mod.cppm
-    PRIVATE
-        ast/dumper.cppm
-)
-target_link_libraries(toyc_ast
-    PRIVATE
-        config
-        llvm_config
-        toyc_lexer
-)
-
-add_library(toyc_parser)
-target_sources(toyc_parser
-    PUBLIC FILE_SET CXX_MODULES FILES
-        parser.cppm
-)
-target_link_libraries(toyc_parser
-    PRIVATE
-        config
+        cpptrace::cpptrace
+        toyc.config
         llvm_config
 )
 
-add_library(toyc_lib)
-target_sources(toyc_lib
-    PUBLIC FILE_SET CXX_MODULES FILES
-        lib.cppm
-)
-target_link_libraries(toyc_lib
+add_module_library(toyc.lexer lexer)
+target_link_libraries(toyc.lexer
     PRIVATE
-        config
-        llvm_config
-        toyc_ast
-        toyc_lexer
-        toyc_macros
-        toyc_parser
+        magic_enum::magic_enum
+        toyc.config
+        toyc.utility
 )
 
-add_executable(toyc)
-target_sources(toyc
-    PUBLIC FILE_SET CXX_MODULES FILES
-        main.cppm
+add_module_library(toyc.parser parser)
+target_link_libraries(toyc.parser
+    PRIVATE
+        magic_enum::magic_enum
+        toyc.config
+        toyc.lexer
+        toyc.utility
 )
+
+add_module_executable(toyc .)
 target_link_libraries(toyc
     PRIVATE
-        config
-        llvm_config
-        toyc_lib
+        toyc.config
+        toyc.lexer
+        toyc.parser
+        toyc.utility
 )
