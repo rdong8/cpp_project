@@ -4,3 +4,4 @@
 [submodule "submodules/llvm-project"]
 	path = submodules/llvm-project
 	url = https://github.com/rdong8/llvm-project.git
+	shallow = true
