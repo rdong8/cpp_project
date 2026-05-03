@@ -22,3 +22,10 @@ build-mlir:
     cmake \
         --build llvm-project/build \
         --target check-mlir
+
+install-llvm-pre-push:
+    mkdir -p ../.git/modules/submodules/llvm-project/hooks/pre-push
+    ln -sf llvm-project/llvm/utils/git/pre-push.py ../.git/modules/submodules/llvm-project/hooks/pre-push
+
+check-llvm:
+    cd llvm-project && git clang-format HEAD~1
