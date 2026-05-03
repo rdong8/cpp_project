@@ -20,7 +20,6 @@ target_link_libraries(toyc.utility
     PRIVATE
         cpptrace::cpptrace
         toyc.config
-        llvm_config
 )
 
 add_module_library(toyc.lexer lexer)
