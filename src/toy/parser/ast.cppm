@@ -5,6 +5,7 @@ module;
 #include <experimental/propagate_const>
 
 #include <llvm/ADT/ArrayRef.h>
+#include <llvm/ADT/SmallVector.h>
 #include <llvm/ADT/StringRef.h>
 
 export module toyc.parser.ast;
@@ -17,7 +18,7 @@ export namespace toyc
 {
 
 using Dimension = std::int64_t;
-using Shape = std::inplace_vector<Dimension, 4>;
+using Shape = llvm::SmallVector<Dimension, 4>;
 
 struct VarType
 {

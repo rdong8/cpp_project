@@ -195,7 +195,7 @@ class Parser final
 
             // Append the nested dimensions to the current level
             auto const first_dims{first_literal->get_dims()};
-            dims.append_range(first_dims);
+            dims.append(first_dims.begin(), first_dims.end());
 
             // Sanity check that shape is uniform across all elements of the list
             for (auto const &expr : values)
