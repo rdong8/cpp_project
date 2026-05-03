@@ -44,6 +44,7 @@ RUN \
   && brew install \
   bat \
   btop \
+  ccache \
   cmake \
   conan \
   doxygen \
