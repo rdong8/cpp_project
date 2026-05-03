@@ -48,6 +48,8 @@ class ASTDumper final
     }
 
   private:
+    std::uint32_t current_indent{0};
+
     /// RAII helper to manage increasing/decreasing indentation as we traverse the AST
     class Indent final
     {
@@ -158,7 +160,7 @@ class ASTDumper final
         // Print the content, recursing on every element of the list
         llvm::interleaveComma(literal->get_values(), llvm::errs(),
                               [&](auto &elem) { print_literal_helper(elem.get()); });
-        toyc::eprint("]");
+        toyc::eprint(" ]");
     }
 
     /// Print a literal, see above for implementation
@@ -255,8 +257,6 @@ class ASTDumper final
         self.dump(node->get_prototype());
         self.dump(node->get_body());
     }
-
-    std::uint32_t current_indent{0};
 };
 
 } // namespace
