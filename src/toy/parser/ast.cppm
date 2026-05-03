@@ -17,7 +17,7 @@ export namespace toyc
 {
 
 using Dimension = std::int64_t;
-using Shape = std::vector<Dimension>;
+using Shape = std::inplace_vector<Dimension, 4>;
 
 struct VarType
 {
