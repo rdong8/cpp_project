@@ -18,7 +18,7 @@ Read the [justfile](./justfile) to see available commands.
 *On the host*:
 
 ```bash
-git clone --recurse-submodules https://github.com/rdong8/cpp_project.git
+git clone https://github.com/rdong8/cpp_project.git
 cd cpp_project/
 ```
 
