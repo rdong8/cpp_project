@@ -1,7 +1,7 @@
 find_package(cpptrace REQUIRED CONFIG)
 find_package(magic_enum REQUIRED CONFIG)
 
-include(LLVM.cmake)
+include(cmake/LLVM.cmake)
 
 add_library(toyc.config)
 target_sources(toyc.config
