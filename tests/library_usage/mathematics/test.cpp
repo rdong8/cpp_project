@@ -2,10 +2,11 @@ module;
 
 #include <catch2/catch_test_macros.hpp>
 
-export module test_mathematics;
+#include "test_main.hpp"
 
-import mathematics;
+module mathematics;
 
+// TODO: move into namespace math
 TEST_CASE("Vector algebra", "[Vec][math]")
 {
     // Setup (reran for each section)
@@ -13,7 +14,10 @@ TEST_CASE("Vector algebra", "[Vec][math]")
     math::Vec<2> constexpr w{4., 5.};
 
     // SECTION("section name", "[section description]...")
-    SECTION("Dot product is commutative") { REQUIRE(v.dot(w) == w.dot(v)); }
+    SECTION("Dot product is commutative")
+    {
+        REQUIRE(v.dot(w) == w.dot(v));
+    }
 
     SECTION("Scalar dot product is associative")
     {
@@ -21,3 +25,5 @@ TEST_CASE("Vector algebra", "[Vec][math]")
         REQUIRE(c * (v.dot(w)) == (c * v).dot(w));
     }
 }
+
+TEST_MAIN()
