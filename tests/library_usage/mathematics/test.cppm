@@ -2,11 +2,10 @@ module;
 
 #include <catch2/catch_test_macros.hpp>
 
-#include "test_main.hpp"
+export module test_mathematics;
 
-module mathematics;
+import mathematics;
 
-// TODO: move into namespace math
 TEST_CASE("Vector algebra", "[Vec][math]")
 {
     // Setup (reran for each section)
@@ -25,5 +24,3 @@ TEST_CASE("Vector algebra", "[Vec][math]")
         REQUIRE(c * (v.dot(w)) == (c * v).dot(w));
     }
 }
-
-TEST_MAIN()
