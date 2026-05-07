@@ -7,79 +7,81 @@ FROM docker.io/fedora:latest
 # - fish: need to set user's shell when we create it
 # - which: to find fish for the useradd
 # - mathjax: dependency of doxygen, but not available via linuxbrew
-RUN \
-  dnf update -y \
-  && dnf install -y \
-  @development-tools \
-  boost-devel \
-  curl \
-  file \
-  fish \
-  gcc-c++ \
-  mathjax \
-  procps-ng \
-  which \
-  && dnf clean all && rm -rf /var/cache/dnf
+RUN <<EOF
+  dnf update -y
+  dnf install -y \
+    @development-tools \
+    boost-devel \
+    curl \
+    file \
+    fish \
+    gcc-c++ \
+    mathjax \
+    procps-ng \
+    which
+  dnf clean all && rm -rf /var/cache/dnf
+EOF
 
+# Add user
 ARG REMOTE_USER
 ARG HOST_UID
 ARG HOST_GID
-RUN \
-  groupadd --gid ${HOST_GID} ${REMOTE_USER} \
-  && useradd -ms $(which fish) --uid ${HOST_UID} --gid ${HOST_GID} ${REMOTE_USER}
+RUN <<EOF
+  groupadd --gid ${HOST_GID} ${REMOTE_USER}
+  useradd -ms $(which fish) --uid ${HOST_UID} --gid ${HOST_GID} ${REMOTE_USER}
+EOF
 USER ${REMOTE_USER}
 
+# Get homebrew binary
 ARG HOMEBREW_PREFIX=/home/linuxbrew/.linuxbrew
 COPY \
   --from=docker.io/homebrew/brew:latest \
   --chown=${REMOTE_USER} \
-  ${HOMEBREW_PREFIX} ${HOMEBREW_PREFIX}
+  ${HOMEBREW_PREFIX} \
+  ${HOMEBREW_PREFIX}
 
 ARG FISH_CONFIG=/home/${REMOTE_USER}/.config/fish
 
-RUN \
-  mkdir -p ${FISH_CONFIG} \
-  && echo "eval (${HOMEBREW_PREFIX}/bin/brew shellenv)" >> ${FISH_CONFIG}/config.fish \
-  && eval "$(${HOMEBREW_PREFIX}/bin/brew shellenv)" \
-  && brew install \
-  bat \
-  btop \
-  ccache \
-  cmake \
-  conan \
-  doxygen \
-  fastfetch \
-  fd \
-  fzf \
-  gawk \
-  git-delta \
-  helix \
-  jq \
-  just \
-  llvm \
-  mold \
-  ninja \
-  prek \
-  ripgrep \
-  terror/tap/just-lsp \
-  tree \
-  uv \
-  wget \
-  zellij
+# Homebrew-related things
+RUN <<EOF
+  # Setup fish config
+  mkdir -p ${FISH_CONFIG}
 
-# NOTE: to install LLVM from head, you can add remove llvm from the list above and add this
-# TODO: exit 0 is there because the postinstall fails for some reason
-# You have to run `brew postinstall llvm` manually in the devcontainer
-# RUN \
-#   eval "$(${HOMEBREW_PREFIX}/bin/brew shellenv)" \
-#   && brew install llvm --HEAD -vd \
-#   ; exit 0
+cat <<EOF2 >> ${FISH_CONFIG}/config.fish
+eval (${HOMEBREW_PREFIX}/bin/brew shellenv)
+EOF2
 
-# Fish completions
-# Only necessary if not builtin: https://github.com/fish-shell/fish-shell/tree/master/share/completions
-# prek: https://prek.j178.dev/installation/#shell-completion
-#   TODO: https://github.com/j178/prek/issues/1992
-RUN \
-  eval "$(${HOMEBREW_PREFIX}/bin/brew shellenv)" \
-  && mkdir -p ${FISH_CONFIG}/completions \
-  && COMPLETE=fish prek > ${FISH_CONFIG}/completions/prek.fish
+  # Install brew packages
+  eval "$(${HOMEBREW_PREFIX}/bin/brew shellenv)"
+  brew install
+    bat \
+    btop \
+    ccache \
+    cmake \
+    conan \
+    doxygen \
+    fastfetch \
+    fd \
+    fzf \
+    gawk \
+    git-delta \
+    helix \
+    jq \
+    just \
+    llvm \
+    mold \
+    ninja \
+    prek \
+    ripgrep \
+    terror/tap/just-lsp \
+    tree \
+    wget \
+    zellij
+
+  # Fish completions
+  # Only necessary if not builtin: https://github.com/fish-shell/fish-shell/tree/master/share/completions
+  mkdir -p ${FISH_CONFIG}/completions \
+  # prek: https://prek.j178.dev/installation/#shell-completion
+  # TODO: https://github.com/j178/prek/issues/1992
+  COMPLETE=fish prek > ${FISH_CONFIG}/completions/prek.fish
+EOF
