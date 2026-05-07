@@ -2,21 +2,17 @@ FROM docker.io/fedora:latest
 
 # For now, only install the following with the system package manager:
 # - Dependencies of linuxbrew itself (curl, file, procps-ng)
-# - boost-devel: see comment in conan/conandata.yml about conan's boost currently being broken
 # - gcc-c++: system toolchain needed for linuxbrew's LLVM
 # - fish: need to set user's shell when we create it
 # - which: to find fish for the useradd
-# - mathjax: dependency of doxygen, but not available via linuxbrew
 RUN <<EOF
   dnf update -y
   dnf install -y \
     @development-tools \
-    boost-devel \
     curl \
     file \
     fish \
     gcc-c++ \
-    mathjax \
     procps-ng \
     which
   dnf clean all
@@ -50,17 +46,16 @@ RUN <<EOF
 
 cat <<EOF2 >> ${FISH_CONFIG}/config.fish
 eval (${HOMEBREW_PREFIX}/bin/brew shellenv)
+fish_add_path (brew --prefix rustup)/bin
 EOF2
 
   # Install brew packages
   eval "$(${HOMEBREW_PREFIX}/bin/brew shellenv)"
-  brew install
+  # Note that LLVM is needed for wild
+  brew install \
     bat \
     btop \
-    ccache \
-    cmake \
-    conan \
-    doxygen \
+    cargo-binstall \
     fastfetch \
     fd \
     fzf \
@@ -70,10 +65,9 @@ EOF2
     jq \
     just \
     llvm \
-    mold \
-    ninja \
     prek \
     ripgrep \
+    rustup \
     terror/tap/just-lsp \
     tree \
     wget \
@@ -81,8 +75,21 @@ EOF2
 
   # Fish completions
   # Only necessary if not builtin: https://github.com/fish-shell/fish-shell/tree/master/share/completions
-  mkdir -p ${FISH_CONFIG}/completions \
   # prek: https://prek.j178.dev/installation/#shell-completion
-  # TODO: https://github.com/j178/prek/issues/1992
+  #   TODO: https://github.com/j178/prek/issues/1992
+  mkdir -p ${FISH_CONFIG}/completions \
   COMPLETE=fish prek > ${FISH_CONFIG}/completions/prek.fish
+EOF
+
+# Wild linker
+RUN <<EOF
+  cargo binstall wild-linker
+  mkdir -p ~/.cargo
+
+cat <<EOF2 >> ~/.cargo/config.toml
+[target.x86_64-unknown-linux-gnu]
+linker = "clang"
+rustflags = ["-Clink-arg=--ld-path=wild"]
+EOF2
+
 EOF
