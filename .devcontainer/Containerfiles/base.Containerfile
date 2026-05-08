@@ -1,6 +1,5 @@
 ##// Note that this file will be put through the C preprocessor, so you need to use ##// for comments
 
-##// TODO: this line moved to consumers of this image because of https://github.com/devcontainers/cli/issues/1223
 FROM docker.io/fedora:latest
 
 ##// For now, only install the following with the system package manager:
