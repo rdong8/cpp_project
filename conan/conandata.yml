@@ -1,7 +1,7 @@
 requirements:
   # TODO: https://github.com/conan-io/conan-center-index/pull/26030
   # Currently installed via brew
-  # - "boost/1.90.0"
+  # - "boost/1.91.0"
   - "catch2/3.14.0"
   - "cpptrace/1.0.4"
   - "magic_enum/0.9.7"
