@@ -32,6 +32,13 @@
       "source": "conan",
       "target": "/home/dev/.conan2",
       "type": "volume"
+    },
+    // WARNING: it is not safe to use multiple concurrence sccache instances (ie. dev containers)
+    // https://github.com/mozilla/sccache/blob/main/docs/Local.md#local
+    {
+      "source": "sccache",
+      "target": "/home/dev/.cache/sccache",
+      "type": "volume"
     }
     // For Python development
     // {

@@ -21,7 +21,9 @@ tools.build:cxxflags += {{ cxxflags }}
 {%
     set cmake_extra_variables = {
         'CMAKE_COLOR_DIAGNOSTICS': 'ON',
+        'CMAKE_CXX_COMPILER_LAUNCHER': 'sccache',
         'CMAKE_CXX_VISIBILITY_PRESET': 'hidden',
+        'CMAKE_C_COMPILER_LAUNCHER': 'sccache',
         'CMAKE_EXPERIMENTAL_CXX_IMPORT_STD': '451f2fe2-a8a2-47c3-bc32-94786d8fc91b',
         'CMAKE_EXPERIMENTAL_EXPORT_BUILD_DATABASE': '73194a1d-c0b5-41b9-9190-a4512925e192',
         'CMAKE_LINKER_TYPE': 'MOLD',

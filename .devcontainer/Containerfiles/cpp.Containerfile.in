@@ -101,5 +101,6 @@ RUN <<EOF
     doxygen \
     llvm \
     mold \
-    ninja
+    ninja \
+    sccache
 EOF
