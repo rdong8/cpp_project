@@ -422,7 +422,7 @@ class ModuleAST final
     using Self = ModuleAST;
 
   public:
-    ModuleAST(std::vector<FunctionAST> functions)
+    explicit ModuleAST(std::vector<FunctionAST> functions)
         : functions{std::move(functions)}
     {
     }

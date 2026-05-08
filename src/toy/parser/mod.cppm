@@ -27,7 +27,7 @@ class Parser final
     using Self = Parser;
 
   public:
-    Parser(Lexer &lexer)
+    explicit Parser(Lexer &lexer)
         : lexer{lexer}
     {
     }
@@ -54,7 +54,7 @@ class Parser final
         // If we didn't reach EOF, there was an error during parsing
         if (self.lexer.get_current_token() != Token::Eof)
         {
-            return self.parse_error<ModuleAST>("nothing", "at end of module");
+            return self.parse_error("nothing", "at end of module");
         }
 
         return std::make_unique<ModuleAST>(std::move(functions));
@@ -66,9 +66,9 @@ class Parser final
     /// Helper function to signal errors while parsing
     /// @param[in] expected expected token
     /// @param[in] context more context
-    template <typename R, typename T, typename U = std::string_view>
+    template <typename T, typename U = std::string_view>
     [[nodiscard]]
-    auto parse_error(this Self const &self, T &&expected, U &&context = "") -> ASTPtr<R>
+    auto parse_error(this Self const &self, T const &expected, U const &context = "") -> std::nullptr_t
     {
         auto cur_token{self.lexer.get_current_token()};
         auto const last_loc{self.lexer.get_last_location()};
@@ -119,15 +119,9 @@ class Parser final
         return std::move(result);
     }
 
-    /// tensor_literal ::= [ literal_list ] | number
-    /// literal_list ::= tensor_literal | tensor_literal, literal_list
     [[nodiscard]]
-    auto parse_tensor_literal_expr(this Self &self) -> ASTPtr<ExprAST>
+    auto parse_tensor_literal_values(this Self &self) -> std::expected<LiteralExprAST::Values, std::nullptr_t>
     {
-        auto loc{self.lexer.get_last_location()};
-        self.lexer.consume(Token::BracketOpen);
-
-        // List of values at this nesting level
         LiteralExprAST::Values values{};
 
         while (true)
@@ -140,14 +134,14 @@ class Parser final
                 if (!values.back())
                 {
                     // Parse error in the nested array
-                    return nullptr;
+                    return std::unexpected(nullptr);
                 }
             }
             else
             {
                 if (self.lexer.get_current_token() != Token::Number)
                 {
-                    return self.parse_error<ExprAST>("<num> or [", "in literal expression");
+                    return std::unexpected(self.parse_error("<num> or [", "in literal expression"));
                 }
 
                 values.push_back(self.parse_number_expr());
@@ -162,7 +156,7 @@ class Parser final
             // Elements are comma separated
             if (self.lexer.get_current_token() != Token{','})
             {
-                return self.parse_error<ExprAST>("] or ,", "in literal expression");
+                return std::unexpected(self.parse_error("] or ,", "in literal expression"));
             }
 
             // Eat `,`
@@ -171,11 +165,34 @@ class Parser final
 
         if (values.empty())
         {
-            return self.parse_error<ExprAST>("<something>", "to fill literal expression");
+            return std::unexpected(self.parse_error("<something>", "to fill literal expression"));
         }
 
         // Eat `]`
         std::ignore = self.lexer.get_next_token();
+
+        return values;
+    }
+
+    /// tensor_literal ::= [ literal_list ] | number
+    /// literal_list ::= tensor_literal | tensor_literal, literal_list
+    [[nodiscard]]
+    auto parse_tensor_literal_expr(this Self &self) -> ASTPtr<ExprAST>
+    {
+        auto loc{self.lexer.get_last_location()};
+        self.lexer.consume(Token::BracketOpen);
+
+        // List of values at this nesting level
+        LiteralExprAST::Values values{};
+
+        if (auto result{self.parse_tensor_literal_values()}; result.has_value())
+        {
+            values = std::move(result.value());
+        }
+        else
+        {
+            return result.error();
+        }
 
         // Dimensions for all nesting inside this level
         Shape dims{};
@@ -188,9 +205,9 @@ class Parser final
         {
             auto const *const first_literal{llvm::dyn_cast<LiteralExprAST>(values.front().get())};
 
-            if (!first_literal)
+            if (first_literal == nullptr)
             {
-                return self.parse_error<ExprAST>("uniform well-nested dimensions", "inside literal expression");
+                return self.parse_error("uniform well-nested dimensions", "inside literal expression");
             }
 
             // Append the nested dimensions to the current level
@@ -202,14 +219,9 @@ class Parser final
             {
                 auto const *const expr_literal{llvm::cast<LiteralExprAST>(expr.get())};
 
-                if (!expr_literal)
+                if (expr_literal == nullptr || expr_literal->get_dims() != first_dims)
                 {
-                    return self.parse_error<ExprAST>("uniform well-nested dimensions", "inside literal expression");
-                }
-
-                if (expr_literal->get_dims() != first_dims)
-                {
-                    return self.parse_error<ExprAST>("uniform well-nested dimensions", "inside literal expression");
+                    return self.parse_error("uniform well-nested dimensions", "inside literal expression");
                 }
             }
         }
@@ -233,7 +245,7 @@ class Parser final
 
         if (self.lexer.get_current_token() != Token::ParenthesesClose)
         {
-            return self.parse_error<ExprAST>(")", "to close expression with parentheses");
+            return self.parse_error(")", "to close expression with parentheses");
         }
 
         self.lexer.consume(Token::ParenthesesClose);
@@ -283,7 +295,7 @@ class Parser final
 
                 if (self.lexer.get_current_token() != Token{','})
                 {
-                    return self.parse_error<ExprAST>(", or )", "in argument list");
+                    return self.parse_error(", or )", "in argument list");
                 }
 
                 std::ignore = self.lexer.get_next_token();
@@ -297,7 +309,7 @@ class Parser final
         {
             if (args.size() != 1)
             {
-                return self.parse_error<ExprAST>("<single arg>", "as argument to `print()`");
+                return self.parse_error("<single arg>", "as argument to `print()`");
             }
 
             return std::make_unique<PrintExprAST>(std::move(loc), std::move(args.front()));
@@ -351,11 +363,12 @@ class Parser final
     [[nodiscard]]
     auto get_token_precedence(this Self const &self) -> int
     {
-        if (!::isascii(std::to_underlying(self.lexer.get_current_token())))
+        if (::isascii(std::to_underlying(self.lexer.get_current_token())) == 0)
         {
             return -1;
         }
 
+        // NOLINTBEGIN(readability-magic-numbers)
         switch (static_cast<char>(self.lexer.get_current_token()))
         {
             case '-':
@@ -373,6 +386,7 @@ class Parser final
                 return -1;
             }
         }
+        // NOLINTEND(readability-magic-numbers)
     }
 
     /// Recursively parse the RHS of a binary expression
@@ -404,7 +418,7 @@ class Parser final
 
             if (!rhs)
             {
-                return self.parse_error<ExprAST>("expression", "to complete binary operator");
+                return self.parse_error("expression", "to complete binary operator");
             }
 
             // If the binop binds less tightly with the RHS than the operator after `rhs`, let the pending operator take
@@ -448,7 +462,7 @@ class Parser final
     {
         if (self.lexer.get_current_token() != Token{'<'})
         {
-            return self.parse_error<VarType>("<", "to begin type");
+            return self.parse_error("<", "to begin type");
         }
 
         // Eat `<`
@@ -469,7 +483,7 @@ class Parser final
 
         if (self.lexer.get_current_token() != Token{'>'})
         {
-            return self.parse_error<VarType>(">", "to end type");
+            return self.parse_error(">", "to end type");
         }
 
         // Eat `>`
@@ -487,7 +501,7 @@ class Parser final
     {
         if (self.lexer.get_current_token() != Token::Var)
         {
-            return self.parse_error<VarDeclExprAST>("var", "to begin declaration");
+            return self.parse_error("var", "to begin declaration");
         }
 
         auto loc{self.lexer.get_last_location()};
@@ -496,7 +510,7 @@ class Parser final
 
         if (self.lexer.get_current_token() != Token::Identifier)
         {
-            return self.parse_error<VarDeclExprAST>("identifier", "after `var` declaration");
+            return self.parse_error("identifier", "after `var` declaration");
         }
 
         std::string identifier{self.lexer.get_identifier()};
@@ -547,7 +561,7 @@ class Parser final
     {
         if (self.lexer.get_current_token() != Token::BraceOpen)
         {
-            return self.parse_error<ExprASTList>("{", "to begin block");
+            return self.parse_error("{", "to begin block");
         }
 
         self.lexer.consume(Token::BraceOpen);
@@ -592,7 +606,7 @@ class Parser final
             // Ensure that elements are separated by a semicolon
             if (self.lexer.get_current_token() != Token::Semicolon)
             {
-                return self.parse_error<ExprASTList>(";", "after expression");
+                return self.parse_error(";", "after expression");
             }
 
             // Ignore empty expressions: swallow sequences of semicolons
@@ -604,7 +618,7 @@ class Parser final
 
         if (self.lexer.get_current_token() != Token::BraceClose)
         {
-            return self.parse_error<ExprASTList>("}", "to close block");
+            return self.parse_error("}", "to close block");
         }
 
         self.lexer.consume(Token::BraceClose);
@@ -621,14 +635,14 @@ class Parser final
 
         if (self.lexer.get_current_token() != Token::Def)
         {
-            return self.parse_error<PrototypeAST>("def", "in prototype");
+            return self.parse_error("def", "in prototype");
         }
 
         self.lexer.consume(Token::Def);
 
         if (self.lexer.get_current_token() != Token::Identifier)
         {
-            return self.parse_error<PrototypeAST>("function name", "in prototype");
+            return self.parse_error("function name", "in prototype");
         }
 
         std::string function_name{self.lexer.get_identifier()};
@@ -636,7 +650,7 @@ class Parser final
 
         if (self.lexer.get_current_token() != Token::ParenthesesOpen)
         {
-            return self.parse_error<PrototypeAST>("(", "in prototype");
+            return self.parse_error("(", "in prototype");
         }
 
         self.lexer.consume(Token::ParenthesesOpen);
@@ -661,14 +675,14 @@ class Parser final
 
                 if (self.lexer.get_current_token() != Token::Identifier)
                 {
-                    return self.parse_error<PrototypeAST>("identifier", "after `,` in function parameter list");
+                    return self.parse_error("identifier", "after `,` in function parameter list");
                 }
             }
         }
 
         if (self.lexer.get_current_token() != Token::ParenthesesClose)
         {
-            return self.parse_error<PrototypeAST>(")", "to end function prototype");
+            return self.parse_error(")", "to end function prototype");
         }
 
         // Success

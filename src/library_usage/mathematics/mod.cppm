@@ -9,10 +9,10 @@ import std;
 export namespace math
 {
 /// An n-dimensional mathematical vector
-template <std::size_t n, std::floating_point Float = double> struct Vec
+template <std::size_t N, std::floating_point Float = double> struct Vec
 {
-    using Self = Vec<n, Float>;        ///< Alias for the type of this vector (postfix doc comment)
-    using Data = std::array<Float, n>; ///< Alias for the underlying data type
+    using Self = Vec<N, Float>;        ///< Alias for the type of this vector (postfix doc comment)
+    using Data = std::array<Float, N>; ///< Alias for the underlying data type
 
     /// The components of the vector (regular doc comment)
     Data components{};
@@ -20,7 +20,7 @@ template <std::size_t n, std::floating_point Float = double> struct Vec
     /// Construct a new @ref Vec with the given components.
     /// @param[in] components The components of the vector
     template <typename... Components>
-    constexpr Vec(Components &&...components)
+    explicit constexpr Vec(Components &&...components)
         : components{std::forward<Components>(components)...}
     {
     }
@@ -70,7 +70,7 @@ template <std::size_t n, std::floating_point Float = double> struct Vec
     auto constexpr operator*(this Self const &self, Float c) noexcept -> Self
     {
         return Self{[&]<std::size_t... I>(std::index_sequence<I...>)
-                    { return std::array{c * self.components[I]...}; }(std::make_index_sequence<n>{})};
+                    { return std::array{c * self.components[I]...}; }(std::make_index_sequence<N>{})};
     }
 
     /// Compute the scalar product of @p c and @p vec
@@ -83,37 +83,39 @@ template <std::size_t n, std::floating_point Float = double> struct Vec
     }
 };
 
+auto constexpr DEFAULT_DX{0.0001};
+
 /// Evaluate the approximate derivative of @p f at @p x
-/// @tparam f A function @f$ f : \mathbb R \to \mathbb R @f$
+/// @tparam F A function @f$ f : \mathbb R \to \mathbb R @f$
 /// @tparam Float A floating point type
-/// @param[in] x The @f$ x @f$-value to evaluate the derivative at
+/// @param[in] x The value to evaluate the derivative at
 ///
 /// Example: @f$ f(x) = x^2 @f$
 /// @code
-/// auto f{[](double x) { return x * x; }};
-/// std::println("{}", d_dx<f>(3.0)); // Prints 6
+/// auto constexpr F{[](double x) { return x * x; }};
+/// std::println("{}", d_dx<F>(3.0)); // Prints 6
 /// @endcode
-template <auto f, std::floating_point Float = double, Float dx = 0.0001>
+template <auto F, std::floating_point Float = double, Float DX = DEFAULT_DX>
     requires requires(Float x) {
-        { f(x) } -> std::same_as<Float>;
+        { F(x) } -> std::same_as<Float>;
     }
 [[nodiscard]]
-auto constexpr d_dx(Float x) noexcept(noexcept(f(std::declval<Float>()))) -> Float
+auto constexpr d_dx(Float x) noexcept(noexcept(F(std::declval<Float>()))) -> Float
 {
-    return (f(x + dx) - f(x)) / dx;
+    return (F(x + DX) - F(x)) / DX;
 }
 
 } // namespace math
 
 // TODO: Make Vec an input range so that this isn't necessary
 /// Formatter specialization for @ref math::Vec
-export template <std::size_t n, std::floating_point Float>
-struct std::formatter<math::Vec<n, Float>> : std::formatter<typename math::Vec<n, Float>::Data>
+export template <std::size_t N, std::floating_point Float>
+struct std::formatter<math::Vec<N, Float>> : std::formatter<typename math::Vec<N, Float>::Data>
 {
-    using Self = std::formatter<typename math::Vec<n, Float>::Data>;
+    using Self = std::formatter<typename math::Vec<N, Float>::Data>;
 
     template <typename FormatContext>
-    auto format(this Self const &self, math::Vec<n, Float> const &vec, FormatContext &ctx) -> FormatContext::iterator
+    auto format(this Self const &self, math::Vec<N, Float> const &vec, FormatContext &ctx) -> FormatContext::iterator
     {
         return self.format(vec.components, ctx);
     }

@@ -1,5 +1,6 @@
 module;
 
+#include <boost/core/noncopyable.hpp>
 #include <llvm/ADT/STLExtras.h>
 #include <llvm/ADT/Twine.h>
 #include <llvm/ADT/TypeSwitch.h>
@@ -51,14 +52,14 @@ class ASTDumper final
     std::uint32_t current_indent{0};
 
     /// RAII helper to manage increasing/decreasing indentation as we traverse the AST
-    class Indent final
+    class Indent final : private boost::noncopyable
     {
         using Self = Indent;
 
         std::uint32_t &level;
 
       public:
-        Indent(std::uint32_t &level)
+        explicit Indent(std::uint32_t &level)
             : level{level}
         {
             ++this->level;
@@ -195,7 +196,7 @@ class ASTDumper final
         auto indent{self.indent()};
         self.println("Return");
 
-        if (auto const maybe_expr{node->get_expr()})
+        if (auto const *const maybe_expr{node->get_expr()})
         {
             return self.dump(maybe_expr);
         }

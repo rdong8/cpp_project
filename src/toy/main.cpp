@@ -15,20 +15,20 @@ namespace cl = llvm::cl;
 namespace
 {
 
-enum class Action
+enum class Action : std::uint8_t
 {
     None,
     DumpAST,
 };
 
-cl::opt<std::string> input_filename{
+cl::opt<std::string> const input_filename{
     cl::Positional,               //
     cl::desc{"<input toy file>"}, //
     cl::init("-"),                //
     cl::value_desc{"filename"}    //
 };
 
-cl::opt<Action> emit_action{
+cl::opt<Action> const emit_action{
     "emit",                                                               //
     cl::desc{"Select the kind of output desired"},                        //
     cl::values(clEnumValN(Action::DumpAST, "ast", "output the AST dump")) //
@@ -64,7 +64,7 @@ auto main(int argc, char *argv[]) -> int
         return 1;
     }
 
-    switch (emit_action)
+    switch (emit_action.getValue())
     {
         case Action::DumpAST:
         {

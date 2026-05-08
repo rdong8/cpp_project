@@ -4,9 +4,9 @@
 #include <spdlog/sinks/basic_file_sink.h>
 #include <spdlog/spdlog.h>
 
-import mathematics;
-
 import std;
+
+import mathematics;
 
 namespace
 {
@@ -32,7 +32,7 @@ auto configure_file_logger() -> void
 
 auto producer(boost::cobalt::channel<int> &channel) -> boost::cobalt::promise<void>
 {
-    for (auto i : std::views::iota(0, 5))
+    for (auto const i : std::views::iota(0, 5))
     {
         spdlog::info("Producing {}", i);
         co_await channel.write(i);
@@ -47,7 +47,7 @@ auto cobalt_demo() -> boost::cobalt::promise<void>
 
     boost::cobalt::channel<int> channel{};
 
-    auto promise = producer(channel);
+    auto promise{producer(channel)};
 
     while (channel.is_open())
     {
@@ -62,9 +62,9 @@ auto vec_demo() -> void
 {
     spdlog::info("VECTOR DEMO:");
 
-    math::Vec<2> constexpr north{0., 1.};
-    math::Vec<2> constexpr east{1., 0.};
-    math::Vec<2> constexpr northeast{1., 1.};
+    math::Vec<2> const north{0., 1.};
+    math::Vec<2> const east{1., 0.};
+    math::Vec<2> const northeast{1., 1.};
 
     spdlog::info("Dot product of {} and {} is: {}", north, east, north.dot(east));
     spdlog::info("Dot product of {} and {} is: {}", north, northeast, north.dot(northeast));
@@ -80,14 +80,14 @@ auto differentiation_demo() -> void
 
     spdlog::info("DIFFERENTIATION DEMO:");
 
-    static auto constexpr f{[](double x) { return 3 * x * x - x + 16; }};
+    // NOLINTBEGIN(readability-magic-numbers)
+    auto constexpr F{[](double x) { return 3 * x * x - x + 16; }};
+    auto constexpr DF_DX{d_dx<F>};
 
     spdlog::info("f(x) = 3x^2 - x + 16");
-    spdlog::info("f'(4) = {}", d_dx<f>(4.0));
-
-    auto constexpr dfdx{[](double x) { return d_dx<f>(x); }};
-
-    spdlog::info("f''(4) = {}", d_dx<dfdx>(4.0));
+    spdlog::info("f'(4) = {}", DF_DX(4.0));
+    spdlog::info("f''(4) = {}", d_dx<DF_DX>(4.0));
+    // NOLINTEND(readability-magic-numbers)
 }
 
 } // namespace

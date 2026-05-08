@@ -1,3 +1,4 @@
+find_package(Boost REQUIRED CONFIG)
 find_package(cpptrace REQUIRED CONFIG)
 find_package(magic_enum REQUIRED CONFIG)
 
@@ -33,6 +34,7 @@ target_link_libraries(toyc.lexer
 add_module_library(toyc.parser parser)
 target_link_libraries(toyc.parser
     PRIVATE
+        Boost::headers
         magic_enum::magic_enum
         toyc.config
         toyc.lexer

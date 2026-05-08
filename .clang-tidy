@@ -1,16 +1,40 @@
 Checks:
-  bugprone-*
-  cppcoreguidelines-*
-  -cppcoreguidelines-avoid-const-or-ref-data-members
-  -cppcoreguidelines-avoid-do-while
-  google-explicit-constructor
-  modernize-*
-  performance-*
-  readability-*
-  -readability-avoid-return-with-void-value
-  -readability-identifier-length
-  -readability-math-missing-parentheses
-  -readability-redundant-member-init
+  bugprone-*,
+  cppcoreguidelines-*,
+  -cppcoreguidelines-avoid-const-or-ref-data-members,
+  -cppcoreguidelines-avoid-do-while,
+  -cppcoreguidelines-avoid-magic-numbers,
+  -cppcoreguidelines-avoid-reference-coroutine-parameters,
+  google-explicit-constructor,
+  modernize-*,
+  performance-*,
+  readability-*,
+  readability-identifier-naming,
+  -readability-avoid-return-with-void-value,
+  -readability-identifier-length,
+  -readability-math-missing-parentheses,
+  -readability-named-parameter,
+  -readability-redundant-member-init,
+  -readability-static-accessed-through-instance,
+
 CheckOptions:
+  cppcoreguidelines-special-member-functions.AllowImplicitlyDeletedCopyOrMove: true
   cppcoreguidelines-special-member-functions.AllowSoleDefaultDtor: true
   modernize-use-trailing-return-type.TransformLambdas: none
+  readability-identifier-naming.ClassCase: CamelCase
+  readability-identifier-naming.ConceptCase: CamelCase
+  readability-identifier-naming.ConstexprVariableCase: UPPER_CASE
+  readability-identifier-naming.EnumCase: CamelCase
+  readability-identifier-naming.EnumConstantCase: CamelCase
+  readability-identifier-naming.FunctionCase: lower_case
+  readability-identifier-naming.MacroDefinitionCase: UPPER_CASE
+  readability-identifier-naming.MemberCase: lower_case
+  readability-identifier-naming.MethodCase: lower_case
+  readability-identifier-naming.NamespaceCase: lower_case
+  readability-identifier-naming.ParameterCase: lower_case
+  readability-identifier-naming.StructCase: CamelCase
+  readability-identifier-naming.TemplateParameterCase: CamelCase
+  readability-identifier-naming.TypeAliasCase: CamelCase
+  readability-identifier-naming.TypedefCase: CamelCase
+  readability-identifier-naming.ValueTemplateParameterCase: UPPER_CASE
+  readability-identifier-naming.VariableCase: lower_case

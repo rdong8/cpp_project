@@ -17,3 +17,4 @@ function(add_module_test name subpath)
 endfunction()
 
 add_subdirectory(library_usage)
+add_subdirectory(toy)

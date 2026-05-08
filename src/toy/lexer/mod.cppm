@@ -137,7 +137,7 @@ class Lexer
   public:
     /// Create a lexer with the given filename. The filename is kept only for debugging purposes (attaching a
     /// Location to a Token).
-    Lexer(std::string filename)
+    explicit Lexer(std::string filename)
         : last_location{.filename = std::make_shared<std::string>(std::move(filename)), .line = 0, .col = 0}
     {
     }
@@ -262,6 +262,35 @@ class Lexer
         return next_char;
     }
 
+    [[nodiscard]] auto get_identifier_like(this Self &self) -> Token
+    {
+        self.identifier_str = static_cast<char>(self.get_last_char());
+
+        // NOLINTNEXTLINE(readability-implicit-bool-conversion)
+        while (std::isalnum(static_cast<Character>(self.last_char = Token{self.get_next_char()})) ||
+               self.get_last_char() == '_')
+        {
+            self.identifier_str += static_cast<char>(self.last_char);
+        }
+
+        if (self.identifier_str == "return")
+        {
+            return Token::Return;
+        }
+
+        if (self.identifier_str == "def")
+        {
+            return Token::Def;
+        }
+
+        if (self.identifier_str == "var")
+        {
+            return Token::Var;
+        }
+
+        return Token::Identifier;
+    }
+
     /// Return the next token from stdin
     [[nodiscard]] auto get_token(this Self &self) -> Token
     {
@@ -280,31 +309,7 @@ class Lexer
         // NOLINTNEXTLINE(readability-implicit-bool-conversion)
         if (std::isalpha(self.get_last_char()))
         {
-            self.identifier_str = static_cast<char>(self.get_last_char());
-
-            // NOLINTNEXTLINE(readability-implicit-bool-conversion)
-            while (std::isalnum(static_cast<Character>(self.last_char = Token{self.get_next_char()})) ||
-                   self.get_last_char() == '_')
-            {
-                self.identifier_str += static_cast<char>(self.last_char);
-            }
-
-            if (self.identifier_str == "return")
-            {
-                return Token::Return;
-            }
-
-            if (self.identifier_str == "def")
-            {
-                return Token::Def;
-            }
-
-            if (self.identifier_str == "var")
-            {
-                return Token::Var;
-            }
-
-            return Token::Identifier;
+            return self.get_identifier_like();
         }
 
         // Number: [0-9.]+
@@ -372,16 +377,16 @@ class LexerBuffer final : public Lexer
     /// Provide 1 line at a time to the Lexer, return an empty string when reaching the end of buffer
     [[nodiscard]] auto read_next_line() -> llvm::StringRef override
     {
-        auto *begin{current};
+        auto const *const begin{current};
 
         while (this->current <= this->end && *this->current != '\0' && *this->current != '\n')
         {
-            ++this->current;
+            std::ignore = std::next(this->current);
         }
 
         if (this->current <= this->end && *this->current != '\0')
         {
-            ++this->current;
+            std::ignore = std::next(this->current);
         }
 
         return llvm::StringRef{begin, static_cast<std::size_t>(this->current - begin)};
