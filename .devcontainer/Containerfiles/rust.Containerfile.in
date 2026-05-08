@@ -1,5 +1,3 @@
-FROM docker.io/fedora:latest
-
 #include "base.Containerfile"
 
 RUN <<EOF
