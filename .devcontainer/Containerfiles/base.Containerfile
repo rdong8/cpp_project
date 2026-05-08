@@ -1,12 +1,15 @@
+##// Note that this file will be put through the C preprocessor, so you need to use ##// for comments
+
+##// TODO: this line moved to consumers of this image because of https://github.com/devcontainers/cli/issues/1223
 FROM docker.io/fedora:latest
 
-# For now, only install the following with the system package manager:
-# - Dependencies of linuxbrew itself (curl, file, procps-ng)
-# - boost-devel: see comment in conan/conandata.yml about conan's boost currently being broken
-# - gcc-c++: system toolchain needed for linuxbrew's LLVM
-# - fish: need to set user's shell when we create it
-# - which: to find fish for the useradd
-# - mathjax: dependency of doxygen, but not available via linuxbrew
+##// For now, only install the following with the system package manager:
+##// - Dependencies of linuxbrew itself (curl, file, procps-ng)
+##// - boost-devel: see comment in conan/conandata.yml about conan's boost currently being broken
+##// - gcc-c++: system toolchain needed for linuxbrew's LLVM
+##// - fish: need to set user's shell when we create it
+##// - which: to find fish for the useradd
+##// - mathjax: dependency of doxygen, but not available via linuxbrew
 RUN <<EOF
   dnf update -y
   dnf install -y \
@@ -23,7 +26,7 @@ RUN <<EOF
   rm -rf /var/cache/dnf
 EOF
 
-# Add user
+##// Add user
 ARG REMOTE_USER
 ARG HOST_UID
 ARG HOST_GID
@@ -33,7 +36,7 @@ RUN <<EOF
 EOF
 USER ${REMOTE_USER}
 
-# Get homebrew binary
+##// Get homebrew binary
 ARG HOMEBREW_PREFIX=/home/linuxbrew/.linuxbrew
 COPY \
   --from=docker.io/homebrew/brew:latest \
@@ -43,24 +46,21 @@ COPY \
 
 ARG FISH_CONFIG=/home/${REMOTE_USER}/.config/fish
 
-# Homebrew-related things
+##// Homebrew-related things
 RUN <<EOF
-  # Setup fish config
+  ##// Setup fish config
   mkdir -p ${FISH_CONFIG}
 
 cat <<EOF2 >> ${FISH_CONFIG}/config.fish
 eval (${HOMEBREW_PREFIX}/bin/brew shellenv)
 EOF2
 
-  # Install brew packages
   eval "$(${HOMEBREW_PREFIX}/bin/brew shellenv)"
-  brew install
+
+  ##// Common tools
+  brew install \
     bat \
     btop \
-    ccache \
-    cmake \
-    conan \
-    doxygen \
     fastfetch \
     fd \
     fzf \
@@ -69,9 +69,6 @@ EOF2
     helix \
     jq \
     just \
-    llvm \
-    mold \
-    ninja \
     prek \
     ripgrep \
     terror/tap/just-lsp \
@@ -79,10 +76,10 @@ EOF2
     wget \
     zellij
 
-  # Fish completions
-  # Only necessary if not builtin: https://github.com/fish-shell/fish-shell/tree/master/share/completions
-  mkdir -p ${FISH_CONFIG}/completions \
-  # prek: https://prek.j178.dev/installation/#shell-completion
-  # TODO: https://github.com/j178/prek/issues/1992
+  ##// Fish completions
+  ##// Only necessary if not builtin: https://github.com/fish-shell/fish-shell/tree/master/share/completions
+  mkdir -p ${FISH_CONFIG}/completions
+  ##// prek: https://prek.j178.dev/installation/#shell-completion
+  ##// TODO: https://github.com/j178/prek/issues/1992
   COMPLETE=fish prek > ${FISH_CONFIG}/completions/prek.fish
 EOF

@@ -1,0 +1,105 @@
+##// TODO: Podman's CPP pass doesn't work with devcontainers currently because of https://github.com/microsoft/vscode-remote-release/issues/11642
+##// So I've just pasted the base image's contents here for now
+#include "base.Containerfile"
+
+##// BEGIN base.Containerfile
+##// Note that this file will be put through the C preprocessor, so you need to use ##// for comments
+
+##// TODO: this line moved to consumers of this image because of https://github.com/devcontainers/cli/issues/1223
+FROM docker.io/fedora:latest
+
+##// For now, only install the following with the system package manager:
+##// - Dependencies of linuxbrew itself (curl, file, procps-ng)
+##// - boost-devel: see comment in conan/conandata.yml about conan's boost currently being broken
+##// - gcc-c++: system toolchain needed for linuxbrew's LLVM
+##// - fish: need to set user's shell when we create it
+##// - which: to find fish for the useradd
+##// - mathjax: dependency of doxygen, but not available via linuxbrew
+RUN <<EOF
+  dnf update -y
+  dnf install -y \
+    @development-tools \
+    boost-devel \
+    curl \
+    file \
+    fish \
+    gcc-c++ \
+    mathjax \
+    procps-ng \
+    which
+  dnf clean all
+  rm -rf /var/cache/dnf
+EOF
+
+##// Add user
+ARG REMOTE_USER
+ARG HOST_UID
+ARG HOST_GID
+RUN <<EOF
+  groupadd --gid ${HOST_GID} ${REMOTE_USER}
+  useradd -ms $(which fish) --uid ${HOST_UID} --gid ${HOST_GID} ${REMOTE_USER}
+EOF
+USER ${REMOTE_USER}
+
+##// Get homebrew binary
+ARG HOMEBREW_PREFIX=/home/linuxbrew/.linuxbrew
+COPY \
+  --from=docker.io/homebrew/brew:latest \
+  --chown=${REMOTE_USER} \
+  ${HOMEBREW_PREFIX} \
+  ${HOMEBREW_PREFIX}
+
+ARG FISH_CONFIG=/home/${REMOTE_USER}/.config/fish
+
+##// Homebrew-related things
+RUN <<EOF
+  ##// Setup fish config
+  mkdir -p ${FISH_CONFIG}
+
+cat <<EOF2 >> ${FISH_CONFIG}/config.fish
+eval (${HOMEBREW_PREFIX}/bin/brew shellenv)
+EOF2
+
+  eval "$(${HOMEBREW_PREFIX}/bin/brew shellenv)"
+
+  ##// Common tools
+  brew install \
+    bat \
+    btop \
+    fastfetch \
+    fd \
+    fzf \
+    gawk \
+    git-delta \
+    helix \
+    jq \
+    just \
+    prek \
+    ripgrep \
+    terror/tap/just-lsp \
+    tree \
+    wget \
+    zellij
+
+  ##// Fish completions
+  ##// Only necessary if not builtin: https://github.com/fish-shell/fish-shell/tree/master/share/completions
+  mkdir -p ${FISH_CONFIG}/completions
+  ##// prek: https://prek.j178.dev/installation/#shell-completion
+  ##// TODO: https://github.com/j178/prek/issues/1992
+  COMPLETE=fish prek > ${FISH_CONFIG}/completions/prek.fish
+EOF
+##// END base.Containerfile
+
+RUN <<EOF
+  eval "$(${HOMEBREW_PREFIX}/bin/brew shellenv)"
+
+  ##// ccache needed for custom LLVM build
+  brew install \
+    ccache \
+    cmake \
+    conan \
+    doxygen \
+    llvm \
+    mold \
+    ninja
+EOF

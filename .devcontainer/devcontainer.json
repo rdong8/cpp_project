@@ -22,6 +22,7 @@
     "label=disable"
   ],
   "mounts": [
+    // TODO: this doesn't actually work since brew deps are installed in build phase before volume has been mounted
     {
       "source": "brew",
       "target": "/home/dev/.cache/Homebrew",
@@ -84,7 +85,7 @@
     }
   },
   "build": {
-    "dockerfile": "Containerfile",
+    "dockerfile": "Containerfiles/cpp.Containerfile.in",
     "args": {
       "REMOTE_USER": "dev",
       // https://github.com/devcontainers/spec/issues/631

@@ -1,0 +1,33 @@
+FROM docker.io/fedora:latest
+
+#include "base.Containerfile"
+
+RUN <<EOF
+cat <<EOF2 >> ${FISH_CONFIG}/config.fish
+fish_add_path (brew --prefix rustup)/bin
+EOF2
+
+  eval "$(${HOMEBREW_PREFIX}/bin/brew shellenv)"
+
+  ##// llvm needed for wild
+  brew install \
+    cargo-binstall \
+    llvm \
+    rustup \
+    sccache
+EOF
+
+## Setup wild linker and sccache
+RUN <<EOF
+  cargo binstall wild-linker
+  mkdir -p ~/.cargo
+
+cat <<EOF2 >> ~/.cargo/config.toml
+[build]
+rustc-wrapper = "sccache"
+
+[target.x86_64-unknown-linux-gnu]
+linker = "clang"
+rustflags = ["-Clink-arg=--ld-path=wild"]
+EOF2
+EOF
