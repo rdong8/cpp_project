@@ -23,11 +23,11 @@
   ],
   "mounts": [
     // TODO: this doesn't actually work since brew deps are installed in build phase before volume has been mounted
-    {
-      "source": "brew",
-      "target": "/home/dev/.cache/Homebrew",
-      "type": "volume"
-    },
+    // {
+    //   "source": "brew",
+    //   "target": "/home/dev/.cache/Homebrew",
+    //   "type": "volume"
+    // },
     {
       "source": "conan",
       "target": "/home/dev/.conan2",
