@@ -1,5 +1,5 @@
-[submodule "docs/doxygen-awesome-css"]
-	path = docs/doxygen-awesome-css
+[submodule "submodules/doxygen-awesome-css"]
+	path = submodules/doxygen-awesome-css
 	url = https://github.com/jothepro/doxygen-awesome-css.git
 	shallow = true
 [submodule "submodules/llvm-project"]
