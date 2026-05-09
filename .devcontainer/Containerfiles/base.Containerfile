@@ -3,7 +3,7 @@
 FROM docker.io/fedora:latest
 
 ##// For now, only install the following with the system package manager:
-##// - Dependencies of linuxbrew itself (curl, file, procps-ng)
+##// - Dependencies of linuxbrew itself (@development-tools, curl, file, procps-ng)
 ##// - boost-devel: see comment in conan/conandata.yml about conan's boost currently being broken
 ##// - gcc-c++: system toolchain needed for linuxbrew's LLVM
 ##// - fish: need to set user's shell when we create it
