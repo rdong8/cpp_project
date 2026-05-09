@@ -39,7 +39,7 @@ class ExprAST
         Var,
         BinOp,
         Call,
-        Print
+        Print,
     };
 
     ExprAST(Kind kind, Location location)
