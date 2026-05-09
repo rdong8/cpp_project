@@ -92,7 +92,7 @@ auto constexpr DEFAULT_DX{0.0001};
 ///
 /// Example: @f$ f(x) = x^2 @f$
 /// @code
-/// auto constexpr F{[](double x) { return x * x; }};
+/// auto constexpr F{[] static (double x) { return x * x; }};
 /// std::println("{}", d_dx<F>(3.0)); // Prints 6
 /// @endcode
 template <auto F, std::floating_point Float = double, Float DX = DEFAULT_DX>
