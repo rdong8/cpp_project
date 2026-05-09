@@ -6,3 +6,5 @@ requirements:
   - "cpptrace/1.0.4"
   - "magic_enum/0.9.7"
   - "spdlog/1.17.0"
+  # Needed for system LLVM
+  - "zstd/1.5.7"

@@ -17,6 +17,8 @@ if (NOT CMAKE_CXX_COMPILER_ID MATCHES "^(Clang|GNU)$")
     message(FATAL_ERROR "Invalid compiler. Must be either Clang or GCC. Found: ${CMAKE_CXX_COMPILER_ID}")
 endif()
 
+set(SUBMODULES_DIR ${PROJECT_SOURCE_DIR}/submodules)
+
 add_library(config INTERFACE)
 
 target_compile_features(config INTERFACE "cxx_std_${CMAKE_CXX_STANDARD}")

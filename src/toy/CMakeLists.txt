@@ -13,7 +13,7 @@ target_link_libraries(toyc.config
     INTERFACE
         cpptrace::cpptrace
         config
-        llvm_config
+        toyc.llvm_config
 )
 
 add_module_library(toyc.utility utility)

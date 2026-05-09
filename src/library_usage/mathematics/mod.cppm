@@ -1,8 +1,8 @@
-/// @module mathematics
+/// @module library_usage.mathematics
 /// A sample library containing math functions.
 /// A documentation comment for the file like this one must be in any file you wish to be tracked by Doxygen.
 
-export module mathematics;
+export module library_usage.mathematics;
 
 import std;
 

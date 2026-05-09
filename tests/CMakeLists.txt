@@ -13,6 +13,7 @@ function(add_module_test name subpath)
             "${name}"
     )
 
+    # TODO: do we want the "test_" prefix here
     add_test(NAME "${TEST_NAME}" COMMAND "${TEST_NAME}")
 endfunction()
 

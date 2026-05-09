@@ -23,10 +23,14 @@ class ConanApplication(ConanFile):
         boost_options.without_locale = True
         boost_options.without_stacktrace = True
 
+        # The link interface of target "LLVMSupport" contains: zstd::libzstd_shared
+        zstd_options = self.options["zstd"]
+        zstd_options.shared = True
+
     def layout(self):
         if not (build_dir := os.getenv("BUILD_DIR")):
             raise KeyError(f"Environment variable BUILD_DIR not set in {__file__}")
-        
+
         cmake_layout(self, src_folder=Path(".."), build_folder=Path("..") / build_dir)
 
     def generate(self):

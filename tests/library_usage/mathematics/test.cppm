@@ -2,9 +2,9 @@ module;
 
 #include <catch2/catch_test_macros.hpp>
 
-export module test_mathematics;
+export module library_usage.test_mathematics;
 
-import mathematics;
+import library_usage.mathematics;
 
 TEST_CASE("Vector algebra", "[Vec][math]")
 {
