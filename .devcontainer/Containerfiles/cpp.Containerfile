@@ -93,9 +93,7 @@ EOF
 RUN <<EOF
   eval "$(${HOMEBREW_PREFIX}/bin/brew shellenv)"
 
-  ##// ccache needed for custom LLVM build
   brew install \
-    ccache \
     cmake \
     conan \
     doxygen \

@@ -6,10 +6,11 @@ config-mlir:
         -B llvm-project/build \
         -G Ninja \
         -DCMAKE_BUILD_TYPE='Debug' \
-        -DCMAKE_C_COMPILER='clang' \
+        -DCMAKE_CXX_COMPILER_LAUNCHER='sccache' \
         -DCMAKE_CXX_COMPILER='clang++' \
+        -DCMAKE_C_COMPILER='clang' \
+        -DCMAKE_C_COMPILER_LAUNCHER='sccache' \
         -DLLVM_BUILD_EXAMPLES='ON' \
-        -DLLVM_CCACHE_BUILD='ON' \
         -DLLVM_ENABLE_ASSERTIONS='ON' \
         -DLLVM_ENABLE_PROJECTS='mlir' \
         -DLLVM_OPTIMIZED_TABLEGEN='ON' \
