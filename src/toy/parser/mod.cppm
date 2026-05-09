@@ -201,7 +201,7 @@ class Parser final
         dims.push_back(static_cast<Dimension>(values.size()));
 
         // If there's any nested array, process all of them and ensure dimensions are uniform.
-        if (llvm::any_of(values, [] static(auto const &expr) { return llvm::isa<LiteralExprAST>(expr.get()); }))
+        if (llvm::any_of(values, [](auto const &expr) static { return llvm::isa<LiteralExprAST>(expr.get()); }))
         {
             auto const *const first_literal{llvm::dyn_cast<LiteralExprAST>(values.front().get())};
 

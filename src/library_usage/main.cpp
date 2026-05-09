@@ -81,7 +81,7 @@ auto differentiation_demo() -> void
     spdlog::info("DIFFERENTIATION DEMO:");
 
     // NOLINTBEGIN(readability-magic-numbers)
-    auto constexpr F{[] static(double x) { return 3 * x * x - x + 16; }};
+    auto constexpr F{[](double x) static { return 3 * x * x - x + 16; }};
     auto constexpr DF_DX{d_dx<F>};
 
     spdlog::info("f(x) = 3x^2 - x + 16");
