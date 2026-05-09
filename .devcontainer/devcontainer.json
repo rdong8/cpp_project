@@ -92,7 +92,7 @@
     }
   },
   "build": {
-    "dockerfile": "Containerfiles/cpp.Containerfile.in",
+    "dockerfile": "Containerfiles/cpp.Containerfile",
     "args": {
       "REMOTE_USER": "dev",
       // https://github.com/devcontainers/spec/issues/631

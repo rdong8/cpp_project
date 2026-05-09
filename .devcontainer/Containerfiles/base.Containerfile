@@ -52,6 +52,7 @@ RUN <<EOF
 
 cat <<EOF2 >> ${FISH_CONFIG}/config.fish
 eval (${HOMEBREW_PREFIX}/bin/brew shellenv)
+set -x EDITOR code
 EOF2
 
   eval "$(${HOMEBREW_PREFIX}/bin/brew shellenv)"

@@ -4,12 +4,10 @@
 
 ##// BEGIN base.Containerfile
 ##// Note that this file will be put through the C preprocessor, so you need to use ##// for comments
-
-##// TODO: this line moved to consumers of this image because of https://github.com/devcontainers/cli/issues/1223
 FROM docker.io/fedora:latest
 
 ##// For now, only install the following with the system package manager:
-##// - Dependencies of linuxbrew itself (curl, file, procps-ng)
+##// - Dependencies of linuxbrew itself (@development-tools, curl, file, procps-ng)
 ##// - boost-devel: see comment in conan/conandata.yml about conan's boost currently being broken
 ##// - gcc-c++: system toolchain needed for linuxbrew's LLVM
 ##// - fish: need to set user's shell when we create it
@@ -58,6 +56,7 @@ RUN <<EOF
 
 cat <<EOF2 >> ${FISH_CONFIG}/config.fish
 eval (${HOMEBREW_PREFIX}/bin/brew shellenv)
+set -x EDITOR code
 EOF2
 
   eval "$(${HOMEBREW_PREFIX}/bin/brew shellenv)"
