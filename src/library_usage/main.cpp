@@ -6,7 +6,7 @@
 
 import std;
 
-import mathematics;
+import library_usage.mathematics;
 
 namespace
 {
