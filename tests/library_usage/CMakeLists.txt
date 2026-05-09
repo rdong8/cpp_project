@@ -1,1 +1,0 @@
-add_module_test(mathematics mathematics)
