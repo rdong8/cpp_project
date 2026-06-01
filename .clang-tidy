@@ -5,6 +5,7 @@ Checks:
   -cppcoreguidelines-avoid-do-while,
   -cppcoreguidelines-avoid-magic-numbers,
   -cppcoreguidelines-avoid-reference-coroutine-parameters,
+  -cppcoreguidelines-macro-usage,
   google-explicit-constructor,
   modernize-*,
   performance-*,
