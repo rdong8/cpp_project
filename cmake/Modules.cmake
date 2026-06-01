@@ -20,13 +20,6 @@ function(add_module_library name subpath)
     add_library("${name}")
     add_module_helper("${name}" "${subpath}")
 
-    set(MAIN_FILE "${IMPLEMENTATION_FILES}")
-    list(FILTER MAIN_FILE INCLUDE REGEX ".*main\.cpp")
-
-    if(MAIN_FILE)
-        message(FATAL_ERROR "Error: module library ${name} cannot contain main")
-    endif()
-
     target_sources("${name}"
         PUBLIC
             FILE_SET CXX_MODULES FILES
@@ -42,18 +35,13 @@ function(add_module_executable name subpath)
     add_executable("${name}")
     add_module_helper("${name}" "${subpath}")
 
-    set(MAIN_FILE "${IMPLEMENTATION_FILES}")
-    list(FILTER MAIN_FILE INCLUDE REGEX ".*main\.cpp")
-    list(FILTER IMPLEMENTATION_FILES EXCLUDE REGEX ".*main\.cpp")
-
     target_sources("${name}"
         PRIVATE
             FILE_SET CXX_MODULES FILES
                 ${MODULE_FILES}
             FILE_SET HEADERS FILES
                 ${HEADERS}
+        PRIVATE
             ${IMPLEMENTATION_FILES}
-        PUBLIC
-            ${MAIN_FILE}
     )
 endfunction()
