@@ -1,3 +1,5 @@
+set(CMAKE_VERIFY_INTERFACE_HEADER_SETS ON)
+
 function(set_compile_options config)
     set(DEBUGGING_OPTIONS
         "$<$<CXX_COMPILER_ID:Clang>:-glldb>"
