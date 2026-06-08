@@ -13,7 +13,26 @@ namespace
 {
 
 using Key = std::size_t;
-using Value = std::size_t;
+
+struct Value
+{
+    using Self = Value;
+
+    std::array<Key, 8> values{};
+
+    Value() = default;
+
+    explicit(false) Value(Key key)
+    {
+        std::ranges::fill(values, key);
+    }
+
+    operator Key(this Self const& self)
+    {
+        return self.values.front();
+    }
+};
+
 // Type aliases avoid the comma-in-macro problem with BENCHMARK_TEMPLATE.
 using AbslMapT = absl::flat_hash_map<Key, Value>;
 using BoostMapT = boost::unordered_flat_map<Key, Value>;
@@ -150,11 +169,11 @@ template <typename Map> auto iterate(benchmark::State &state) -> void
         // TODO: doesn't work with DenseMap
         // auto sum{std::ranges::fold_left_first(m | std::views::values, std::plus<>{})};
 
-        Value sum{0};
+        Key sum{0};
 
         for (auto const [k, v] : m)
         {
-            sum += v;
+            sum += static_cast<Key>(v);
         }
 
         benchmark::DoNotOptimize(sum);
