@@ -43,7 +43,9 @@ if (PROJECT_IS_TOP_LEVEL)
     include(cmake/ClangTidy.cmake)
 
     # Needs to be done in the main CMakeLists since it calls enable_testing, which must be in the main CMakeLists
-    include(CTest)
+    enable_testing()
+    # If using CDash, use this instead of the above
+    # include(CTest)
     add_subdirectory(tests)
 
     find_package(Doxygen
