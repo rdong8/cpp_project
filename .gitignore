@@ -58,3 +58,6 @@ uv.lock
 
 # Python
 .venv/
+
+# Devcontainer
+.devcontainer/Containerfile
