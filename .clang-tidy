@@ -39,3 +39,4 @@ CheckOptions:
   readability-identifier-naming.TypedefCase: CamelCase
   readability-identifier-naming.ValueTemplateParameterCase: UPPER_CASE
   readability-identifier-naming.VariableCase: lower_case
+  readability-inconsistent-declaration-parameter-name.Strict: true
