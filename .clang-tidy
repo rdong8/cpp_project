@@ -3,9 +3,9 @@ Checks:
   cppcoreguidelines-*,
   -cppcoreguidelines-avoid-const-or-ref-data-members,
   -cppcoreguidelines-avoid-do-while,
-  -cppcoreguidelines-avoid-magic-numbers,
   -cppcoreguidelines-avoid-reference-coroutine-parameters,
   -cppcoreguidelines-macro-usage,
+  -cppcoreguidelines-pro-bounds-constant-array-index,
   google-explicit-constructor,
   modernize-*,
   performance-*,
@@ -17,6 +17,7 @@ Checks:
   -readability-named-parameter,
   -readability-redundant-member-init,
   -readability-static-accessed-through-instance,
+  -readability-static-in-anonymous-namespace,
 
 CheckOptions:
   cppcoreguidelines-special-member-functions.AllowImplicitlyDeletedCopyOrMove: true
