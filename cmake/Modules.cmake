@@ -8,6 +8,17 @@ macro(add_module_helper name subpath)
         PRIVATE
             config
     )
+
+    target_sources("${name}"
+        PUBLIC
+            FILE_SET CXX_MODULES FILES
+                ${MODULE_FILES}
+            FILE_SET HEADERS FILES
+                ${HEADERS}
+        PRIVATE
+            FILE_SET SOURCES FILES
+                ${IMPLEMENTATION_FILES}
+    )
 endmacro()
 
 # This function adds a new module library to the project whose lib.cppm is
@@ -19,29 +30,9 @@ endmacro()
 function(add_module_library name subpath)
     add_library("${name}")
     add_module_helper("${name}" "${subpath}")
-
-    target_sources("${name}"
-        PUBLIC
-            FILE_SET CXX_MODULES FILES
-                ${MODULE_FILES}
-            FILE_SET HEADERS FILES
-                ${HEADERS}
-        PRIVATE
-            ${IMPLEMENTATION_FILES}
-    )
 endfunction()
 
 function(add_module_executable name subpath)
     add_executable("${name}")
     add_module_helper("${name}" "${subpath}")
-
-    target_sources("${name}"
-        PRIVATE
-            FILE_SET CXX_MODULES FILES
-                ${MODULE_FILES}
-            FILE_SET HEADERS FILES
-                ${HEADERS}
-        PRIVATE
-            ${IMPLEMENTATION_FILES}
-    )
 endfunction()

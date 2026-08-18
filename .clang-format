@@ -12,5 +12,6 @@ BreakBeforeBraces: Allman
 BreakConstructorInitializers: BeforeComma
 ColumnLimit: 120
 IndentCaseLabels: true
+IndentPPDirectives: BeforeHash
 PointerAlignment: Right
 QualifierAlignment: Right

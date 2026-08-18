@@ -368,7 +368,7 @@ class Parser final
             return -1;
         }
 
-        // NOLINTBEGIN(readability-magic-numbers)
+        // NOLINTBEGIN(*-magic-numbers)
         switch (static_cast<char>(self.lexer.get_current_token()))
         {
             case '-':
@@ -386,7 +386,7 @@ class Parser final
                 return -1;
             }
         }
-        // NOLINTEND(readability-magic-numbers)
+        // NOLINTEND(*-magic-numbers)
     }
 
     /// Recursively parse the RHS of a binary expression

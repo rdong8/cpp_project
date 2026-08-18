@@ -2,13 +2,13 @@ import os
 from pathlib import Path
 
 from conan import ConanFile
-from conan.tools.cmake import CMakeToolchain, cmake_layout
+from conan.tools.cmake import cmake_layout
 
 
 class ConanApplication(ConanFile):
     package_type = "application"
     settings = "os", "compiler", "build_type", "arch"
-    generators = ["CMakeDeps"]
+    generators = "CMakeConfigDeps"
 
     def build_requirements(self):
         # Specify CMake version in CMakeLists.txt, not here
@@ -20,6 +20,7 @@ class ConanApplication(ConanFile):
 
         # https://github.com/conan-io/conan-center-index/issues/28311
         boost_options = self.options["boost"]
+        boost_options.without_cobalt_io_ssl = True
         boost_options.without_locale = True
         boost_options.without_stacktrace = True
 
@@ -32,10 +33,6 @@ class ConanApplication(ConanFile):
             raise KeyError(f"Environment variable BUILD_DIR not set in {__file__}")
 
         cmake_layout(self, src_folder=Path(".."), build_folder=Path("..") / build_dir)
-
-    def generate(self):
-        tc = CMakeToolchain(self)
-        tc.generate()
 
     def requirements(self):
         requirements = self.conan_data.get("requirements", [])
