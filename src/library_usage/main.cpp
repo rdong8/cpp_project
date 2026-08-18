@@ -80,14 +80,14 @@ auto differentiation_demo() -> void
 
     spdlog::info("DIFFERENTIATION DEMO:");
 
-    // NOLINTBEGIN(readability-magic-numbers)
+    // NOLINTBEGIN(*-magic-numbers)
     auto constexpr F{[](double x) static { return 3 * x * x - x + 16; }};
     auto constexpr DF_DX{d_dx<F>};
 
     spdlog::info("f(x) = 3x^2 - x + 16");
     spdlog::info("f'(4) = {}", DF_DX(4.0));
     spdlog::info("f''(4) = {}", d_dx<DF_DX>(4.0));
-    // NOLINTEND(readability-magic-numbers)
+    // NOLINTEND(*-magic-numbers)
 }
 
 } // namespace

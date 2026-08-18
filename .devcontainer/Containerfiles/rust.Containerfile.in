@@ -17,7 +17,6 @@ EOF
 
 ## Setup wild linker and sccache
 RUN <<EOF
-  cargo binstall wild-linker
   mkdir -p ~/.cargo
 
 cat <<EOF2 >> ~/.cargo/config.toml

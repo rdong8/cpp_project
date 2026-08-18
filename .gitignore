@@ -36,7 +36,6 @@
 
 # IDE
 .idea/
-.vscode/
 .cache/
 .fleet
 
