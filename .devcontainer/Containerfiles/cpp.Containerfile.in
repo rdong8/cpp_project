@@ -9,7 +9,6 @@ RUN <<EOF
     conan \
     doxygen \
     llvm \
-    mold \
     ninja \
     openssl@4 \
     sccache
