@@ -50,6 +50,8 @@
   "customizations": {
     "vscode": {
       "extensions": [
+        // Bazel
+        "BazelBuild.vscode-bazel",
         // C++
         "llvm-vs-code-extensions.vscode-clangd",
         "ms-vscode.cpptools-themes",
