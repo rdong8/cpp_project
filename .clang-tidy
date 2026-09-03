@@ -23,7 +23,9 @@ Checks:
 CheckOptions:
   cppcoreguidelines-special-member-functions.AllowImplicitlyDeletedCopyOrMove: true
   cppcoreguidelines-special-member-functions.AllowSoleDefaultDtor: true
+
   modernize-use-trailing-return-type.TransformLambdas: none
+
   readability-identifier-naming.ClassCase: CamelCase
   readability-identifier-naming.ConceptCase: CamelCase
   readability-identifier-naming.ConstexprVariableCase: UPPER_CASE
@@ -38,7 +40,10 @@ CheckOptions:
   readability-identifier-naming.StructCase: CamelCase
   readability-identifier-naming.TemplateParameterCase: CamelCase
   readability-identifier-naming.TypeAliasCase: CamelCase
+  readability-identifier-naming.TypeAliasIgnoredRegexp: &type_alias_ignored_regexp "^(.*_type|.*_iterator|.*_pointer|.*_reference|absl_.*)$"
   readability-identifier-naming.TypedefCase: CamelCase
+  readability-identifier-naming.TypedefIgnoredRegexp: *type_alias_ignored_regexp
   readability-identifier-naming.ValueTemplateParameterCase: UPPER_CASE
   readability-identifier-naming.VariableCase: lower_case
+
   readability-inconsistent-declaration-parameter-name.Strict: true
