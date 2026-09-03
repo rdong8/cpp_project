@@ -9,7 +9,6 @@ EOF2
 
   ##// llvm needed for wild
   brew install \
-    cargo-binstall \
     llvm \
     rustup \
     sccache

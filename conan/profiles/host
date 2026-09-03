@@ -23,6 +23,7 @@ tools.build:cxxflags += {{ cxxflags }}
         'CMAKE_COLOR_DIAGNOSTICS': 'ON',
         'CMAKE_CXX_COMPILER_LAUNCHER': 'sccache',
         'CMAKE_CXX_VISIBILITY_PRESET': 'hidden',
+        'CMAKE_C_VISIBILITY_PRESET': 'hidden',
         'CMAKE_C_COMPILER_LAUNCHER': 'sccache',
         'CMAKE_EXPERIMENTAL_CXX_IMPORT_STD': 'f35a9ac6-8463-4d38-8eec-5d6008153e7d',
         'CMAKE_EXPERIMENTAL_EXPORT_BUILD_DATABASE': '70ef007e-b743-492d-9407-e35eeac03a40',
