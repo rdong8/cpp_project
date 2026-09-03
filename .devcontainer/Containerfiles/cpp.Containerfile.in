@@ -6,6 +6,7 @@ RUN <<EOF
   ##// openssl needed for Boost.Cobalt
   brew install \
     bazelisk \
+    buildifier \
     cmake \
     conan \
     doxygen \
