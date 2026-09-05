@@ -63,3 +63,6 @@ uv.lock
 
 # Bazel
 /bazel-*
+
+# trash-cli
+.Trash-*/

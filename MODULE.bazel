@@ -22,18 +22,26 @@ bazel_dep(name = "toolchains_llvm")
 git_override(
     module_name = "toolchains_llvm",
     commit = "342c292d3435eb4168e2c7184b1c3d8a81c9b3a1",
+    patch_strip = 1,
+    patches = [
+        "//bazel:toolchains_llvm_cpp_module_deps_scanning.patch",
+    ],
     remote = "https://github.com/bazel-contrib/toolchains_llvm.git",
 )
 
 # Configure and register the toolchain.
 llvm = use_extension("@toolchains_llvm//toolchain/extensions:llvm.bzl", "llvm")
 llvm.toolchain(
+    link_flags = {"": ["--ld-path=/home/linuxbrew/.linuxbrew/bin/wild"]},
     llvm_version = "23.1.0",
 )
-use_repo(llvm, "llvm_toolchain")
+use_repo(llvm, "llvm_toolchain", "llvm_toolchain_llvm")
 
-# use_repo(llvm, "llvm_toolchain_llvm") # if you depend on specific tools in scripts
 register_toolchains("@llvm_toolchain//:all")
+
+# C++ std module
+std_module = use_extension("//bazel:std_module.bzl", "std_module")
+use_repo(std_module, "std_module")
 
 # C++ stuff
 bazel_dep(name = "abseil-cpp", version = "20260817.0")

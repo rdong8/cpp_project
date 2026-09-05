@@ -334,6 +334,21 @@
   },
   "selectedYankedVersions": {},
   "moduleExtensions": {
+    "//bazel:std_module.bzl%std_module": {
+      "general": {
+        "bzlTransitiveDigest": "sUdVcdGbtLsRUbmrQ0ouCD8Kn/4rZZ+BWOpt34Q/DAM=",
+        "usagesDigest": "FVHnJNwi2TIqAc82kJxbtfCpQiTn6ZYFcjbpwEKofWo=",
+        "recordedInputs": [
+          "REPO_MAPPING:,llvm_toolchain_llvm toolchains_llvm++llvm+llvm_toolchain_llvm"
+        ],
+        "generatedRepoSpecs": {
+          "std_module": {
+            "repoRuleId": "@@//bazel:std_module.bzl%std_module_repo",
+            "attributes": {}
+          }
+        }
+      }
+    },
     "@@protobuf+//python/dist:system_python.bzl%system_python_extension": {
       "general": {
         "bzlTransitiveDigest": "qh0n9IrXU/xS94wxKQrG1J63zrLkA1Wy2Y3BQxptPcI=",

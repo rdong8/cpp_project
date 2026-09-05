@@ -70,6 +70,7 @@ EOF2
     prek \
     ripgrep \
     terror/tap/just-lsp \
+    trash-cli \
     tree \
     wild-linker/wild/wild \
     wget \
