@@ -8,5 +8,5 @@ RUN <<EOF
     bazelisk \
     buildifier \
     doxygen \
-    llvm \
+    llvm
 EOF
