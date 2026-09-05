@@ -1,7 +1,7 @@
 [conf]
 tools.build:compiler_executables={'c': 'clang', 'cpp': 'clang++'}
 
-# TODO: brew's LLVM is build with libstdc++, can't use libc++
+# TODO: brew's LLVM is built with libstdc++, can't use libc++
 # To use libc++:
 # Add to cxxflags: -stdlib++-isystem ${HOMEBREW_PREFIX}/include/c++/v1
 # Add to linkflags: -L${HOMEBREW_PREFIX}/lib -Wl,-rpath,${HOMEBREW_PREFIX}/lib

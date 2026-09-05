@@ -1,3 +1,7 @@
 import %workspace%/preset.bazelrc
 
 build --verbose_failures
+
+build --experimental_cpp_modules
+
+build --cxxopt=-std=c++26
