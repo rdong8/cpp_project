@@ -7,11 +7,6 @@ RUN <<EOF
   brew install \
     bazelisk \
     buildifier \
-    cmake \
-    conan \
     doxygen \
     llvm \
-    ninja \
-    openssl@4 \
-    sccache
 EOF
