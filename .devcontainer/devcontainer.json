@@ -60,6 +60,8 @@
   "customizations": {
     "vscode": {
       "extensions": [
+        // AI
+        "google.google-antigravity",
         // Bazel
         "BazelBuild.vscode-bazel",
         // C++
