@@ -5,11 +5,8 @@ RUN <<EOF
 
   ##// openssl needed for Boost.Cobalt
   brew install \
-    cmake \
-    conan \
+    bazelisk \
+    buildifier \
     doxygen \
     llvm \
-    ninja \
-    openssl@4 \
-    sccache
 EOF
