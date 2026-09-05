@@ -60,3 +60,6 @@ uv.lock
 
 # Devcontainer
 .devcontainer/Containerfile
+
+# Bazel
+/bazel-*
