@@ -81,7 +81,7 @@
         // "ms-kubernetes-tools.vscode-kubernetes-tools",
         // LLVM
         "llvm-vs-code-extensions.lldb-dap",
-        // "llvm-vs-code-extensions.vscode-mlir",
+        "llvm-vs-code-extensions.vscode-mlir",
         // Log files
         "iliazeus.vscode-ansi",
         // Manifest files
