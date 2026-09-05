@@ -1,1 +1,3 @@
+import %workspace%/preset.bazelrc
+
 build --verbose_failures
