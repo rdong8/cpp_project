@@ -21,12 +21,8 @@ bazel_dep(name = "bazelrc-preset.bzl", version = "1.9.2")
 bazel_dep(name = "toolchains_llvm")
 git_override(
     module_name = "toolchains_llvm",
-    commit = "342c292d3435eb4168e2c7184b1c3d8a81c9b3a1",
-    patch_strip = 1,
-    patches = [
-        "//bazel:toolchains_llvm_cpp_module_deps_scanning.patch",
-    ],
-    remote = "https://github.com/bazel-contrib/toolchains_llvm.git",
+    commit = "ead229bbfec7a9191bce66a8f140260951de9a58",
+    remote = "https://github.com/rdong8/toolchains_llvm",
 )
 
 # Configure and register the toolchain.
