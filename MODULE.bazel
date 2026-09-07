@@ -21,8 +21,8 @@ bazel_dep(name = "bazelrc-preset.bzl", version = "1.9.2")
 bazel_dep(name = "toolchains_llvm")
 git_override(
     module_name = "toolchains_llvm",
-    commit = "ead229bbfec7a9191bce66a8f140260951de9a58",
-    remote = "https://github.com/rdong8/toolchains_llvm",
+    commit = "2711d4189ff8c5670ecd1df46bbb1e758073fe78",
+    remote = "https://github.com/bazel-contrib/toolchains_llvm",
 )
 
 # Configure and register the toolchain.
@@ -56,3 +56,9 @@ git_override(
     commit = "85d83bc1ee3ab8034d9c40f6900a0753688068b6",
     remote = "https://github.com/helly25/bazel-compile-commands-extractor.git",
 )
+
+# Docs
+bazel_dep(name = "rules_doxygen", version = "2.6.4", dev_dependency = True)
+
+doxygen_extension = use_extension("@rules_doxygen//:extensions.bzl", "doxygen_extension")
+use_repo(doxygen_extension, "doxygen")
