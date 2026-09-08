@@ -1,8 +1,6 @@
-# cpp_project
+# Monorepo
 
-Template for a modern C++ project using CMake. Also serves as a monorepo for some personal projects.
-
-Read the [justfile](./justfile) to see available commands.
+Monorepo for my personal projects. Also serves as a demo for doing things the "right way". This always means using the most correct, most modern, most powerful tool for the job. There is no such thing as overkill.
 
 ## Notes
 
