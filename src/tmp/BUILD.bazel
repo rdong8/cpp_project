@@ -1,0 +1,9 @@
+load("@rules_cc//cc:defs.bzl", "cc_binary")
+
+cc_binary(
+    name = "tmp",
+    srcs = ["main.cpp"],
+    features = ["cpp_modules"],
+    module_interfaces = ["mod.cppm"],
+    deps = ["@std_module"],
+)

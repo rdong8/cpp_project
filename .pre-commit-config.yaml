@@ -20,7 +20,13 @@ repos:
         args:
           - --fix=lf
       - id: trailing-whitespace
+
   - repo: https://github.com/pre-commit/mirrors-clang-format
-    rev: v22.1.4
+    rev: v23.1.0
     hooks:
       - id: clang-format
+
+  - repo: https://github.com/keith/pre-commit-buildifier
+    rev: 8.5.1.3
+    hooks:
+      - id: buildifier

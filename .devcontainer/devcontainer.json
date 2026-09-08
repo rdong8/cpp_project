@@ -22,24 +22,34 @@
     "label=disable"
   ],
   "mounts": [
+    {
+      "source": "bazel",
+      "target": "/home/dev/.cache/bazel",
+      "type": "volume"
+    },
+    {
+      "source": "bazelisk",
+      "target": "/home/dev/.cache/bazel",
+      "type": "volume"
+    }
     // TODO: this doesn't actually work since brew deps are installed in build phase before volume has been mounted
     // {
     //   "source": "brew",
     //   "target": "/home/dev/.cache/Homebrew",
     //   "type": "volume"
     // },
-    {
-      "source": "conan",
-      "target": "/home/dev/.conan2",
-      "type": "volume"
-    },
-    // WARNING: it is not safe to use multiple concurrence sccache instances (ie. dev containers)
+    // {
+    //   "source": "conan",
+    //   "target": "/home/dev/.conan2",
+    //   "type": "volume"
+    // },
+    // WARNING: it is not safe to use multiple concurrent sccache instances (ie. dev containers)
     // https://github.com/mozilla/sccache/blob/main/docs/Local.md#local
-    {
-      "source": "sccache",
-      "target": "/home/dev/.cache/sccache",
-      "type": "volume"
-    }
+    // {
+    //   "source": "sccache",
+    //   "target": "/home/dev/.cache/sccache",
+    //   "type": "volume"
+    // }
     // For Python development
     // {
     //   "source": "uv",
@@ -50,6 +60,10 @@
   "customizations": {
     "vscode": {
       "extensions": [
+        // AI
+        "google.google-antigravity",
+        // Bazel
+        "BazelBuild.vscode-bazel",
         // C++
         "llvm-vs-code-extensions.vscode-clangd",
         "ms-vscode.cpptools-themes",
@@ -69,7 +83,7 @@
         // "ms-kubernetes-tools.vscode-kubernetes-tools",
         // LLVM
         "llvm-vs-code-extensions.lldb-dap",
-        // "llvm-vs-code-extensions.vscode-mlir",
+        "llvm-vs-code-extensions.vscode-mlir",
         // Log files
         "iliazeus.vscode-ansi",
         // Manifest files

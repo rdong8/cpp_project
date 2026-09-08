@@ -1,0 +1,64 @@
+module(
+    name = "monorepo",
+    version = "latest",
+)
+
+# Bazel stuff
+bazel_dep(name = "bazel_skylib", version = "1.9.2")
+bazel_dep(name = "bazelrc-preset.bzl", version = "1.9.2")
+
+# TODO(hermetic-llvm): https://github.com/hermeticbuild/hermetic-llvm/issues/221
+# bazel_dep(name = "llvm", version = "0.8.19")
+# toolchain = use_extension("@llvm//extensions:toolchain.bzl", "toolchain")
+# toolchain.exec(arch = "x86_64", os = "linux")
+# toolchain.target(arch = "x86_64", os = "linux")
+# use_repo(toolchain, "llvm_toolchains")
+# register_toolchains("@llvm//toolchain:all")
+# llvm = use_extension("@llvm//extensions:llvm.bzl", "llvm")
+# llvm.version(llvm_version = "23.1.0")
+
+# LLVM
+bazel_dep(name = "toolchains_llvm")
+git_override(
+    module_name = "toolchains_llvm",
+    commit = "2711d4189ff8c5670ecd1df46bbb1e758073fe78",
+    remote = "https://github.com/bazel-contrib/toolchains_llvm",
+)
+
+# Configure and register the toolchain.
+llvm = use_extension("@toolchains_llvm//toolchain/extensions:llvm.bzl", "llvm")
+llvm.toolchain(
+    link_flags = {"": ["--ld-path=/home/linuxbrew/.linuxbrew/bin/wild"]},
+    llvm_version = "23.1.0",
+)
+use_repo(llvm, "llvm_toolchain", "llvm_toolchain_llvm")
+
+register_toolchains("@llvm_toolchain//:all")
+
+# C++ std module
+std_module = use_extension("//bazel:std_module.bzl", "std_module")
+use_repo(std_module, "std_module")
+
+# C++ stuff
+bazel_dep(name = "abseil-cpp", version = "20260817.0")
+bazel_dep(name = "boost", version = "1.90.0.bcr.2")
+bazel_dep(name = "catch2", version = "3.15.1")
+bazel_dep(name = "cpptrace", version = "1.0.4.bcr.1")
+bazel_dep(name = "google_benchmark", version = "1.9.5")
+bazel_dep(name = "magic_enum", version = "0.9.8")
+bazel_dep(name = "quill", version = "13.0.0")
+bazel_dep(name = "rules_cc", version = "0.2.22")
+
+# Compile commands
+bazel_dep(name = "hedron_compile_commands", dev_dependency = True)
+git_override(
+    module_name = "hedron_compile_commands",
+    commit = "85d83bc1ee3ab8034d9c40f6900a0753688068b6",
+    remote = "https://github.com/helly25/bazel-compile-commands-extractor.git",
+)
+
+# Docs
+bazel_dep(name = "rules_doxygen", version = "2.6.4", dev_dependency = True)
+
+doxygen_extension = use_extension("@rules_doxygen//:extensions.bzl", "doxygen_extension")
+use_repo(doxygen_extension, "doxygen")

@@ -3,12 +3,10 @@
 RUN <<EOF
   eval "$(${HOMEBREW_PREFIX}/bin/brew shellenv)"
 
+  ##// openssl needed for Boost.Cobalt
   brew install \
-    cmake \
-    conan \
+    bazelisk \
+    buildifier \
     doxygen \
-    llvm \
-    mold \
-    ninja \
-    sccache
+    llvm
 EOF

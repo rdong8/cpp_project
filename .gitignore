@@ -36,7 +36,6 @@
 
 # IDE
 .idea/
-.vscode/
 .cache/
 .fleet
 
@@ -61,3 +60,9 @@ uv.lock
 
 # Devcontainer
 .devcontainer/Containerfile
+
+# Bazel
+/bazel-*
+
+# trash-cli
+.Trash-*/

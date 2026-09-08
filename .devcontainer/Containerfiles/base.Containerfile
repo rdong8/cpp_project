@@ -4,7 +4,6 @@ FROM docker.io/fedora:latest
 
 ##// For now, only install the following with the system package manager:
 ##// - Dependencies of linuxbrew itself (@development-tools, curl, file, procps-ng)
-##// - boost-devel: see comment in conan/conandata.yml about conan's boost currently being broken
 ##// - gcc-c++: system toolchain needed for linuxbrew's LLVM
 ##// - fish: need to set user's shell when we create it
 ##// - which: to find fish for the useradd
@@ -13,7 +12,6 @@ RUN <<EOF
   dnf update -y
   dnf install -y \
     @development-tools \
-    boost-devel \
     curl \
     file \
     fish \
@@ -72,7 +70,9 @@ EOF2
     prek \
     ripgrep \
     terror/tap/just-lsp \
+    trash-cli \
     tree \
+    wild-linker/wild/wild \
     wget \
     zellij
 
