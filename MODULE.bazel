@@ -56,7 +56,7 @@ bazel_dep(name = "rules_cc", version = "0.2.22")
 bazel_dep(name = "hedron_compile_commands", dev_dependency = True)
 git_override(
     module_name = "hedron_compile_commands",
-    commit = "a3ea4aa87b4539b3d6e356f49b3eb81f593e5656",
+    commit = "513b4b589e05779debeb7d35d96b74efb2c94b96",
     remote = "https://github.com/rdong8/bazel-compile-commands-extractor",
 )
 
