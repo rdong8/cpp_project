@@ -6,4 +6,5 @@ cc_binary(
     features = ["cpp_modules"],
     module_interfaces = ["mod.cppm"],
     deps = ["@std_module"],
+    visibility = ["//docs:__pkg__"]
 )

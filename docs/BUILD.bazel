@@ -1,23 +1,79 @@
+load("@bazel_skylib//rules:copy_file.bzl", "copy_file")
 load("@doxygen//:doxygen.bzl", "doxygen")
+load("@rules_shell//shell:sh_binary.bzl", "sh_binary")
+
+# External repo layout in Bazel's sandbox can vary across configs
+# Stage the file into $(OUTDIR) instead
+copy_file(
+    name = "copy_doxygen_awesome_css",
+    src = "@doxygen_awesome_css//:doxygen-awesome.css",
+    out = "doxygen-awesome.css",
+)
 
 doxygen(
-    name = "doxygen",  # Name of the rule, can be anything
-    srcs = glob([
+    name = "docs",
+    tags = ["manual"],
+    deps = ["//src/tmp:tmp"],
+    srcs = [
+        ":copy_doxygen_awesome_css",
+        "//:README.md",
+    ] + glob(
+        [
+            "*.cpp",
+            "*.cppm",
+            "*.hpp",
+            "*.md",
+        ],
+        allow_empty = True,
+    ),
+    extension_mapping = ["cppm=C++"],
+    file_patterns = [
         "*.cpp",
         "*.cppm",
         "*.hpp",
         "*.md",
-    ]),
+    ],
+    alphabetical_index = False,
+    builtin_stl_support = True,
+    disable_index = False,
+    distribute_group_doc = True,
+    dot_image_format = "svg",
+    extract_all = True,
+    full_sidebar = False,
     generate_html = True,
+    generate_treeview = True,
+    hide_friend_compounds = True,
+    hide_in_body_docs = True,
+    html_extra_stylesheet = "$(OUTDIR)/doxygen-awesome.css",
+    javadoc_autobrief = True,
+    # macro_expansion = True,
     project_brief = "Personal project/experiment monorepo",
     project_name = "monorepo",
-    # Equivalently, you can manually set the configurations
-    # that will be appended to the Doxyfile in the form of a list of strings
-    # configurations = [
-    #    "GENERATE_HTML = YES",
-    #    "GENERATE_LATEX = NO",
-    #    "USE_MDFILE_AS_MAINPAGE = README.md",
-    # ],
-    tags = ["manual"],
+    # qt_autobrief = True,
+    quiet = True,
+    recursive = True,
+    show_include_files = False,
+    sort_by_scope_name = True,
+    sort_member_docs = False,
+    source_browser = True,
     use_mdfile_as_mainpage = "README.md",
+    use_mathjax = True,
+    warn_if_undocumented = False,
 )
+
+filegroup(
+    name = "html",
+    srcs = [":docs"],
+    output_group = "html",
+)
+
+sh_binary(
+    name = "serve",
+    srcs = ["serve.fish"],
+    data = [":html"],
+    args = [
+        "--directory",
+        "$(rootpath :html)",
+    ],
+)
+

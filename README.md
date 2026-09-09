@@ -23,92 +23,12 @@ Then set the `dotfiles.repository` setting in VS Code to your dotfiles repositor
 
 Then build the devcontainer. All commands after this point are to be run *in the devcontainer*, not on the host.
 
-## Dependencies
-
-### Conan
-
-In the [devcontainer configuration](.devcontainer/devcontainer.json), a volume has been configured for Conan. This helps persist Conan's cache and build profile even when the container is destroyed.
-
-#### Profile
-
-Conan profiles specify toolchain details for building packages. There are 2 kinds:
-
-- Build profile: describes the system where the build is happening
-  - Used to build tools that will run on the build machine during the build process like CMake, Ninja, etc.
-- Host profile: describes the system where the built binaries will run
-  - Used to build your project and its dependencies
-
-In other words, the build profile is used to build *tools*, whereas the host profile is used to build *your project*. Conan can automatically detect an appropriate build profile for you:
-
-```bash
-just create-conan-build-profile
-```
-
-You can run this once and will basically never have to touch it again unless the toolchain provided by the container image changes (ie. you switch to a newer Fedora image).
-
-On the other hand, the host profile specifies the things you care about like the C++ version, compiler, standard library, etc. you plan on using. An example is given in [conan/profiles/host](conan/profiles/host). The project is configured to use this profile by default.
-
-You can edit a profile in the config location with `just edit-conan-profile host`.
-
-Note that if your `compiler.version` in your host profile is too new, you may get an error from Conan. Just [edit `conan/settings_user.yml`](http://docs.conan.io/2/knowledge/faq.html#error-invalid-setting) and add it there.
-
-#### Build Dependencies
-
-This step needs to be run each time anything in [`conan/`](./conan) is modified. Build the project's C++ dependencies with Conan:
-
-```bash
-just conan-install
-```
-
-## Configure
-
-Run the CMake configure. Generates the underlying build system files.
-
-```bash
-just config
-```
-
-At this point, you may want to restart clangd (`clangd: Restart language server` in VSCode command palette) so it picks up the new compile commands.
-
-## Build
-
-Build a target:
-
-```bash
-just build target-name
-```
-
-You can omit the target name to build everything.
-
-The target will end up in `./build/src/path/to/target/build_type/target`.
-
 ## Docs
 
-To open the documentation in the default browser (must be built first via `just build docs`):
+Build and serve the doxygen documentation:
 
-```bash
+```fish
 just docs
-```
-
-You may also pass a command that will be used to open the `index.html` file:
-
-```bash
-just docs firefox
-just docs 'flatpak run com.brave.Browser' # You need to use Flatseal to give the flatpak permission in this case
-```
-
-## Test
-
-Run all tests:
-
-```bash
-just test
-```
-
-Any [flags](https://cmake.org/cmake/help/book/mastering-cmake/chapter/Testing%20With%20CMake%20and%20CTest.html#testing-using-ctest) will be forwarded to `ctest`, for example:
-
-```bash
-just test -R math # Run tests matching regular expression "math", matches `test_library_uage.mathematics`
 ```
 
 ## Pre-Commit

@@ -6,6 +6,8 @@ module(
 # Bazel stuff
 bazel_dep(name = "bazel_skylib", version = "1.9.2")
 bazel_dep(name = "bazelrc-preset.bzl", version = "1.9.2")
+bazel_dep(name = "platforms", version = "1.1.0")
+bazel_dep(name = "rules_shell", version = "0.8.0")
 
 # TODO(hermetic-llvm): https://github.com/hermeticbuild/hermetic-llvm/issues/221
 # bazel_dep(name = "llvm", version = "0.8.19")
@@ -59,6 +61,29 @@ git_override(
 
 # Docs
 bazel_dep(name = "rules_doxygen", version = "2.6.4", dev_dependency = True)
+git_override(
+    module_name = "rules_doxygen",
+    commit = "0b74d0a622c8fa625da9435eef34a0a564f77569",
+    remote = "https://github.com/rdong8/rules_doxygen",
+)
 
 doxygen_extension = use_extension("@rules_doxygen//:extensions.bzl", "doxygen_extension")
 use_repo(doxygen_extension, "doxygen")
+
+http_archive = use_repo_rule("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+http_archive(
+    name = "doxygen_awesome_css",
+    urls = ["https://github.com/jothepro/doxygen-awesome-css/archive/refs/tags/v2.4.2.tar.gz"],
+    sha256 = "6f527e5733723bfd7243c28f24588dca4714cf977fea6147fdb4ae2050244409",
+    strip_prefix = "doxygen-awesome-css-2.4.2",
+    build_file_content = """
+exports_files(["doxygen-awesome.css"])
+
+filegroup(
+    name = "css",
+    srcs = ["doxygen-awesome.css"],
+    visibility = ["//visibility:public"],
+)
+""",
+)
+

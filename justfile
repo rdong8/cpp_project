@@ -29,6 +29,9 @@ test: (_cmd "test")
 
 run: (_cmd "run")
 
+docs:
+    bazel run //docs:serve
+
 pre-commit:
     prek run --all-files
 
