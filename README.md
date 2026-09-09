@@ -7,14 +7,14 @@ Monorepo for my personal projects. Also serves as a demo for doing things the "r
 *On the host*:
 
 ```fish
-git clone https://github.com/rdong8/cpp_project.git
+git clone https://github.com/rdong8/monorepo.git
 cd cpp_project/
 ```
 
-Install the following dependencies on the host:
+Bootstrap the host:
 
 ```fish
-sudo dnf -y install cpp podman
+just initialize-host
 ```
 
 Then run `id` on the host to determine your user's UID and GID. Use that to fill in the `build.dockerfile.args.HOST_UID` and `build.dockerfile.args.HOST_GID` values in the [devcontainer.json](.devcontainer/devcontainer.json) file.
@@ -38,7 +38,7 @@ just pre-commit-install
 just pre-commit # Or manually run it
 ```
 
-Clean the Bazel build directories:
+Clean the Bazel build directories (you shouldn't actually ever have to do this):
 
 ```bash
 just clean
