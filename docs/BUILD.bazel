@@ -12,8 +12,6 @@ copy_file(
 
 doxygen(
     name = "docs",
-    tags = ["manual"],
-    deps = ["//src/tmp:tmp"],
     srcs = [
         ":copy_doxygen_awesome_css",
         "//:README.md",
@@ -26,19 +24,19 @@ doxygen(
         ],
         allow_empty = True,
     ),
+    alphabetical_index = False,
+    builtin_stl_support = True,
+    disable_index = False,
+    distribute_group_doc = True,
+    dot_image_format = "svg",
     extension_mapping = ["cppm=C++"],
+    extract_all = True,
     file_patterns = [
         "*.cpp",
         "*.cppm",
         "*.hpp",
         "*.md",
     ],
-    alphabetical_index = False,
-    builtin_stl_support = True,
-    disable_index = False,
-    distribute_group_doc = True,
-    dot_image_format = "svg",
-    extract_all = True,
     full_sidebar = False,
     generate_html = True,
     generate_treeview = True,
@@ -56,9 +54,11 @@ doxygen(
     sort_by_scope_name = True,
     sort_member_docs = False,
     source_browser = True,
-    use_mdfile_as_mainpage = "README.md",
+    tags = ["manual"],
     use_mathjax = True,
+    use_mdfile_as_mainpage = "README.md",
     warn_if_undocumented = False,
+    deps = ["//src/tmp"],
 )
 
 filegroup(
@@ -70,10 +70,9 @@ filegroup(
 sh_binary(
     name = "serve",
     srcs = ["serve.fish"],
-    data = [":html"],
     args = [
         "--directory",
         "$(rootpath :html)",
     ],
+    data = [":html"],
 )
-

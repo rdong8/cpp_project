@@ -36,4 +36,3 @@ else
     mv $Brewfile $_flag_Brewfile
     return $exit_code
 end
-

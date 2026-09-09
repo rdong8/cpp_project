@@ -8,4 +8,3 @@ bazelrc_preset(
 exports_files([
     "README.md",
 ])
-

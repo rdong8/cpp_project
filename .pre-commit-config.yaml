@@ -4,9 +4,10 @@ repos:
       - id: check-added-large-files
       - id: check-case-conflict
       - id: check-json
-        exclude: .devcontainer/devcontainer.json
+        exclude: &json5_files '^(\.devcontainer|\.vscode)/.*\.json$|\.json5$'
       - id: check-json5
-        files: .devcontainer/devcontainer.json
+        files: *json5_files
+        types: [file]
       - id: check-merge-conflict
       - id: check-symlinks
       - id: check-toml

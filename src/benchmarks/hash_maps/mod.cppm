@@ -27,7 +27,7 @@ struct Value
         std::ranges::fill(values, key);
     }
 
-    operator Key(this Self const& self)
+    operator Key(this Self const &self)
     {
         return self.values.front();
     }
