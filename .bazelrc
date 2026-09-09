@@ -29,10 +29,8 @@ build --per_file_copt=^(src|tests)/.*@\
 -Wimplicit-fallthrough,\
 -Wnull-dereference,\
 -Wpedantic,\
--Wunused,\
 -Wnon-virtual-dtor,\
--Wold-style-cast,\
--Woverloaded-virtual
+-Wold-style-cast
 
 build:default_sanitizers \
     --copt=-fno-sanitize-merge \

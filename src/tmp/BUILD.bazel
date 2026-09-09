@@ -7,6 +7,5 @@ cc_binary(
     srcs = ["main.cpp"],
     features = ["cpp_modules"],
     module_interfaces = ["mod.cppm"],
-    visibility = ["//docs:__pkg__"],
     deps = ["@std_module"],
 )
