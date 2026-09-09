@@ -2,36 +2,24 @@
 
 Monorepo for my personal projects. Also serves as a demo for doing things the "right way". This always means using the most correct, most modern, most powerful tool for the job. There is no such thing as overkill.
 
-## Notes
-
-- Only Linux is supported
-- This project uses [devcontainers](https://containers.dev/) to avoid dependencies polluting the host. Specifically, we use [podman](https://podman.io/) instead of Docker, which enables the devcontainer to run on a host that is itself containerized (ie. a [GCP Cloud Workstation](https://cloud.google.com/workstations?hl=en) instance)
-- The devcontainer uses [`brew`](https://brew.sh/) for a few reasons:
-  - We use a non-root user in the container so you can't use the system package manager
-  - The LLVM build in Fedora's repos lacks debug symbols
-- The devcontainer is setup to use [fish](https://fishshell.com/) as the default shell
-
 ## Initialize
 
 *On the host*:
 
-```bash
+```fish
 git clone https://github.com/rdong8/cpp_project.git
 cd cpp_project/
 ```
 
-Also make sure you have [`podman`](https://podman.io/docs/installation#installing-on-linux) installed on the host. For example:
+Install the following dependencies on the host:
 
-```bash
-# Fedora
-sudo dnf -y install podman
-
-# Ubuntu
-sudo apt update
-sudo apt -y install podman
+```fish
+sudo dnf -y install cpp podman
 ```
 
 Then run `id` on the host to determine your user's UID and GID. Use that to fill in the `build.dockerfile.args.HOST_UID` and `build.dockerfile.args.HOST_GID` values in the [devcontainer.json](.devcontainer/devcontainer.json) file.
+
+Then set the `dotfiles.repository` setting in VS Code to your dotfiles repository. Note that your install script MUST add Linuxbrew to the fish `PATH`.
 
 Then build the devcontainer. All commands after this point are to be run *in the devcontainer*, not on the host.
 

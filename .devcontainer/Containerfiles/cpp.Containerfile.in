@@ -1,12 +1,7 @@
 #include "base.Containerfile"
 
-RUN <<EOF
-  eval "$(${HOMEBREW_PREFIX}/bin/brew shellenv)"
-
-  ##// openssl needed for Boost.Cobalt
-  brew install \
-    bazelisk \
-    buildifier \
-    doxygen \
-    llvm
+RUN <<EOF >>${BREWFILE}
+  brew "bazelisk"
+  brew "buildifier"
+  brew "llvm"
 EOF

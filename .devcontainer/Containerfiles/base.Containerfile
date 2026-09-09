@@ -6,6 +6,7 @@ FROM docker.io/fedora:latest
 ##// - Dependencies of linuxbrew itself (@development-tools, curl, file, procps-ng)
 ##// - gcc-c++: system toolchain needed for linuxbrew's LLVM
 ##// - fish: need to set user's shell when we create it
+##// - stow: to install dotfiles
 ##// - which: to find fish for the useradd
 ##// - mathjax: dependency of doxygen, but not available via linuxbrew
 RUN <<EOF
@@ -18,6 +19,7 @@ RUN <<EOF
     gcc-c++ \
     mathjax \
     procps-ng \
+    stow \
     which
   dnf clean all
   rm -rf /var/cache/dnf
@@ -32,6 +34,9 @@ RUN <<EOF
   useradd -ms $(which fish) --uid ${HOST_UID} --gid ${HOST_GID} ${REMOTE_USER}
 EOF
 USER ${REMOTE_USER}
+##// Ensure ~/.cache is owned by REMOTE_USER so volume mounts in ~/.cache don't create it as root:root
+RUN mkdir -p /home/${REMOTE_USER}/.cache
+ARG FISH_CONFIG=/home/${REMOTE_USER}/.config/fish
 
 ##// Get homebrew binary
 ARG HOMEBREW_PREFIX=/home/linuxbrew/.linuxbrew
@@ -41,45 +46,24 @@ COPY \
   ${HOMEBREW_PREFIX} \
   ${HOMEBREW_PREFIX}
 
-ARG FISH_CONFIG=/home/${REMOTE_USER}/.config/fish
-
-##// Homebrew-related things
-RUN <<EOF
-  ##// Setup fish config
-  mkdir -p ${FISH_CONFIG}
-
-cat <<EOF2 >> ${FISH_CONFIG}/config.fish
-eval (${HOMEBREW_PREFIX}/bin/brew shellenv)
-set -x EDITOR code
-EOF2
-
-  eval "$(${HOMEBREW_PREFIX}/bin/brew shellenv)"
-
-  ##// Common tools
-  brew install \
-    bat \
-    btop \
-    fastfetch \
-    fd \
-    fzf \
-    gawk \
-    git-delta \
-    helix \
-    jq \
-    just \
-    prek \
-    ripgrep \
-    terror/tap/just-lsp \
-    trash-cli \
-    tree \
-    wild-linker/wild/wild \
-    wget \
-    zellij
-
-  ##// Fish completions
-  ##// Only necessary if not builtin: https://github.com/fish-shell/fish-shell/tree/master/share/completions
-  mkdir -p ${FISH_CONFIG}/completions
-  ##// prek: https://prek.j178.dev/installation/#shell-completion
-  ##// TODO: https://github.com/j178/prek/issues/1992
-  COMPLETE=fish prek > ${FISH_CONFIG}/completions/prek.fish
+ARG BREWFILE
+RUN <<EOF >${BREWFILE}
+  brew "bat"
+  brew "btop"
+  brew "fastfetch"
+  brew "fd"
+  brew "fzf"
+  brew "gawk"
+  brew "git-delta"
+  brew "helix"
+  brew "jq"
+  brew "just"
+  brew "prek"
+  brew "ripgrep"
+  brew "terror/tap/just-lsp", trusted: true
+  brew "trash-cli"
+  brew "tree"
+  brew "wild-linker/wild/wild", trusted: true
+  brew "wget"
+  brew "zellij"
 EOF

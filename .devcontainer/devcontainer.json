@@ -29,15 +29,14 @@
     },
     {
       "source": "bazelisk",
-      "target": "/home/dev/.cache/bazel",
+      "target": "/home/dev/.cache/bazelisk",
+      "type": "volume"
+    },
+    {
+      "source": "brew",
+      "target": "/home/dev/.cache/Homebrew",
       "type": "volume"
     }
-    // TODO: this doesn't actually work since brew deps are installed in build phase before volume has been mounted
-    // {
-    //   "source": "brew",
-    //   "target": "/home/dev/.cache/Homebrew",
-    //   "type": "volume"
-    // },
     // {
     //   "source": "conan",
     //   "target": "/home/dev/.conan2",
@@ -49,7 +48,7 @@
     //   "source": "sccache",
     //   "target": "/home/dev/.cache/sccache",
     //   "type": "volume"
-    // }
+    // },
     // For Python development
     // {
     //   "source": "uv",
@@ -68,7 +67,6 @@
         "llvm-vs-code-extensions.vscode-clangd",
         "ms-vscode.cpptools-themes",
         // CMake
-        "cheshirekow.cmake-format",
         "ms-vscode.cmake-tools",
         // Containers
         "docker.docker",
@@ -108,14 +106,16 @@
   "build": {
     "dockerfile": "Containerfile",
     "args": {
-      "REMOTE_USER": "dev",
+      "BREWFILE": "/tmp/Brewfile",
       // https://github.com/devcontainers/spec/issues/631
       // Run `id` on the host to get these
       "HOST_UID": "1000",
-      "HOST_GID": "1000"
+      "HOST_GID": "1000",
+      "REMOTE_USER": "dev"
     }
   },
   "initializeCommand": "cpp -P .devcontainer/Containerfiles/cpp.Containerfile.in .devcontainer/Containerfile",
+  "postStartCommand": "fish ${containerWorkspaceFolder}/.devcontainer/post_start_command.fish --Brewfile=/tmp/Brewfile",
   "runArgs": [
     // For Podman
     "--userns=keep-id"

@@ -1,20 +1,13 @@
 #include "base.Containerfile"
 
-RUN <<EOF
-cat <<EOF2 >> ${FISH_CONFIG}/config.fish
-fish_add_path (brew --prefix rustup)/bin
-EOF2
-
-  eval "$(${HOMEBREW_PREFIX}/bin/brew shellenv)"
-
-  ##// llvm needed for wild
-  brew install \
-    llvm \
-    rustup \
-    sccache
+RUN <<EOF >>${BREWFILE}
+  brew "rustup"
+  ##// Needed for `linker = "clang"` below
+  brew "llvm"
+  brew "sccache"
 EOF
 
-## Setup wild linker and sccache
+##// Setup wild linker and sccache
 RUN <<EOF
   mkdir -p ~/.cargo
 
@@ -26,4 +19,5 @@ rustc-wrapper = "sccache"
 linker = "clang"
 rustflags = ["-Clink-arg=--ld-path=wild"]
 EOF2
+
 EOF
