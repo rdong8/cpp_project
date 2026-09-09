@@ -15,7 +15,7 @@ if not set -ql _flag_Brewfile
 end
 
 # IMPORTANT ASSUMPTION: your `dotfiles.installCommand` must add brew to path, ie. by way of creating a fish.config that evals `brew shellenv`
-if not which brew 2>/dev/null
+if not type -q brew
     echo 'brew not in path, did your `dotfiles.installCommand` complete successfully?' >&2
     return 1
 end

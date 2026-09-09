@@ -47,7 +47,7 @@ COPY \
   ${HOMEBREW_PREFIX}
 
 ARG BREWFILE
-RUN <<EOF >${BREWFILE}
+RUN cat <<EOF >${BREWFILE}
   brew "bat"
   brew "btop"
   brew "fastfetch"

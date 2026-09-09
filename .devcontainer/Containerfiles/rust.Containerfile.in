@@ -1,6 +1,6 @@
 #include "base.Containerfile"
 
-RUN <<EOF >>${BREWFILE}
+RUN cat <<EOF >>${BREWFILE}
   brew "rustup"
   ##// Needed for `linker = "clang"` below
   brew "llvm"
