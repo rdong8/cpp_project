@@ -1,6 +1,7 @@
 import %workspace%/preset.bazelrc
 
-build --verbose_failures --warnings_as_errors
+build --verbose_failures
+build --copt=-Wall --copt=-Werror
 
 build --experimental_cpp_modules
 
