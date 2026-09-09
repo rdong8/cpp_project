@@ -30,6 +30,7 @@ git_override(
 # Configure and register the toolchain.
 llvm = use_extension("@toolchains_llvm//toolchain/extensions:llvm.bzl", "llvm")
 llvm.toolchain(
+    cxx_standard = {"": "c++2d"},
     # TODO: make linker hermetic
     link_flags = {"": ["--ld-path=/home/linuxbrew/.linuxbrew/bin/wild"]},
     llvm_version = "23.1.0",
@@ -53,7 +54,7 @@ bazel_dep(name = "quill", version = "13.0.0")
 bazel_dep(name = "rules_cc", version = "0.2.22")
 
 # Compile commands
-# TODO: this thing is pretty bad, maybe https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2024/p2977r1.html is the fix
+# TODO: https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2024/p2977r1.html
 bazel_dep(name = "hedron_compile_commands", dev_dependency = True)
 git_override(
     module_name = "hedron_compile_commands",
@@ -73,11 +74,9 @@ doxygen_extension = use_extension("@rules_doxygen//:extensions.bzl", "doxygen_ex
 use_repo(doxygen_extension, "doxygen")
 
 http_archive = use_repo_rule("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+
 http_archive(
     name = "doxygen_awesome_css",
-    urls = ["https://github.com/jothepro/doxygen-awesome-css/archive/refs/tags/v2.4.2.tar.gz"],
-    sha256 = "6f527e5733723bfd7243c28f24588dca4714cf977fea6147fdb4ae2050244409",
-    strip_prefix = "doxygen-awesome-css-2.4.2",
     build_file_content = """
 exports_files(["doxygen-awesome.css"])
 
@@ -87,5 +86,7 @@ filegroup(
     visibility = ["//visibility:public"],
 )
 """,
+    sha256 = "6f527e5733723bfd7243c28f24588dca4714cf977fea6147fdb4ae2050244409",
+    strip_prefix = "doxygen-awesome-css-2.4.2",
+    urls = ["https://github.com/jothepro/doxygen-awesome-css/archive/refs/tags/v2.4.2.tar.gz"],
 )
-

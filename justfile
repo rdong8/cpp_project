@@ -17,17 +17,18 @@ initialize-host:
 bazel-completions:
     bazelisk completion fish > ~/.config/fish/completions/bazelisk.fish
 
-_cmd cmd *targets=targets:
+[private]
+bazel cmd *targets=targets:
     bazel \
         {{ cmd }} \
         {{ configs }} \
         {{ targets }}
 
-build *targets=targets: (_cmd "build" targets)
+build *targets=targets: (bazel "build" targets)
 
-test *targets=targets: (_cmd "test" targets)
+test *targets=targets: (bazel "test" targets)
 
-run target=targets: (_cmd "run" target)
+run target=targets: (bazel "run" target)
 
 # HACK: hedron_compile_commands doesn't support C++20 modules, have to build first
 [doc]

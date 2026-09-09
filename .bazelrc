@@ -1,8 +1,61 @@
+# TODO: lots of stuff here should be features
+
 import %workspace%/preset.bazelrc
 
 build --verbose_failures
-build --copt=-Wall --copt=-Werror
 
 build --experimental_cpp_modules
 
-build --cxxopt=-std=c++26
+build \
+    --copt=-fvisibility=hidden \
+    --cxxopt=-fvisibility-inlines-hidden
+
+# TODO: https://github.com/bazel-contrib/toolchains_llvm/issues/592
+build --conlyopt=-std=c23
+
+# TODO: Can't compile std with --config=opt without this
+build --force_pic
+
+build \
+    --copt=-Wall \
+    --copt=-Wcast-align \
+    --copt=-Wconversion \
+    --copt=-Wdouble-promotion \
+    --copt=-Wextra \
+    --copt=-Wformat=2 \
+    --copt=-Wimplicit-fallthrough \
+    --copt=-Wnull-dereference \
+    --copt=-Wpedantic \
+    --copt=-Wunused \
+    --copt=-Werror \
+    --cxxopt=-Wnon-virtual-dtor \
+    --cxxopt=-Wold-style-cast \
+    --cxxopt=-Woverloaded-virtual
+
+# TODO: Also consider safe-stack, memory, realtime, thread (some mutually exclusive with others)
+build:sanitizers \
+    --copt=-fno-sanitize-merge \
+    --copt=-fsanitize=address,leak
+
+build:dbg \
+    --compilation_mode=dbg \
+    --config=sanitizers \
+    --copt=-Og \
+    --copt=-fno-omit-frame-pointer \
+    --copt=-glldb \
+    --cxxopt=-gmodules
+
+# WARNING: technically -march=native breaks hermeticity
+build:opt \
+    --compilation_mode=opt \
+    --copt=-O3 \
+    --copt=-march=native
+
+# TODO: --features=thin_lto broken for some reason
+build:lto \
+    --config=opt \
+    --features=lto
+
+# Should be combined with --config=opt or --config=lto
+build:profile \
+    --copt=-pg
