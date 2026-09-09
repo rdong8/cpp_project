@@ -1,5 +1,6 @@
 {
   "clangd.arguments": [
-    "--completion-style=detailed"
+    "--completion-style=detailed",
+    "--experimental-modules-support",
   ]
 }

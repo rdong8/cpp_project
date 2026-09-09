@@ -52,11 +52,12 @@ bazel_dep(name = "quill", version = "13.0.0")
 bazel_dep(name = "rules_cc", version = "0.2.22")
 
 # Compile commands
+# TODO: this thing is pretty bad, maybe https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2024/p2977r1.html is the fix
 bazel_dep(name = "hedron_compile_commands", dev_dependency = True)
 git_override(
     module_name = "hedron_compile_commands",
-    commit = "85d83bc1ee3ab8034d9c40f6900a0753688068b6",
-    remote = "https://github.com/helly25/bazel-compile-commands-extractor",
+    commit = "a3ea4aa87b4539b3d6e356f49b3eb81f593e5656",
+    remote = "https://github.com/rdong8/bazel-compile-commands-extractor",
 )
 
 # Docs
