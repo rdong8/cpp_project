@@ -6,10 +6,14 @@ configs := ''
 targets := ''
 
 # Fedora already has the required packages
+[doc]
 initialize-host:
     sudo apt -y update
     sudo apt -y install podman
 
+# TODO: The only reason we have a .bazelversion is because fish completions can't be generated without it
+# https://github.com/bazelbuild/bazelisk/issues/718#issuecomment-3435688542
+[doc]
 bazel-completions:
     bazelisk completion fish > ~/.config/fish/completions/bazelisk.fish
 
@@ -26,6 +30,7 @@ test *targets=targets: (_cmd "test" targets)
 run target=targets: (_cmd "run" target)
 
 # HACK: hedron_compile_commands doesn't support C++20 modules, have to build first
+[doc]
 compile_commands: (build "//src/...") (run "@hedron_compile_commands//:refresh_all")
 
 docs: (run "//docs:serve")
