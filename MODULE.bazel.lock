@@ -415,6 +415,50 @@
         }
       }
     },
+    "@@rules_doxygen+//:extensions.bzl%doxygen_extension": {
+      "general": {
+        "bzlTransitiveDigest": "LdDQ2smzomCLWbW++Y5gwEoHpYk6VEbrH5MrbZynDgI=",
+        "usagesDigest": "EAzx0LLgTEYABbwo29PDWm2WDGuUFlujqCPewv4nZx8=",
+        "recordedInputs": [
+          "REPO_MAPPING:rules_doxygen+,rules_doxygen rules_doxygen+"
+        ],
+        "generatedRepoSpecs": {
+          "doxygen": {
+            "repoRuleId": "@@rules_doxygen+//:extensions.bzl%doxygen_repository",
+            "attributes": {
+              "versions": [
+                "1.18.0",
+                "1.18.0",
+                "1.18.0",
+                "1.18.0",
+                "1.18.0"
+              ],
+              "sha256s": [
+                "e84f54cfd49ef06b0b16536056dbec0c496323de28abcce53a4269463de35eaf",
+                "36440a181c89f48e56817d85210d55a6e7f4c60ee6d6238370e1f81089d4d3ab",
+                "59f42b0b991766380a6b0a42afca226e0fc172ef4525145eaef044e3a6663259",
+                "14fa81bdc34171edb5f1f02b1d60e74802f0439b77fa44e592565d517d72df90",
+                "14fa81bdc34171edb5f1f02b1d60e74802f0439b77fa44e592565d517d72df90"
+              ],
+              "platforms": [
+                "windows",
+                "mac",
+                "mac-arm",
+                "linux",
+                "linux-arm"
+              ],
+              "executables": [
+                "",
+                "",
+                "",
+                "",
+                ""
+              ]
+            }
+          }
+        }
+      }
+    },
     "@@rules_python+//python/uv:uv.bzl%uv": {
       "general": {
         "bzlTransitiveDigest": "I8FPZMevE2oI/peSpMBRVIN++WOtfjtJVjbPsBZQ87A=",

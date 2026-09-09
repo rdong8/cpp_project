@@ -14,6 +14,9 @@ initialize-host:
     sudo apt -y update
     sudo apt -y install podman
 
+bazel-completions:
+    bazelisk completion fish > ~/.config/fish/completions/bazelisk.fish
+
 _cmd cmd:
     bazel \
         {{ cmd }} \

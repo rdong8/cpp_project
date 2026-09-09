@@ -1,0 +1,23 @@
+load("@doxygen//:doxygen.bzl", "doxygen")
+
+doxygen(
+    name = "doxygen",  # Name of the rule, can be anything
+    srcs = glob([
+        "*.cpp",
+        "*.cppm",
+        "*.hpp",
+        "*.md",
+    ]),
+    generate_html = True,
+    project_brief = "Personal project/experiment monorepo",
+    project_name = "monorepo",
+    # Equivalently, you can manually set the configurations
+    # that will be appended to the Doxyfile in the form of a list of strings
+    # configurations = [
+    #    "GENERATE_HTML = YES",
+    #    "GENERATE_LATEX = NO",
+    #    "USE_MDFILE_AS_MAINPAGE = README.md",
+    # ],
+    tags = ["manual"],
+    use_mdfile_as_mainpage = "README.md",
+)
