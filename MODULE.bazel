@@ -66,8 +66,8 @@ git_override(
 bazel_dep(name = "rules_doxygen", version = "2.6.4", dev_dependency = True)
 git_override(
     module_name = "rules_doxygen",
-    commit = "0b74d0a622c8fa625da9435eef34a0a564f77569",
-    remote = "https://github.com/rdong8/rules_doxygen",
+    commit = "7d6dc5494458bcba9159de927af6e6677621104d",
+    remote = "https://github.com/TendTo/rules_doxygen",
 )
 
 doxygen_extension = use_extension("@rules_doxygen//:extensions.bzl", "doxygen_extension")
