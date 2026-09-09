@@ -16,30 +16,32 @@ build --conlyopt=-std=c23
 # TODO: Can't compile std with --config=opt without this
 build --force_pic
 
-build \
-    --copt=-Wall \
-    --copt=-Wcast-align \
-    --copt=-Wconversion \
-    --copt=-Wdouble-promotion \
-    --copt=-Wextra \
-    --copt=-Wformat=2 \
-    --copt=-Wimplicit-fallthrough \
-    --copt=-Wnull-dereference \
-    --copt=-Wpedantic \
-    --copt=-Wunused \
-    --copt=-Werror \
-    --cxxopt=-Wnon-virtual-dtor \
-    --cxxopt=-Wold-style-cast \
-    --cxxopt=-Woverloaded-virtual
+# TODO: scope this to just our code?
+build --features=treat_warnings_as_errors
 
-# TODO: Also consider safe-stack, memory, realtime, thread (some mutually exclusive with others)
-build:sanitizers \
+build --per_file_copt=^(src|tests)/.*@\
+-Wall,\
+-Wcast-align,\
+-Wconversion,\
+-Wdouble-promotion,\
+-Wextra,\
+-Wformat=2,\
+-Wimplicit-fallthrough,\
+-Wnull-dereference,\
+-Wpedantic,\
+-Wunused,\
+-Wnon-virtual-dtor,\
+-Wold-style-cast,\
+-Woverloaded-virtual
+
+build:default_sanitizers \
     --copt=-fno-sanitize-merge \
-    --copt=-fsanitize=address,leak
+    --features=asan \
+    --features=lsan
 
 build:dbg \
     --compilation_mode=dbg \
-    --config=sanitizers \
+    --config=default_sanitizers \
     --copt=-Og \
     --copt=-fno-omit-frame-pointer \
     --copt=-glldb \
