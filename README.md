@@ -23,7 +23,7 @@ Then set the `dotfiles.repository` setting in VS Code to your dotfiles repositor
 
 Then build the devcontainer. All commands after this point are to be run *in the devcontainer*, not on the host.
 
-## Docs
+## Development Workflow
 
 Build and serve the doxygen documentation:
 
@@ -31,27 +31,15 @@ Build and serve the doxygen documentation:
 just docs
 ```
 
-## Pre-Commit
-
-Registers pre-commit hooks to run automatically.
+Register pre-commit hooks to run automatically:
 
 ```bash
 just pre-commit-install
+just pre-commit # Or manually run it
 ```
 
-## Clean
-
-Clean the build directory and Conan generated files:
+Clean the Bazel build directories:
 
 ```bash
 just clean
-```
-
-After cleaning, you have to re-run everything from `just conan-install` and after.
-
-You can also delete all installed Conan packages matching a pattern:
-
-```bash
-just clean-conan 'boost/*'
-just clean-conan # Removes everything
 ```
