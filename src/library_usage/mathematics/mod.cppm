@@ -1,5 +1,5 @@
-/// @module library_usage.mathematics
-/// A sample library containing math functions.
+/// @file
+/// @brief A sample library containing math functions.
 /// A documentation comment for the file like this one must be in any file you wish to be tracked by Doxygen.
 
 export module library_usage.mathematics;
@@ -69,8 +69,10 @@ template <std::size_t N, std::floating_point Float = double> struct Vec
     [[nodiscard]]
     auto constexpr operator*(this Self const &self, Float c) noexcept -> Self
     {
-        return Self{[&]<std::size_t... I>(std::index_sequence<I...>)
-                    { return std::array{c * self.components[I]...}; }(std::make_index_sequence<N>{})};
+        return Self{
+            [&]<std::size_t... I>(std::index_sequence<I...>)
+            { return std::array{c * self.components[I]...}; }(std::make_index_sequence<N>{}),
+        };
     }
 
     /// Compute the scalar product of @p c and @p vec
@@ -83,7 +85,7 @@ template <std::size_t N, std::floating_point Float = double> struct Vec
     }
 };
 
-auto constexpr DEFAULT_DX{0.0001};
+auto constexpr DEFAULT_DX = 0.0001;
 
 /// Evaluate the approximate derivative of @p f at @p x
 /// @tparam F A function @f$ f : \mathbb R \to \mathbb R @f$

@@ -1,0 +1,24 @@
+load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library")
+
+package(default_visibility = ["//docs:__pkg__"])
+
+cc_library(
+    name = "library_usage.mathematics",
+    features = ["cpp_modules"],
+    module_interfaces = ["mathematics/mod.cppm"],
+    deps = [
+        "@std_module",
+    ],
+)
+
+cc_binary(
+    name = "library_usage",
+    srcs = ["main.cpp"],
+    features = ["cpp_modules"],
+    deps = [
+        ":library_usage.mathematics",
+        "@boost.cobalt",
+        "@quill//:quill_module",
+        "@std_module",
+    ],
+)

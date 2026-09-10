@@ -1,92 +1,95 @@
 #include <boost/cobalt/channel.hpp>
 #include <boost/cobalt/main.hpp>
 #include <boost/cobalt/promise.hpp>
-#include <spdlog/sinks/basic_file_sink.h>
-#include <spdlog/spdlog.h>
+#include <quill/LogMacros.h>
 
 import std;
 
 import library_usage.mathematics;
 
+import quill;
+
 namespace
 {
 
-// Configure the default logger to log to the file "log.txt", flushing on the info level or higher
 [[maybe_unused]]
-auto configure_file_logger() -> void
+auto configure_logger() -> void
 {
-    // Create new logger called "logger" to log.txt, clearing previous contents
-    auto const logger{spdlog::basic_logger_st("logger", "log.txt", true)};
+    quill::Backend::start();
 
-    // Change the message format to "[abbreviated log level] message"
-    // https://github.com/gabime/spdlog/wiki/3.-Custom-formatting
-    logger->set_pattern("[%L] %v");
+    auto console_sink = quill::Frontend::create_or_get_sink<quill::ConsoleSink>("console");
 
-    // Automatically flush for info level or higher
-    logger->flush_on(spdlog::level::info);
+    auto file_sink = quill::Frontend::create_or_get_sink<quill::FileSink>(
+        "library_usage.log",
+        [] static
+        {
+            quill::FileSinkConfig config{};
+            config.set_open_mode('w');
+            config.set_filename_append_option(quill::FilenameAppendOption::StartDateTime);
+            return config;
+        }(),
+        quill::FileEventNotifier{});
 
-    // Set the logger used by the `spdlog::<level>(msg)` logging functions to this logger ie.
-    // `spdlog::warn("Warning!!")`
-    spdlog::set_default_logger(logger);
+    auto const *logger = quill::Frontend::create_or_get_logger("root", {std::move(console_sink), std::move(file_sink)})
 }
 
-auto producer(boost::cobalt::channel<int> &channel) -> boost::cobalt::promise<void>
+auto producer(quill::Logger *logger, boost::cobalt::channel<int> &channel) -> boost::cobalt::promise<void>
 {
     for (auto const i : std::views::iota(0, 5))
     {
-        spdlog::info("Producing {}", i);
+        QUILL_LOG_INFO(logger, "Producing {}", i);
         co_await channel.write(i);
     }
 
     channel.close();
 }
 
-auto cobalt_demo() -> boost::cobalt::promise<void>
+auto cobalt_demo(quill::Logger *logger) -> boost::cobalt::promise<void>
 {
-    spdlog::info("COBALT DEMO:");
+    QUILL_LOG_INFO(logger, "COBALT DEMO:");
 
     boost::cobalt::channel<int> channel{};
 
-    auto promise{producer(channel)};
+    auto promise = producer(channel);
 
     while (channel.is_open())
     {
-        spdlog::info("Consumer received {}", co_await channel.read());
+        QUILL_LOG_INFO(logger, "Consumer received {}", co_await channel.read());
     }
 
     // Force the producer to finish
     co_await promise;
 }
 
-auto vec_demo() -> void
+auto vec_demo(quill::Logger *logger) -> void
 {
-    spdlog::info("VECTOR DEMO:");
+    QUILL_LOG_INFO(logger, "VECTOR DEMO:");
 
     math::Vec<2> const north{0., 1.};
     math::Vec<2> const east{1., 0.};
     math::Vec<2> const northeast{1., 1.};
 
-    spdlog::info("Dot product of {} and {} is: {}", north, east, north.dot(east));
-    spdlog::info("Dot product of {} and {} is: {}", north, northeast, north.dot(northeast));
+    QUILL_LOG_INFO(logger, "Dot product of {} and {} is: {}", north, east, north.dot(east));
+    QUILL_LOG_INFO(logger, "Dot product of {} and {} is: {}", north, northeast, north.dot(northeast));
 
-    spdlog::info("Norm of {} is: {}", northeast, northeast.norm());
+    QUILL_LOG_INFO(logger, "Norm of {} is: {}", northeast, northeast.norm());
 
-    spdlog::info("Is {} < {}? {}", east, northeast, east < northeast);
+    QUILL_LOG_INFO(logger, "Is {} < {}? {}", east, northeast, east < northeast);
 }
 
-auto differentiation_demo() -> void
+auto differentiation_demo(quill::Logger *logger) -> void
 {
     using math::d_dx;
 
-    spdlog::info("DIFFERENTIATION DEMO:");
+    QUILL_LOG_INFO(logger, "DIFFERENTIATION DEMO:");
 
     // NOLINTBEGIN(*-magic-numbers)
-    auto constexpr F{[](double x) static { return 3 * x * x - x + 16; }};
-    auto constexpr DF_DX{d_dx<F>};
+    auto constexpr F = [](double x) static { return 3 * x * x - x + 16; };
+    auto constexpr DF_DX = d_dx<F>;
 
-    spdlog::info("f(x) = 3x^2 - x + 16");
-    spdlog::info("f'(4) = {}", DF_DX(4.0));
-    spdlog::info("f''(4) = {}", d_dx<DF_DX>(4.0));
+    QUILL_LOG_INFO(logger, "f(x) = 3x^2 - x + 16");
+    QUILL_LOG_INFO(logger, "f'(4) = {}", DF_DX(4.0));
+    QUILL_LOG_INFO(logger, "f''(4) = {}", d_dx<DF_DX>(4.0));
     // NOLINTEND(*-magic-numbers)
 }
 
@@ -95,13 +98,13 @@ auto differentiation_demo() -> void
 auto co_main([[maybe_unused]] int argc, [[maybe_unused]] char **argv) -> boost::cobalt::main
 {
     // By default spdlog will log to stdout
-    // configure_file_logger();
+    auto *logger = configure_logger();
 
-    co_await cobalt_demo();
+    co_await cobalt_demo(logger);
 
-    vec_demo();
+    vec_demo(logger);
 
-    differentiation_demo();
+    differentiation_demo(logger);
 
     co_return 0;
 }
