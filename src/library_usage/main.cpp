@@ -5,15 +5,15 @@
 
 import std;
 
-import library_usage.mathematics;
-
 import quill;
+
+import library_usage.mathematics;
 
 namespace
 {
 
 [[maybe_unused]]
-auto configure_logger() -> void
+auto configure_logger() -> quill::Logger *
 {
     quill::Backend::start();
 
@@ -30,7 +30,7 @@ auto configure_logger() -> void
         }(),
         quill::FileEventNotifier{});
 
-    auto const *logger = quill::Frontend::create_or_get_logger("root", {std::move(console_sink), std::move(file_sink)})
+    return quill::Frontend::create_or_get_logger("root", {std::move(console_sink), std::move(file_sink)});
 }
 
 auto producer(quill::Logger *logger, boost::cobalt::channel<int> &channel) -> boost::cobalt::promise<void>
@@ -50,7 +50,7 @@ auto cobalt_demo(quill::Logger *logger) -> boost::cobalt::promise<void>
 
     boost::cobalt::channel<int> channel{};
 
-    auto promise = producer(channel);
+    auto promise = producer(logger, channel);
 
     while (channel.is_open())
     {

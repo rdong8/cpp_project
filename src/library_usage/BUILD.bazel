@@ -7,6 +7,7 @@ cc_library(
     features = ["cpp_modules"],
     module_interfaces = ["mathematics/mod.cppm"],
     deps = [
+        "@quill//:quill_module",
         "@std_module",
     ],
 )

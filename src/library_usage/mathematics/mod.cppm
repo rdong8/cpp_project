@@ -2,9 +2,13 @@
 /// @brief A sample library containing math functions.
 /// A documentation comment for the file like this one must be in any file you wish to be tracked by Doxygen.
 
+module;
+
 export module library_usage.mathematics;
 
 import std;
+
+import quill;
 
 export namespace math
 {
@@ -112,7 +116,7 @@ auto constexpr d_dx(Float x) noexcept(noexcept(F(std::declval<Float>()))) -> Flo
 // TODO: Make Vec an input range so that this isn't necessary
 /// Formatter specialization for @ref math::Vec
 export template <std::size_t N, std::floating_point Float>
-struct std::formatter<math::Vec<N, Float>> : std::formatter<typename math::Vec<N, Float>::Data>
+struct fmtquill::formatter<math::Vec<N, Float>> : fmtquill::formatter<typename math::Vec<N, Float>::Data>
 {
     using Self = std::formatter<typename math::Vec<N, Float>::Data>;
 

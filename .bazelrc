@@ -32,6 +32,9 @@ build --per_file_copt=^(src|tests)/.*@\
 -Wnon-virtual-dtor,\
 -Wold-style-cast
 
+# TODO: external deps that are consumed through headers can generate warnings that the above glob doesn't silence, because they're compiled as part of a TU in src|tests
+build --features=external_include_paths
+
 build:default_sanitizers \
     --copt=-fno-sanitize-merge \
     --features=asan \
