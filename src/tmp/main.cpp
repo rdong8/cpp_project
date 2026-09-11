@@ -1,8 +1,5 @@
-import rdong8.tmp;
-
-import quill;
+import std;
 
 auto main() -> int
 {
-    hello_world();
 }

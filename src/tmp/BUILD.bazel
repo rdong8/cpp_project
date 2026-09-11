@@ -4,11 +4,10 @@ package(default_visibility = ["//docs:__pkg__"])
 
 cc_binary(
     name = "tmp",
-    srcs = ["main.cpp"],
+    srcs = [],
     features = ["cpp_modules"],
     module_interfaces = ["mod.cppm"],
     deps = [
-        "@quill//:quill_module",
         "@std_module",
     ],
 )
