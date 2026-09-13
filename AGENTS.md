@@ -154,6 +154,7 @@ If you want to group statements by concern, use a block or immediately invoked l
 ## Bazel
 
 - Use `implementation_deps` for C++ targets
+- Never rely on transitive dependencies
 - Use the fish shell for all shell targets. Use `argparse` and named arguments only.
 - Never touch the system compiler for experimentation/testing. Make a temporary bazel target to play around with, ie. [`//src/tmp:tmp`](src/tmp/BUILD.bazel)
 
