@@ -51,17 +51,17 @@ auto make_random_keys(std::size_t n, std::uint64_t seed, Key low, Key high) -> s
 }
 
 // Disjoint key spaces so "miss" lookups never accidentally hit.
-constexpr std::size_t     //
-    HIT_LOW{1},           //
-    HIT_HIGH{1ULL << 47}, //
-    MISS_LOW{1ULL << 47}, //
-    MISS_HIGH{1ULL << 48};
+constexpr auto            //
+    HIT_LOW = 1UZ,        //
+    HIT_HIGH = 1UZ << 47, //
+    MISS_LOW = 1UZ << 47, //
+    MISS_HIGH = 1UZ << 48;
 
 // Insertion (rehashes from empty)
 template <typename Map> auto insert(benchmark::State &state) -> void
 {
-    auto const n{static_cast<std::uint32_t>(state.range(0))};
-    auto const keys{make_random_keys(n, 1, HIT_LOW, HIT_HIGH)};
+    auto const n = static_cast<std::uint32_t>(state.range(0));
+    auto const keys = make_random_keys(n, 1, HIT_LOW, HIT_HIGH);
 
     for (auto const _ : state)
     {
@@ -83,8 +83,8 @@ template <typename Map> auto insert(benchmark::State &state) -> void
 // Insertion with reserve (no incremental rehashing)
 template <typename Map> auto insert_reserve(benchmark::State &state) -> void
 {
-    auto const n{static_cast<std::uint32_t>(state.range(0))};
-    auto const keys{make_random_keys(n, 1, HIT_LOW, HIT_HIGH)};
+    auto const n = static_cast<std::uint32_t>(state.range(0));
+    auto const keys = make_random_keys(n, 1, HIT_LOW, HIT_HIGH);
 
     for (auto const _ : state)
     {
@@ -99,14 +99,15 @@ template <typename Map> auto insert_reserve(benchmark::State &state) -> void
         benchmark::DoNotOptimize(m);
         benchmark::ClobberMemory();
     }
+
     state.SetItemsProcessed(state.iterations() * static_cast<int64_t>(n));
 }
 
 // Successful lookup
 template <typename Map> auto lookup_hit(benchmark::State &state) -> void
 {
-    auto const n{static_cast<std::uint32_t>(state.range(0))};
-    auto const keys{make_random_keys(n, 1, HIT_LOW, HIT_HIGH)};
+    auto const n = static_cast<std::uint32_t>(state.range(0));
+    auto const keys = make_random_keys(n, 1, HIT_LOW, HIT_HIGH);
     Map m{};
     m.reserve(n);
 
@@ -119,7 +120,7 @@ template <typename Map> auto lookup_hit(benchmark::State &state) -> void
 
     for (auto const _ : state)
     {
-        auto it{m.find(keys[i++ % n])};
+        auto it = m.find(keys[i++ % n]);
         benchmark::DoNotOptimize(it);
     }
 
@@ -129,9 +130,9 @@ template <typename Map> auto lookup_hit(benchmark::State &state) -> void
 // Failed lookup
 template <typename Map> auto lookup_miss(benchmark::State &state) -> void
 {
-    auto const n{static_cast<std::uint32_t>(state.range(0))};
-    auto const keys{make_random_keys(n, 1, HIT_LOW, HIT_HIGH)};
-    auto const miss_keys{make_random_keys(n, 2, MISS_LOW, MISS_HIGH)};
+    auto const n = static_cast<std::uint32_t>(state.range(0));
+    auto const keys = make_random_keys(n, 1, HIT_LOW, HIT_HIGH);
+    auto const miss_keys = make_random_keys(n, 2, MISS_LOW, MISS_HIGH);
     Map m{};
     m.reserve(n);
 
@@ -144,7 +145,7 @@ template <typename Map> auto lookup_miss(benchmark::State &state) -> void
 
     for (auto const _ : state)
     {
-        auto it{m.find(miss_keys[i++ % n])};
+        auto it = m.find(miss_keys[i++ % n]);
         benchmark::DoNotOptimize(it);
     }
 
@@ -154,8 +155,8 @@ template <typename Map> auto lookup_miss(benchmark::State &state) -> void
 // Iteration
 template <typename Map> auto iterate(benchmark::State &state) -> void
 {
-    auto const n{static_cast<std::uint32_t>(state.range(0))};
-    auto const keys{make_random_keys(n, 1, HIT_LOW, HIT_HIGH)};
+    auto const n = static_cast<std::uint32_t>(state.range(0));
+    auto const keys = make_random_keys(n, 1, HIT_LOW, HIT_HIGH);
     Map m{};
     m.reserve(n);
 
@@ -186,8 +187,8 @@ template <typename Map> auto iterate(benchmark::State &state) -> void
 // Insert + erase churn (erase-heavy workload)
 template <typename Map> void churn(benchmark::State &state)
 {
-    auto const n{static_cast<std::uint32_t>(state.range(0))};
-    auto const keys{make_random_keys(n, 1, HIT_LOW, HIT_HIGH)};
+    auto const n = static_cast<std::uint32_t>(state.range(0));
+    auto const keys = make_random_keys(n, 1, HIT_LOW, HIT_HIGH);
 
     for (auto const _ : state)
     {
