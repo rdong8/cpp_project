@@ -13,7 +13,7 @@ build \
 # TODO: https://github.com/bazel-contrib/toolchains_llvm/issues/592
 build --conlyopt=-std=c23
 
-# TODO: Can't compile std with --config=opt without this
+# TODO(cpp20-modules): Can't compile std with --config=opt without this
 build --force_pic
 
 build --linkopt=-Wl,-fatal-warnings

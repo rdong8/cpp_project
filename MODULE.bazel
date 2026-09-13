@@ -3,32 +3,35 @@ module(
     version = "latest",
 )
 
-# Bazel stuff
+# C++ std module
+std_module = use_extension("//bazel:std_module.bzl", "std_module")
+use_repo(std_module, "std_module")
+
+# Dependencies
+
+bazel_dep(name = "abseil-cpp", version = "20260817.0")
 bazel_dep(name = "bazel_skylib", version = "1.9.2")
 bazel_dep(name = "bazelrc-preset.bzl", version = "1.9.2")
+bazel_dep(name = "boost", version = "1.90.0.bcr.2")
+bazel_dep(name = "boost.cobalt", version = "1.90.0.bcr.1")
+bazel_dep(name = "cpptrace", version = "1.0.4.bcr.1")
+bazel_dep(name = "google_benchmark", version = "1.9.5")
+bazel_dep(name = "googletest", version = "1.18.0.bcr.1")
+bazel_dep(name = "magic_enum", version = "0.9.8")
 bazel_dep(name = "platforms", version = "1.1.0")
+bazel_dep(name = "quill", version = "13.1.0")
 bazel_dep(name = "rules_cc", version = "0.2.22")
 bazel_dep(name = "rules_shell", version = "0.8.0")
-
-# TODO(hermetic-llvm): https://github.com/hermeticbuild/hermetic-llvm/issues/221
-# bazel_dep(name = "llvm", version = "0.8.19")
-# toolchain = use_extension("@llvm//extensions:toolchain.bzl", "toolchain")
-# toolchain.exec(arch = "x86_64", os = "linux")
-# toolchain.target(arch = "x86_64", os = "linux")
-# use_repo(toolchain, "llvm_toolchains")
-# register_toolchains("@llvm//toolchain:all")
-# llvm = use_extension("@llvm//extensions:llvm.bzl", "llvm")
-# llvm.version(llvm_version = "23.1.0")
-
-# LLVM
 bazel_dep(name = "toolchains_llvm")
+
+## toolchains_llvm
+
 git_override(
     module_name = "toolchains_llvm",
     commit = "2711d4189ff8c5670ecd1df46bbb1e758073fe78",
     remote = "https://github.com/bazel-contrib/toolchains_llvm",
 )
 
-# Configure and register the toolchain.
 llvm = use_extension("@toolchains_llvm//toolchain/extensions:llvm.bzl", "llvm")
 llvm.toolchain(
     cxx_standard = {"": "c++2d"},
@@ -40,36 +43,28 @@ use_repo(llvm, "llvm_toolchain", "llvm_toolchain_llvm")
 
 register_toolchains("@llvm_toolchain//:all")
 
-# C++ std module
-std_module = use_extension("//bazel:std_module.bzl", "std_module")
-use_repo(std_module, "std_module")
-
-# C++ stuff
-bazel_dep(name = "abseil-cpp", version = "20260817.0")
-bazel_dep(name = "boost", version = "1.90.0.bcr.2")
-bazel_dep(name = "boost.cobalt", version = "1.90.0.bcr.1")
-bazel_dep(name = "cpptrace", version = "1.0.4.bcr.1")
-bazel_dep(name = "google_benchmark", version = "1.9.5")
-bazel_dep(name = "googletest", version = "1.18.0.bcr.1")
-bazel_dep(name = "magic_enum", version = "0.9.8")
-bazel_dep(name = "quill", version = "13.1.0")
+## quill
 git_override(
     module_name = "quill",
     commit = "be8099d1fc7fe121a36d18c6ffcda9fa3469cc91",
     remote = "https://github.com/rdong8/quill",
 )
 
-# Compile commands
-# TODO: https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2024/p2977r1.html
+# Dev dependencies
+
 bazel_dep(name = "hedron_compile_commands", dev_dependency = True)
+bazel_dep(name = "rules_doxygen", version = "2.6.4", dev_dependency = True)
+
+# hedron_compile_commands
+# TODO: use https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2024/p2977r1.html
 git_override(
     module_name = "hedron_compile_commands",
     commit = "a3ea4aa87b4539b3d6e356f49b3eb81f593e5656",
     remote = "https://github.com/rdong8/bazel-compile-commands-extractor",
 )
 
-# Docs
-bazel_dep(name = "rules_doxygen", version = "2.6.4", dev_dependency = True)
+# rules_doxygen
+
 git_override(
     module_name = "rules_doxygen",
     commit = "7d6dc5494458bcba9159de927af6e6677621104d",
