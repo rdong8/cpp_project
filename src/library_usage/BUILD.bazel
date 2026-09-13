@@ -1,6 +1,9 @@
 load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library")
 
-package(default_visibility = ["//docs:__pkg__"])
+package(default_visibility = [
+    "//docs:__pkg__",
+    "//src/library_usage:__subpackages__",
+])
 
 cc_library(
     name = "library_usage.mathematics",

@@ -157,6 +157,18 @@ If you want to group statements by concern, use a block or immediately invoked l
 - Use the fish shell for all shell targets. Use `argparse` and named arguments only.
 - Never touch the system compiler for experimentation/testing. Make a temporary bazel target to play around with, ie. [`//src/tmp:tmp`](src/tmp/BUILD.bazel)
 
+## Testing
+
+- Use module implementation partition units to write unit tests. This allows testing of internal APIs of a project that may not be `export`'ed.
+- Tests belong in an anonymous namespace nested in the namespace under test.
+- If you need to test hidden members of a class, add the `-fno-access-control` flag to the test instead of incorrectly making a hidden member public
+
+## Test Selection
+
+Do not write stupid tests. Examples:
+
+- Don't write an assertion with constants for both operands, ie. `static_assert(sizeof(MessageFrame) == 8UZ)`. If this is required by some protocol, then it belongs next to the struct declaration, not in the unit tests. Else you're just comparing a compile time constant against a magic number.
+
 ## Meta
 
 - Avoid making compromises without consulting with me.

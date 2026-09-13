@@ -1,1 +1,0 @@
-add_module_test(library_usage.mathematics mathematics)

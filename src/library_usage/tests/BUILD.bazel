@@ -1,0 +1,15 @@
+load("@rules_cc//cc:defs.bzl", "cc_test")
+
+package(default_visibility = ["//visibility:private"])
+
+cc_test(
+    name = "mathematics",
+    srcs = ["mathematics.cpp"],
+    features = ["cpp_modules"],
+    linkstatic = True,
+    deps = [
+        "//src/library_usage:library_usage.mathematics",
+        "@googletest//:gtest_main",
+        "@std_module",
+    ],
+)
