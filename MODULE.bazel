@@ -55,8 +55,8 @@ bazel_dep(name = "magic_enum", version = "0.9.8")
 bazel_dep(name = "quill", version = "13.1.0")
 git_override(
     module_name = "quill",
-    commit = "bfccbb8add0602f2a54eb4c7ddc8c6ee8274b196",
-    remote = "https://github.com/odygrd/quill",
+    commit = "be8099d1fc7fe121a36d18c6ffcda9fa3469cc91",
+    remote = "https://github.com/rdong8/quill",
 )
 
 # Compile commands

@@ -1,5 +1,3 @@
-# TODO: lots of stuff here should be features
-
 import %workspace%/preset.bazelrc
 
 build --verbose_failures
@@ -62,3 +60,5 @@ build:lto \
 # Should be combined with --config=opt or --config=lto
 build:profile \
     --copt=-pg
+
+build --@quill//:disable_non_prefixed_macros

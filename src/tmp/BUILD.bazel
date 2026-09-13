@@ -4,9 +4,9 @@ package(default_visibility = ["//docs:__pkg__"])
 
 cc_binary(
     name = "tmp",
-    srcs = [],
+    srcs = ["main.cpp"],
     features = ["cpp_modules"],
-    module_interfaces = ["mod.cppm"],
+    module_interfaces = [],
     deps = [
         "@std_module",
     ],

@@ -118,11 +118,17 @@ auto constexpr d_dx(Float x) noexcept(noexcept(F(std::declval<Float>()))) -> Flo
 export template <std::size_t N, std::floating_point Float>
 struct fmtquill::formatter<math::Vec<N, Float>> : fmtquill::formatter<typename math::Vec<N, Float>::Data>
 {
-    using Self = std::formatter<typename math::Vec<N, Float>::Data>;
+    using Self = fmtquill::formatter<typename math::Vec<N, Float>::Data>;
 
     template <typename FormatContext>
     auto format(this Self const &self, math::Vec<N, Float> const &vec, FormatContext &ctx) -> FormatContext::iterator
     {
         return self.format(vec.components, ctx);
     }
+};
+
+/// Codec specialization for @ref math::Vec
+export template <std::size_t N, std::floating_point Float>
+struct quill::Codec<math::Vec<N, Float>> : quill::DeferredFormatCodec<math::Vec<N, Float>>
+{
 };
