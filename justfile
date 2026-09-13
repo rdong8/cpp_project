@@ -1,4 +1,5 @@
 set dotenv-load
+set shell := ['fish', '-c']
 
 export UBSAN_OPTIONS := 'print_stacktrace=1'
 
