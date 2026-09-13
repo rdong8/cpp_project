@@ -9,6 +9,7 @@ cc_test(
     linkstatic = True,
     deps = [
         "//src/library_usage:library_usage.mathematics",
+        "@googletest//:gtest",
         "@googletest//:gtest_main",
         "@std_module",
     ],
