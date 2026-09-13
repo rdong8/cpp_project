@@ -33,13 +33,13 @@ just docs
 
 Register pre-commit hooks to run automatically:
 
-```bash
+```fish
 just pre-commit-install
 just pre-commit # Or manually run it
 ```
 
 Clean the Bazel build directories (you shouldn't actually ever have to do this):
 
-```bash
+```fish
 just clean
 ```
