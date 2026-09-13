@@ -1,6 +1,7 @@
 # AGENTS.md
 
 - Use module implementation partition units to write unit tests. This allows testing of internal APIs of a project that may not be `export`'ed.
+- Tests belong in an anonymous namespace nested in the namespace under test.
 - Use `-fno-access-control` for unit testing hidden members instead of incorrectly making them visible.
 
 ## Test Selection
