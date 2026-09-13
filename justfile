@@ -5,11 +5,8 @@ export UBSAN_OPTIONS := 'print_stacktrace=1'
 configs := ''
 targets := ''
 
-# Fedora already has the required packages
-[doc]
 initialize-host:
-    sudo apt -y update
-    sudo apt -y install podman
+    sudo dnf install cpp podman
 
 # TODO: The only reason we have a .bazelversion is because fish completions can't be generated without it
 # https://github.com/bazelbuild/bazelisk/issues/718#issuecomment-3435688542

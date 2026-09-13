@@ -8,7 +8,7 @@ Monorepo for my personal projects. Also serves as a demo for doing things the "r
 
 ```fish
 git clone https://github.com/rdong8/monorepo.git
-cd cpp_project/
+cd monorepo/
 ```
 
 Bootstrap the host:
