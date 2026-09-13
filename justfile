@@ -34,6 +34,17 @@ compile_commands: (build "//src/...") (run "@hedron_compile_commands//:refresh_a
 
 docs: (run "//docs:serve")
 
+[doc("Tail the last Bazel invocation")]
+tail *args='-F':
+    #!/usr/bin/env fish
+    set -l log (test -L bazel-out && readlink -f bazel-out/../../../command.log 2>/dev/null)
+    if test (count $log) -eq 0
+        set -l cache_dir (test -n "$XDG_CACHE_HOME" && echo "$XDG_CACHE_HOME" || echo "$HOME/.cache")
+        set -l hash (echo -n '{{ justfile_directory() }}' | md5sum | cut -d' ' -f1)
+        set log "$cache_dir/bazel/_bazel_$USER/$hash/command.log"
+    end
+    tail {{ args }} $log
+
 pre-commit:
     prek run --all-files
 

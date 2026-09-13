@@ -1,4 +1,4 @@
-load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library", "cc_test")
+load("@rules_cc//cc:defs.bzl", "cc_binary")
 
 package(default_visibility = ["//docs:__pkg__"])
 
@@ -8,25 +8,6 @@ cc_binary(
     features = ["cpp_modules"],
     module_interfaces = [],
     deps = [
-        "@std_module",
-    ],
-)
-
-cc_library(
-    name = "my_math",
-    features = ["cpp_modules"],
-    module_interfaces = ["math.cppm"],
-    deps = ["@std_module"],
-)
-
-cc_test(
-    name = "test",
-    srcs = ["test.cppm"],
-    features = ["cpp_modules"],
-    linkstatic = True,
-    deps = [
-        ":my_math",
-        "@googletest//:gtest_main",
         "@std_module",
     ],
 )

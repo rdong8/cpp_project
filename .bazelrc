@@ -1,5 +1,7 @@
 import %workspace%/preset.bazelrc
 
+common --write_command_log
+
 build --verbose_failures
 
 build --experimental_cpp_modules
