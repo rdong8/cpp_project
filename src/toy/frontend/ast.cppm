@@ -7,11 +7,11 @@ module;
 #include <llvm/ADT/StringRef.h>
 #include <llvm/Support/raw_ostream.h>
 
-export module toy:ast;
+export module toy:frontend.ast;
 
 import std;
 
-import :lexer;
+import :frontend.lexer;
 
 export namespace toy
 {

@@ -8,11 +8,12 @@ module;
 
 #include "src/toy/macros.hpp"
 
-export module toy:lexer;
+export module toy:frontend.lexer;
 
 import std;
 
 import utility;
+
 import :utility;
 
 export namespace toy

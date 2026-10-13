@@ -9,12 +9,12 @@ module;
 #include <llvm/Support/raw_ostream.h>
 #include <magic_enum/magic_enum.hpp>
 
-module toy:ast.impl;
+module toy:frontend.ast.impl;
 
 import std;
 
-import :ast;
-import :lexer;
+import :frontend.ast;
+import :frontend.lexer;
 import :utility;
 
 namespace toy
@@ -27,8 +27,7 @@ namespace
 auto loc(auto const *node) -> std::string
 {
     auto const &location = node->loc();
-
-    return llvm::formatv("@{0}:{1}:{2}", *location.filename, location.line, location.column).str();
+    return llvm::formatv("@{}:{}:{}", *location.filename, location.line, location.column).str();
 }
 
 /// Helper class that implements the AST tree traversal and prints the nodes along the way.

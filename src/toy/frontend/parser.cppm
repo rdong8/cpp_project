@@ -5,13 +5,14 @@ module;
 #include <llvm/Support/Casting.h>
 #include <llvm/Support/raw_ostream.h>
 
-export module toy:parser;
+export module toy:frontend.parser;
 
 import std;
 
-import :ast;
-import :lexer;
 import utility;
+
+import :frontend.ast;
+import :frontend.lexer;
 import :utility;
 
 export namespace toy
