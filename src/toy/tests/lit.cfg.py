@@ -17,6 +17,7 @@ for directory in tool_dirs:
     lit.llvm.llvm_config.with_environment("PATH", directory, append_path=True)
 
 tools = [
+    ToolSubst("toyc-ch1", os.path.join(config.toy_tools_dir, "toyc"), unresolved="fatal"),
     ToolSubst("toyc", os.path.join(config.toy_tools_dir, "toyc"), unresolved="fatal"),
     ToolSubst("FileCheck", os.path.join(config.llvm_tools_dir, "FileCheck"), unresolved="fatal"),
 ]

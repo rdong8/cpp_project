@@ -465,25 +465,6 @@
         }
       }
     },
-    "//bazel:llvm.bzl%llvm_raw": {
-      "general": {
-        "bzlTransitiveDigest": "iVue+XyZSX1HEi1sWwhT/3R6tYVNBTv3H2iXPeONwiI=",
-        "usagesDigest": "xiaTXm7HGlfDwyDj34sRzaUbfO3pUh0wYcHa8cJCID0=",
-        "recordedInputs": [
-          "REPO_MAPPING:,bazel_tools bazel_tools"
-        ],
-        "generatedRepoSpecs": {
-          "llvm-raw": {
-            "repoRuleId": "@@bazel_tools//tools/build_defs/repo:http.bzl%http_archive",
-            "attributes": {
-              "build_file_content": "# empty",
-              "strip_prefix": "llvm-project-94d961f440b18a3ab5ff782304edafac745af98a",
-              "url": "https://github.com/rdong8/llvm-project/archive/94d961f440b18a3ab5ff782304edafac745af98a.tar.gz"
-            }
-          }
-        }
-      }
-    },
     "//bazel:std_module.bzl%std_module": {
       "general": {
         "bzlTransitiveDigest": "ZVxZy4DqxVBpBCq1oVwIeoe1XJNmOy9+lA7sWCAuUU8=",
@@ -495,6 +476,31 @@
           "std_module": {
             "repoRuleId": "@@//bazel:std_module.bzl%std_module_repo",
             "attributes": {}
+          }
+        }
+      }
+    },
+    "//bazel/llvm:llvm.bzl%llvm_raw": {
+      "general": {
+        "bzlTransitiveDigest": "xR5v42FhxxBmkh2C9D12MIRrD0KL+YZkaA5WoaBY9c8=",
+        "usagesDigest": "cOgIr3dzwKcWSdgbwZJku0A5F4qbRw2/ayJJGbs+Ho8=",
+        "recordedInputs": [
+          "REPO_MAPPING:,bazel_tools bazel_tools"
+        ],
+        "generatedRepoSpecs": {
+          "llvm-raw": {
+            "repoRuleId": "@@bazel_tools//tools/build_defs/repo:http.bzl%http_archive",
+            "attributes": {
+              "build_file_content": "# empty",
+              "patch_args": [
+                "-p1"
+              ],
+              "patches": [
+                "@@//bazel/llvm/patches:export_toy_tests.patch"
+              ],
+              "strip_prefix": "llvm-project-1281da5137cfdc32bada0de254629c68cfedbbe4",
+              "url": "https://github.com/rdong8/llvm-project/archive/1281da5137cfdc32bada0de254629c68cfedbbe4.tar.gz"
+            }
           }
         }
       }

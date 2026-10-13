@@ -1,3 +1,4 @@
+load("@bazel_skylib//rules:copy_file.bzl", "copy_file")
 load("@llvm-project//llvm:lit_test.bzl", "lit_expand_template", "lit_test")
 load("@rules_cc//cc:defs.bzl", "cc_test")
 
@@ -26,6 +27,20 @@ lit_expand_template(
     template = "lit.site.cfg.py.in",
 )
 
+TOY_TESTS = [
+    "ast.toy",
+    "empty.toy",
+]
+
+[
+    copy_file(
+        name = "{}_copy".format(src),
+        src = "@llvm-project//mlir/test:Examples/Toy/Ch1/{}".format(src),
+        out = src,
+    )
+    for src in TOY_TESTS
+]
+
 [
     lit_test(
         name = "{}.test".format(src),
@@ -40,5 +55,5 @@ lit_expand_template(
             "@llvm-project//llvm:not",
         ],
     )
-    for src in glob(["*.toy"])
+    for src in TOY_TESTS
 ]

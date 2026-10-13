@@ -1,0 +1,20 @@
+--- a/utils/bazel/llvm-project-overlay/mlir/test/BUILD.bazel	2026-10-13 02:34:31.649346958 +0000
++++ b/utils/bazel/llvm-project-overlay/mlir/test/BUILD.bazel	2026-10-13 02:34:31.649449030 +0000
+@@ -15,6 +15,17 @@
+
+ licenses(["notice"])
+
++exports_files(
++    glob([
++        "Examples/Toy/**/*.toy",
++    ]),
++)
++
++filegroup(
++    name = "toy_test_files",
++    srcs = glob(["Examples/Toy/**/*.toy"]),
++)
++
+ lit_expand_template(
+     name = "lit_site_cfg_py",
+     testonly = True,

@@ -8,11 +8,15 @@ See:
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
 def _llvm_raw_impl(_module_context):
-    COMMIT = "94d961f440b18a3ab5ff782304edafac745af98a"
+    COMMIT = "1281da5137cfdc32bada0de254629c68cfedbbe4"
 
     http_archive(
         name = "llvm-raw",
         build_file_content = "# empty",
+        patch_args = ["-p1"],
+        patches = [
+            Label("//bazel/llvm/patches:export_toy_tests.patch"),
+        ],
         strip_prefix = "llvm-project-" + COMMIT,
         url =
             "https://github.com/rdong8/llvm-project/archive/{}.tar.gz".format(COMMIT),

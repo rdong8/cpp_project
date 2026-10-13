@@ -167,7 +167,7 @@ class ASTDumper final
 
         llvm::interleaveComma(literal_node->get_values(), self.stream,
                               [&](auto &element) { self.print_literal_helper(element.get()); });
-        toy::print(self.stream, "]");
+        toy::print(self.stream, " ]");
     }
 
     /// Print a literal
