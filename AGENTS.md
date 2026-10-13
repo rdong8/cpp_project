@@ -172,10 +172,10 @@ If you want to group statements by concern, use a block or immediately invoked l
 - Use module implementation partition units to write unit tests. This allows testing of internal APIs of a project that may not be `export`'ed.
 - Tests belong in an anonymous namespace nested in the namespace under test.
 - Tests belong in a directory nested in the subproject being tested. Integration and unit tests should be split out as subdirectories, and the unit test tree should follow the structure of the project's source tree.
-- Unit test file names should end in `_test`
+- Unit test file names should have their basenames suffixed with `.test`, ie. `utility.test.cpp`
 - If you need to test hidden members of a class, add the `-fno-access-control` flag to the test instead of incorrectly making a hidden member public
 
-## Test Selection
+### Test Selection
 
 Do not write stupid tests. Examples:
 
