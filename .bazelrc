@@ -4,7 +4,7 @@ common --write_command_log
 
 build --verbose_failures
 
-# TODO: pass host_cxxopt too?
+# TODO: pass host_cxxopt everywhere we're passing cxxopt?
 
 # TODO(llvm-libc): need to undef _FORTIFY_SOURCE because glibc's fortified headers wrap some functions in inline overloads with internal linkage, which it then tries to export from a module
 # Disable layering_check since it uses Clang modules, which are disabled when cpp_modules is enabled
@@ -52,6 +52,12 @@ build:dbg \
     --copt=-fno-omit-frame-pointer \
     --copt=-glldb \
     --cxxopt=-gmodules
+
+# TODO: LLDB doesn't currently support dynamic debugging
+build:dbg-opt \
+    --config=dbg \
+    --config=opt \
+    --copt=-fdynamic-debugging
 
 build:opt \
     --compilation_mode=opt \
