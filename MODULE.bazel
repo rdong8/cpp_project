@@ -108,7 +108,7 @@ use_repo(std_module, "std_module")
 
 # LLVM raw
 
-llvm_raw = use_extension("//bazel/llvm:llvm.bzl", "llvm_raw")
+llvm_raw = use_extension("//bazel/llvm:extension.bzl", "llvm_raw")
 use_repo(llvm_raw, "llvm-raw")
 
 llvm_configure = use_repo_rule("@llvm-raw//utils/bazel:configure.bzl", "llvm_configure")
