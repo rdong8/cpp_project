@@ -38,8 +38,8 @@ git_override(
 ## rules_cc
 git_override(
     module_name = "rules_cc",
-    commit = "365be0aadeeffca8dbf4302025664b382a62f4fd",
-    remote = "https://github.com/rdong8/rules_cc",
+    commit = "4d19de1c63961e3e75ee69cbd986557ecfab5afe",
+    remote = "https://github.com/bazelbuild/rules_cc",
 )
 
 ## quill
