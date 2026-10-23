@@ -17,7 +17,7 @@ bazel_dep(name = "googletest", version = "1.18.0.bcr.1")
 bazel_dep(name = "magic_enum", version = "0.9.8")
 bazel_dep(name = "platforms", version = "1.1.0")
 bazel_dep(name = "quill", version = "13.1.0")
-bazel_dep(name = "rules_cc", version = "0.2.26")
+bazel_dep(name = "rules_cc", version = "0.2.27")
 bazel_dep(name = "rules_python", version = "2.4.3")
 bazel_dep(name = "rules_shell", version = "0.8.0")
 bazel_dep(name = "toolchains_llvm", version = "1.12.0")
@@ -33,13 +33,6 @@ git_override(
     module_name = "cpptrace",
     commit = "9edc08b0ffafc6231e5f7b1f4e81ac0c0ccf75f0",
     remote = "https://github.com/rdong8/cpptrace",
-)
-
-## rules_cc
-git_override(
-    module_name = "rules_cc",
-    commit = "11976124184a79bfecaedf6ff5cbf2f17f815a21",
-    remote = "https://github.com/bazelbuild/rules_cc",
 )
 
 ## quill
